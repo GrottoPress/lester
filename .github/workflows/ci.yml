@@ -1,0 +1,49 @@
+name: CI
+on:
+  push:
+    paths:
+      - '**.cr'
+      - '.github/workflows/**'
+  pull_request:
+    branches: [master]
+    paths:
+      - '**.cr'
+      - '.github/workflows/**'
+  schedule:
+    - cron: '0 6 * * 6'
+jobs:
+  specs:
+    strategy:
+      fail-fast: false
+      matrix:
+        crystal: [1.0.0, 1.1.1, 1.2.0]
+        experimental: [false]
+        include:
+          - crystal: nightly
+            experimental: true
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    steps:
+      - name: Download source
+        uses: actions/checkout@v2
+      - name: Install Crystal
+        uses: oprypin/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal }}
+      - name: Cache shards
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/shards
+          key: ${{ runner.os }}-shards-${{ hashFiles('shard.yml') }}
+          restore-keys: ${{ runner.os }}-shards-
+      - name: Install shards
+        run: shards update
+      - name: Run tests
+        env:
+          LXD_SOCKET: ${{ secrets.LESTER_SPEC_LXD_SOCKET }}
+          LXD_BASE_URI: ${{ secrets.LESTER_SPEC_LXD_BASE_URI }}
+          LXD_TLS_KEY_PATH: ${{ secrets.LESTER_SPEC_LXD_TLS_KEY_PATH }}
+          LXD_TLS_CERT_PATH: ${{ secrets.LESTER_SPEC_LXD_TLS_CERT_PATH }}
+          LXD_TLS_CA_PATH: ${{ secrets.LESTER_SPEC_LXD_TLS_CA_PATH }}
+          LXD_TLS_VERIFY_MODE: ${{ secrets.LESTER_SPEC_LXD_TLS_VERIFY_MODE }}
+        run: crystal spec --error-on-warnings
