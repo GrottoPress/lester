@@ -153,3 +153,95 @@ See <https://linuxcontainers.org/lxd/api/master/#/images> for the raw JSON schem
        # ...
    end
    ```
+
+#### Image aliases
+
+1. List all image aliases:
+
+   ```crystal
+   lxd.images.aliases.list(project: "default") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |alias|
+       puts alias.description
+       puts alias.name
+       puts alias.target
+       # ...
+     end
+   end
+   ```
+
+1. Add new image alias:
+
+   ```crystal
+   lxd.images.aliases.create(
+     description: "Ubuntu image",
+     name: "ubuntu-20.04",
+     target: "a1b2c3",
+     type: "container",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Delete image alias:
+
+   ```crystal
+   lxd.images.aliases.delete(name: "awesome-image") do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Fetch single image alias:
+
+   ```crystal
+   lxd.images.aliases.fetch(name: "awesome-image") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |alias|
+       puts alias.type
+       puts alias.created_at
+       puts alias.expires_at
+       # ...
+     end
+   end
+   ```
+
+1. Update image alias:
+
+   ```crystal
+   # Uses the `PATCH` request method
+   # Call `lxd.images.aliases.replace(...)` to use the `PUT` method instead.
+   lxd.images.aliases.update(
+     name: "awesome-image",
+     description: "super awesome",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Rename image alias:
+
+   ```crystal
+   lxd.images.aliases.rename(
+     name: "awesome-image",
+     new_name: "super-awesome-image",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```

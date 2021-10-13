@@ -1,6 +1,10 @@
 struct Lester::Image::Endpoint
   include Hapi::Endpoint
 
+  def aliases : Alias::Endpoint
+    Alias::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end
