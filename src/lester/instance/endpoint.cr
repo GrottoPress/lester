@@ -1,6 +1,10 @@
 struct Lester::Instance::Endpoint
   include Hapi::Endpoint
 
+  def backups : Backup::Endpoint
+    Backup::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end

@@ -35,6 +35,18 @@
    end
    ```
 
+1. Download instance backup:
+
+   ```crystal
+   lxd.instances.backups.export(
+     instance_name: "instance-04",
+     name: "backup0",
+     destination: "/home/user/Downloads/backup.zip"
+   ) do |response|
+     puts response.message
+   end
+   ```
+
 ## Documentation
 
 Find the complete documentation in the `docs/` directory of this repository.

@@ -112,3 +112,104 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
      end
    end
    ```
+
+#### Instance backups
+
+1. List all instance backups:
+
+   ```crystal
+   lxd.instances.backups.list(
+     instance_name: "instance-10",
+     project: "default"
+    ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |backup|
+       puts backup.container_only?
+       puts backup.created_at
+       puts backup.expires_at
+       # ...
+     end
+   end
+   ```
+
+1. Create instance backup:
+
+   ```crystal
+   lxd.instances.backups.create(
+     instance_name: "instance-04",
+     name: "backup0",
+     compression_algorithm: "gzip"
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.class
+       puts operation.created_at
+       puts operation.description
+       # ...
+     end
+   end
+   ```
+
+1. Delete instance backup:
+
+   ```crystal
+   lxd.instances.backups.delete("instance-04", "backup0") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.err
+       puts operation.id
+       puts operation.location
+       # ...
+     end
+   end
+   ```
+
+1. Fetch instance backup:
+
+   ```crystal
+   lxd.instances.backups.fetch("instance-04", name: "backup0") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |backup|
+       puts backup.instance_only?
+       puts backup.name
+       puts backup.optimized_storage?
+       # ...
+     end
+   end
+   ```
+
+1. Rename instance backup:
+
+   ```crystal
+   lxd.instances.backups.rename(
+     instance_name: "instance-04",
+     name: "backup0",
+     new_name: "backup-2021-10-14"
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.id
+       puts operation.location
+       puts operation.metadata.try &.status
+     end
+   end
+   ```
+
+1. Download instance backup:
+
+   ```crystal
+   lxd.instances.backups.export(
+     instance_name: "instance-04",
+     name: "backup0",
+     destination: "/home/user/Downloads/backup.zip"
+   ) do |response|
+     puts response.message
+   end
+   ```
