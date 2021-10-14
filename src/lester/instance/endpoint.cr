@@ -5,6 +5,10 @@ struct Lester::Instance::Endpoint
     Backup::Endpoint.new(@client)
   end
 
+  def console : Console::Endpoint
+    Console::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end

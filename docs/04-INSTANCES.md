@@ -213,3 +213,48 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
      puts response.message
    end
    ```
+
+#### Instance console
+
+1. Connect to console:
+
+   ```crystal
+   lxd.instances.console.connect(
+     instance_name: "instance-04",
+     height: 24,
+     type: "console",
+     width: 80,
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.class
+       puts operation.created_at
+       puts operation.description
+       # ...
+     end
+   end
+   ```
+
+1. Show console log:
+
+   ```crystal
+   lxd.instances.console.output(
+     instance_name: "instance-04",
+     outfile: "/home/user/console.log"
+   ) do |response|
+     puts response.message
+   end
+   ```
+
+1. Clear console log:
+
+   ```crystal
+   lxd.instances.console.clear(instance_name: "instance-04") do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
