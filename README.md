@@ -44,7 +44,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 - [ ] Certificates
 - [ ] Cluster
 - [x] Images
-- [ ] Instances
+- [x] Instances
 - [ ] Metrics
 - [ ] Network ACLs
 - [ ] Networks

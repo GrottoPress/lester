@@ -73,6 +73,10 @@ class Lester
     @images ||= Image::Endpoint.new(self)
   end
 
+  def instances : Instance::Endpoint
+    @instances ||= Instance::Endpoint.new(self)
+  end
+
   protected def recurse(**params)
     params.merge({recursion: "1"})
   end
