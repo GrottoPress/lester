@@ -24,6 +24,8 @@ See <https://linuxcontainers.org/lxd/api/master/#/images> for the raw JSON schem
 1. Add new image:
 
    ```crystal
+   # To add a raw image file, call:
+   #   `lxd.images.add(file: "/path/to/file", ...)
    lxd.images.add(
      fingerprint: "a1b2c3...",
      secret: "super-secret",

@@ -17,23 +17,26 @@ struct Lester::Image::Endpoint
     end
   end
 
-  def add(fingerprint = nil, secret = nil, project = nil, **params)
-    yield add(fingerprint, secret, project, **params)
+  def add(fingerprint = nil, secret = nil, project = nil, file = nil, **params)
+    yield add(fingerprint, secret, project, file, **params)
   end
 
   def add(
     fingerprint : String? = nil,
     secret : String? = nil,
     project : String? = nil,
+    file = nil,
     **params
   ) : Operation::Item
     headers = HTTP::Headers.new
     headers["X-LXD-secret"] = secret if secret
     headers["X-LXD-fingerprint"] = fingerprint if fingerprint
 
+    body = file ? File.open(file, "rb") : params.to_json
+
     @client.post(
       "#{uri.path}?project=#{project}",
-      body: params.to_json,
+      body: body,
       headers: headers
     ) do |response|
       Operation::Item.from_json(response.body_io)
