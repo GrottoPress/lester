@@ -30,7 +30,7 @@ struct Lester::Instance::Console::Endpoint
         return Operation::Item.from_json(response.body_io)
       end
 
-      File.write(outfile, response.body_io, mode: "wb")
+      ::File.write(outfile, response.body_io, mode: "wb")
 
       Operation::Item.from_json({
         type: "sync",

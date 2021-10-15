@@ -260,3 +260,85 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
      puts response.code
    end
    ```
+
+#### Instance files
+
+1. Create file in instance:
+
+   ```crystal
+   lxd.instances.files.create(
+     instance_name: "instance-04",
+     path: "/path/to/file",
+     content: "may be a String or IO",
+     # ...
+   ) do |response|
+     puts response.message
+   end
+   ```
+
+1. Download file from instance:
+
+   ```crystal
+   lxd.instances.files.fetch(
+     instance_name: "instance-04",
+     path: "/path/to/file",
+     destination: "/home/user/Downloads/file.txt"
+   ) do |response|
+     puts response.message
+   end
+   ```
+
+1. Delete file from instance:
+
+   ```crystal
+   lxd.instances.files.delete("instance-04", "/path/to/file") do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+#### Instance directories
+
+1. Create directory in instance:
+
+   ```crystal
+   lxd.instances.directories.create(
+     instance_name: "instance-04",
+     path: "/path/to/directory",
+     # ...
+   ) do |response|
+     puts response.message
+   end
+   ```
+
+1. Get directory content:
+
+   ```crystal
+   lxd.instances.directories.fetch(
+     instance_name: "instance-04",
+     path: "/path/to/directory",
+     #...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |file|
+       puts file
+     end
+   end
+   ```
+
+1. Delete directory from instance:
+
+   ```crystal
+   lxd.instances.directories.delete(
+     instance_name: "instance-04",
+     path: "/path/to/directory"
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```

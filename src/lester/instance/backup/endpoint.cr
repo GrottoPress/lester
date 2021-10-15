@@ -95,7 +95,7 @@ struct Lester::Instance::Backup::Endpoint
         return Operation::Item.from_json(response.body_io)
       end
 
-      File.write(destination, response.body_io, mode: "wb")
+      ::File.write(destination, response.body_io, mode: "wb")
 
       Operation::Item.from_json({
         type: "sync",

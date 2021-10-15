@@ -9,6 +9,14 @@ struct Lester::Instance::Endpoint
     Console::Endpoint.new(@client)
   end
 
+  def directories : Directory::Endpoint
+    Directory::Endpoint.new(@client)
+  end
+
+  def files : File::Endpoint
+    File::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end
