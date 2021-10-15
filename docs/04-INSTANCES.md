@@ -24,6 +24,8 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
 1. Create new instance:
 
    ```crystal
+   # To create from backup file,call:
+   #   `lxd.instances.create(backup: "/path/to/file", ...)
    lxd.instances.create(
      source: {
        protocol: "simplestreams",

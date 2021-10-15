@@ -21,18 +21,21 @@ struct Lester::Instance::Endpoint
     end
   end
 
-  def create(project = nil, target = nil, **params)
-    yield create(project, target, **params)
+  def create(project = nil, target = nil, backup = nil, **params)
+    yield create(project, target, backup, **params)
   end
 
   def create(
     project : String? = nil,
     target : String? = nil,
+    backup = nil,
     **params
   ) : Operation::Item
+    body = backup ? ::File.open(backup, "rb") : params.to_json
+
     @client.post(
       "#{uri.path}?project=#{project}&target=#{target}",
-      body: params.to_json,
+      body: body,
     ) do |response|
       Operation::Item.from_json(response.body_io)
     end
