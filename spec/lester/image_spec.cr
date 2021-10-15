@@ -61,7 +61,7 @@ describe Lester::Image::Endpoint do
     end
   end
 
-  describe "#create" do
+  describe "#add" do
     it "adds image" do
       body_io = IO::Memory.new <<-JSON
         {
@@ -92,7 +92,7 @@ describe Lester::Image::Endpoint do
         .with(body: %({"public":false}))
         .to_return(body_io: body_io)
 
-      LXD.images.create(secret: "a1b2c3", public: false) do |response|
+      LXD.images.add(secret: "a1b2c3", public: false) do |response|
         response.success?.should be_true
         response.metadata.should be_a(Lester::Operation)
       end

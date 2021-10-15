@@ -17,11 +17,11 @@ struct Lester::Image::Endpoint
     end
   end
 
-  def create(fingerprint = nil, secret = nil, project = nil, **params)
-    yield create(fingerprint, secret, project, **params)
+  def add(fingerprint = nil, secret = nil, project = nil, **params)
+    yield add(fingerprint, secret, project, **params)
   end
 
-  def create(
+  def add(
     fingerprint : String? = nil,
     secret : String? = nil,
     project : String? = nil,
