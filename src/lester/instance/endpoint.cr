@@ -26,9 +26,9 @@ struct Lester::Instance::Endpoint
   end
 
   def list(**params) : List
-    params = @client.recurse(**params)
+    params = URI::Params.encode(@client.recurse **params)
 
-    @client.get("#{uri.path}?#{URI::Params.encode(params)}") do |response|
+    @client.get("#{uri.path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -70,9 +70,9 @@ struct Lester::Instance::Endpoint
   end
 
   def fetch(name : String, **params) : Item
-    @client.get(
-      "#{uri.path}/#{name}?#{URI::Params.encode(params)}"
-    ) do |response|
+    params = URI::Params.encode(params)
+
+    @client.get("#{uri.path}/#{name}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end

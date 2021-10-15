@@ -30,6 +30,7 @@ struct Lester::Instance::Directory::Endpoint
     write_mode : File::WriteMode? = nil,
     project : String? = nil
   ) : Operation::Item
+    uri_path = uri(instance_name).path
 
     headers = HTTP::Headers.new
 
@@ -40,7 +41,7 @@ struct Lester::Instance::Directory::Endpoint
     headers["X-LXD-write"] = write_mode.to_s.downcase if write_mode
 
     @client.post(
-      "#{uri(instance_name).path}?path=#{path}&project=#{project}",
+      "#{uri_path}?path=#{path}&project=#{project}",
       headers: headers
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -56,9 +57,9 @@ struct Lester::Instance::Directory::Endpoint
     path : String,
     project : String? = nil
   ) : Operation::Item
-    @client.delete(
-      "#{uri(instance_name).path}?path=#{path}&project=#{project}"
-    ) do |response|
+    uri_path = uri(instance_name).path
+
+    @client.delete("#{uri_path}?path=#{path}&project=#{project}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -68,11 +69,10 @@ struct Lester::Instance::Directory::Endpoint
   end
 
   def fetch(instance_name : String, path : String, **params) : Item
-    params = params.merge({path: path})
+    uri_path = uri(instance_name).path
+    params = URI::Params.encode params.merge({path: path})
 
-    @client.get(
-      "#{uri(instance_name).path}?#{URI::Params.encode(params)}"
-    ) do |response|
+    @client.get("#{uri_path}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end

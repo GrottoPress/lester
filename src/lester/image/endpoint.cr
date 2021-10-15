@@ -10,9 +10,9 @@ struct Lester::Image::Endpoint
   end
 
   def list(**params) : List
-    params = @client.recurse(**params)
+    params = URI::Params.encode(@client.recurse **params)
 
-    @client.get("#{uri.path}?#{URI::Params.encode(params)}") do |response|
+    @client.get("#{uri.path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -29,6 +29,7 @@ struct Lester::Image::Endpoint
     **params
   ) : Operation::Item
     headers = HTTP::Headers.new
+
     headers["X-LXD-secret"] = secret if secret
     headers["X-LXD-fingerprint"] = fingerprint if fingerprint
 
@@ -60,9 +61,9 @@ struct Lester::Image::Endpoint
   end
 
   def fetch(fingerprint : String, **params) : Item
-    @client.get(
-      "#{uri.path}/#{fingerprint}?#{URI::Params.encode(params)}"
-    ) do |response|
+    params = URI::Params.encode(params)
+
+    @client.get("#{uri.path}/#{fingerprint}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -102,9 +103,9 @@ struct Lester::Image::Endpoint
   end
 
   def export(fingerprint : String, destination, **params) : Operation::Item
-    @client.get(
-      "#{uri.path}/#{fingerprint}/export?#{URI::Params.encode(params)}"
-    ) do |response|
+    params = URI::Params.encode(params)
+
+    @client.get("#{uri.path}/#{fingerprint}/export?#{params}") do |response|
       unless response.status.success?
         return Operation::Item.from_json(response.body_io)
       end
