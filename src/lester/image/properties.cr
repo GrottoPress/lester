@@ -3,6 +3,7 @@ struct Lester::Image::Properties
 
   getter architecture : String?
   getter description : String?
+  getter name : String?
   getter os : String?
   getter release : String?
   getter serial : String?
