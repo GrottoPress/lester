@@ -17,6 +17,10 @@ struct Lester::Instance::Endpoint
     File::Endpoint.new(@client)
   end
 
+  def logs : Log::Endpoint
+    Log::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end

@@ -342,3 +342,47 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
      puts response.code
    end
    ```
+
+#### Instance logs
+
+1. List log files:
+
+   ```crystal
+   lxd.instances.logs.list(
+     instance_name: "instance-04",
+     project: "default"
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |file|
+       puts file
+     end
+   end
+   ```
+
+1. Delete log file:
+
+   ```crystal
+   lxd.instances.logs.delete(
+     instance_name: "instance-04",
+     filename: "file.log"
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Download log file:
+
+   ```crystal
+   lxd.instances.logs.fetch(
+     instance_name: "instance-04",
+     filename: "file.log",
+     destination: "/home/user/Downloads/file.log",
+     #...
+   ) do |response|
+     puts response.message
+   end
+   ```
