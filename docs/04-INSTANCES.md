@@ -386,3 +386,41 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
      puts response.message
    end
    ```
+
+#### Instance metadata
+
+1. Retrieve instance image's metadata:
+
+   ```crystal
+   lxd.instances.metadata.fetch(
+     instance_name: "instance-04",
+     project: "default"
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |metadata|
+       puts metadata.architecture
+       puts metadata.creation_date
+       puts metadata.expiry_date
+       # ...
+     end
+   end
+   ```
+
+1. Update instance image's metadata:
+
+   ```crystal
+   # Uses the `PATCH` request method
+   # Call `lxd.instances.metadata.replace(...)` to use `PUT` instead.
+   lxd.instances.metadata.update(
+     instance_name: "instance-04",
+     architecture: "x86_64",
+     expiry_date: 1620685757,
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```

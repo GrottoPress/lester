@@ -21,6 +21,10 @@ struct Lester::Instance::Endpoint
     Log::Endpoint.new(@client)
   end
 
+  def metadata : Metadata::Endpoint
+    Metadata::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end
