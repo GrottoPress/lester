@@ -201,15 +201,19 @@ describe Lester::Instance::Backup::Endpoint do
 
   describe "#export" do
     it "downloads raw backup file" do
-      body_io = IO::Memory.new
+      body_io = IO::Memory.new("Lester::Instance::Backup::Endpoint#export")
+      destination = File.tempname("lester-instance-backup-endpoint-export")
 
       WebMock.stub(
         :GET,
         "#{LXD_BASE_URI}/1.0/instances/inst4/backups/bak0/export"
       ).to_return(body_io: body_io)
 
-      LXD.instances.backups.export("inst4", "bak0", File::NULL) do |response|
+      LXD.instances.backups.export("inst4", "bak0", destination) do |response|
         response.success?.should be_true
+        File.read_lines(destination).first?.should eq(body_io.to_s)
+      ensure
+        File.delete(destination)
       end
     end
   end

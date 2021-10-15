@@ -242,7 +242,8 @@ describe Lester::Image::Endpoint do
 
   describe "#export" do
     it "downloads image" do
-      body_io = IO::Memory.new
+      body_io = IO::Memory.new("Lester::Image::Endpoint#export")
+      destination = File.tempname("lester-image-endpoint-export")
 
       WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/images/a1b2/export")
         .with(query: {"project" => "default"})
@@ -251,9 +252,12 @@ describe Lester::Image::Endpoint do
       LXD.images.export(
         fingerprint: "a1b2",
         project: "default",
-        destination: File::NULL
+        destination: destination
       ) do |response|
         response.success?.should be_true
+        File.read_lines(destination).first?.should eq(body_io.to_s)
+      ensure
+        File.delete(destination)
       end
     end
   end
