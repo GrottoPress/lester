@@ -481,3 +481,116 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
      puts response.message
    end
    ```
+
+#### Instance snapshots
+
+1. List all instance snapshots:
+
+   ```crystal
+   lxd.instances.snapshots.list(
+     instance_name: "instance-10",
+     project: "default"
+    ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |instance|
+       puts instance.architecture
+       puts instance.config.try &.["image.os"]?
+       puts instance.ephemeral?
+       # ...
+     end
+   end
+   ```
+
+1. Create instance snapshot:
+
+   ```crystal
+   lxd.instances.snapshots.create(
+     instance_name: "instance-04",
+     name: "snap0",
+     stateful: false,
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.class
+       puts operation.created_at
+       puts operation.description
+       # ...
+     end
+   end
+   ```
+
+1. Delete instance snapshot:
+
+   ```crystal
+   lxd.instances.snapshots.delete("instance-04", "snap0") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.err
+       puts operation.id
+       puts operation.location
+       # ...
+     end
+   end
+   ```
+
+1. Fetch instance snapshot:
+
+   ```crystal
+   lxd.instances.snapshots.fetch("instance-04", name: "snap0") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |instance|
+       puts instance.architecture
+       puts instance.config.try &.["image.os"]?
+       puts instance.ephemeral?
+       # ...
+     end
+   end
+   ```
+
+1. Update instance snapshot:
+
+   ```crystal
+   # Uses the `PATCH` request method
+   # Call `lxd.instances.snapshots.replace(...)` to use `PUT` instead.
+   lxd.instances.snapshots.update(
+     instance_name: "instance-04",
+     name: "snap0",
+     expires_at: 10.days.from_now,
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.err
+       puts operation.id
+       puts operation.location
+       # ...
+     end
+   end
+   ```
+
+1. Rename instance snapshot:
+
+   ```crystal
+   lxd.instances.snapshots.rename(
+     instance_name: "instance-04",
+     name: "snap0",
+     new_name: "backup-2021-10-14",
+     live: false,
+     migration: false,
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.id
+       puts operation.location
+       puts operation.metadata.try &.status
+     end
+   end
+   ```

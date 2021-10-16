@@ -25,6 +25,10 @@ struct Lester::Instance::Endpoint
     Metadata::Endpoint.new(@client)
   end
 
+  def snapshots : Snapshot::Endpoint
+    Snapshot::Endpoint.new(@client)
+  end
+
   def templates : Template::Endpoint
     Template::Endpoint.new(@client)
   end
