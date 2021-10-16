@@ -2,39 +2,39 @@ struct Lester::Instance::Endpoint
   include Hapi::Endpoint
 
   def backups : Backup::Endpoint
-    Backup::Endpoint.new(@client)
+    @backups ||= Backup::Endpoint.new(@client)
   end
 
   def console : Console::Endpoint
-    Console::Endpoint.new(@client)
+    @console ||= Console::Endpoint.new(@client)
   end
 
   def directories : Directory::Endpoint
-    Directory::Endpoint.new(@client)
+    @directories ||= Directory::Endpoint.new(@client)
   end
 
   def files : File::Endpoint
-    File::Endpoint.new(@client)
+    @files ||= File::Endpoint.new(@client)
   end
 
   def logs : Log::Endpoint
-    Log::Endpoint.new(@client)
+    @logs ||= Log::Endpoint.new(@client)
   end
 
   def metadata : Metadata::Endpoint
-    Metadata::Endpoint.new(@client)
+    @metadata ||= Metadata::Endpoint.new(@client)
   end
 
   def snapshots : Snapshot::Endpoint
-    Snapshot::Endpoint.new(@client)
+    @snapshots ||= Snapshot::Endpoint.new(@client)
   end
 
   def state : State::Endpoint
-    State::Endpoint.new(@client)
+    @state ||= State::Endpoint.new(@client)
   end
 
   def templates : Template::Endpoint
-    Template::Endpoint.new(@client)
+    @templates ||= Template::Endpoint.new(@client)
   end
 
   def list(**params)

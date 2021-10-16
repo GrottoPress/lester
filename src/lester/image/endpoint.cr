@@ -2,7 +2,7 @@ struct Lester::Image::Endpoint
   include Hapi::Endpoint
 
   def aliases : Alias::Endpoint
-    Alias::Endpoint.new(@client)
+    @aliases ||= Alias::Endpoint.new(@client)
   end
 
   def list(**params)
