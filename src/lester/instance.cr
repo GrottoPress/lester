@@ -1,5 +1,6 @@
 struct Lester::Instance
   include Hapi::Resource
+  include Image::TypeField
 
   getter architecture : String?
   getter config : Hash(String, String)?
@@ -18,5 +19,4 @@ struct Lester::Instance
   getter last_used_at : Time?
   getter location : String?
   getter size : Int64?
-  getter type : String?
 end

@@ -1,5 +1,8 @@
+require "./image/type_field"
+
 struct Lester::Image
   include Hapi::Resource
+  include TypeField
 
   getter aliases : Array(Alias)?
   getter architecture : String?
@@ -14,7 +17,6 @@ struct Lester::Image
   getter properties : Properties?
   getter? public : Bool?
   getter size : Int64?
-  getter type : String?
   getter update_source : UpdateSource?
   getter uploaded_at : Time?
 end
