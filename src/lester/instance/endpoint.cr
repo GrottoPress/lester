@@ -29,6 +29,10 @@ struct Lester::Instance::Endpoint
     Snapshot::Endpoint.new(@client)
   end
 
+  def state : State::Endpoint
+    State::Endpoint.new(@client)
+  end
+
   def templates : Template::Endpoint
     Template::Endpoint.new(@client)
   end

@@ -594,3 +594,43 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
      end
    end
    ```
+
+#### Instance state
+
+1. Get instance state:
+
+   ```crystal
+   lxd.instances.state.fetch(instance_name: "instance-04") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |state|
+       puts state.cpu.try &.usage
+       puts state.disk.try &.["root]?.try &.usage
+       puts state.memory.try &.usage
+       # ...
+     end
+   end
+   ```
+
+1. Update instance state:
+
+   ```crystal
+   # Uses the `PUT` request method
+   lxd.instances.state.replace(
+     instance_name: "instance-04",
+     action: "start",
+     force: false,
+     stateful: false,
+     timeout: 30
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.err
+       puts operation.id
+       puts operation.location
+       # ...
+     end
+   end
+   ```
