@@ -34,12 +34,10 @@ struct Lester::Image::Endpoint
     headers["X-LXD-fingerprint"] = fingerprint if fingerprint
 
     body = file ? File.open(file, "rb") : params.to_json
+    uri_path = "#{uri.path}?project=#{project}"
+    uri_path += "&public" if secret
 
-    @client.post(
-      "#{uri.path}?project=#{project}",
-      body: body,
-      headers: headers
-    ) do |response|
+    @client.post(uri_path, body: body, headers: headers) do |response|
       Operation::Item.from_json(response.body_io)
     end
   end

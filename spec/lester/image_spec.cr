@@ -88,11 +88,11 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/images?project=")
-        .with(body: %({"public":false}))
+      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/images?project=&public")
+        .with(body: %({"auto_update":false}))
         .to_return(body_io: body_io)
 
-      LXD.images.add(secret: "a1b2c3", public: false) do |response|
+      LXD.images.add(secret: "a1b2c3", auto_update: false) do |response|
         response.success?.should be_true
         response.metadata.should be_a(Lester::Operation)
       end
