@@ -20,6 +20,22 @@
    # )
    ```
 
+1. Add new trusted certificate:
+
+   ```crystal
+   lxd.certificates.add(
+     certificate: "X509 PEM certificate...",
+     name: "castiana",
+     password: "secret",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
 1. List all images:
 
    ```crystal
@@ -53,7 +69,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 
 ## Todo
 
-- [ ] Certificates
+- [x] Certificates
 - [ ] Cluster
 - [x] Images
 - [x] Instances

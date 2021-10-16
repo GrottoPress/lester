@@ -69,6 +69,10 @@ class Lester
     new UNIXSocket.new(uri.path)
   end
 
+  def certificates : Certificate::Endpoint
+    @certificates ||= Certificate::Endpoint.new(self)
+  end
+
   def images : Image::Endpoint
     @images ||= Image::Endpoint.new(self)
   end
