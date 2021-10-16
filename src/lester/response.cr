@@ -7,6 +7,7 @@ module Lester::Response
     @status : String?
     @status_code : Int32?
 
+    getter operation : String?
     getter type : Lester::Response::Type
 
     def code : Int32
