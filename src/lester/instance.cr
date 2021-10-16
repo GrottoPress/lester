@@ -5,6 +5,7 @@ struct Lester::Instance
   getter config : Hash(String, String)?
   getter devices : Hash(String, Hash(String, String))?
   getter? ephemeral : Bool?
+  getter expires_at : Time?
   getter profiles : Array(String)?
   getter? stateful : Bool?
   getter description : String?
@@ -16,5 +17,6 @@ struct Lester::Instance
   getter status_code : Int32?
   getter last_used_at : Time?
   getter location : String?
+  getter size : Int64?
   getter type : String?
 end
