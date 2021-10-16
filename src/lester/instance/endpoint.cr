@@ -25,6 +25,10 @@ struct Lester::Instance::Endpoint
     Metadata::Endpoint.new(@client)
   end
 
+  def templates : Template::Endpoint
+    Template::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end

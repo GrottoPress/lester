@@ -424,3 +424,60 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
      puts response.code
    end
    ```
+
+#### Instance templates
+
+1. List all instance templates:
+
+   ```crystal
+   lxd.instances.templates.list(
+     instance_name: "instance-04"
+     #...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |template|
+       puts template
+     end
+   end
+   ```
+
+1. Create instance template:
+
+   ```crystal
+   lxd.instances.templates.create(
+     instance_name: "instance-04",
+     path: "/path/to/file",
+     content: "may be a String or IO",
+     # ...
+   ) do |response|
+     puts response.message
+   end
+   ```
+
+1. Delete template from instance:
+
+   ```crystal
+   lxd.instances.templates.delete(
+     instance_name: "instance-04",
+     path: "/path/to/file"
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Download template from instance:
+
+   ```crystal
+   lxd.instances.templates.fetch(
+     instance_name: "instance-04",
+     path: "/path/to/file",
+     destination: "/home/user/Downloads/file.tpl"
+   ) do |response|
+     puts response.message
+   end
+   ```
