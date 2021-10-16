@@ -10,10 +10,10 @@ struct Lester::Instance::Console::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
 
     @client.post(
-      "#{uri_path}?project=#{project}",
+      "#{base_path}?project=#{project}",
       body: params.to_json,
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -25,10 +25,10 @@ struct Lester::Instance::Console::Endpoint
   end
 
   def output(instance_name : String, outfile, **params) : Operation::Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{uri_path}?#{params}") do |response|
+    @client.get("#{base_path}?#{params}") do |response|
       unless response.status.success?
         return Operation::Item.from_json(response.body_io)
       end
@@ -48,9 +48,9 @@ struct Lester::Instance::Console::Endpoint
   end
 
   def clear(instance_name : String, project : String? = nil) : Operation::Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
 
-    @client.delete("#{uri_path}?project=#{project}") do |response|
+    @client.delete("#{base_path}?project=#{project}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end

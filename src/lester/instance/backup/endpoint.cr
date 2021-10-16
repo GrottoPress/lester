@@ -6,10 +6,10 @@ struct Lester::Instance::Backup::Endpoint
   end
 
   def list(instance_name : String, **params) : List
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
     params = URI::Params.encode(@client.recurse **params)
 
-    @client.get("#{uri_path}?#{params}") do |response|
+    @client.get("#{base_path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -23,10 +23,10 @@ struct Lester::Instance::Backup::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
 
     @client.post(
-      "#{uri_path}?project=#{project}",
+      "#{base_path}?project=#{project}",
       body: params.to_json
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -42,9 +42,9 @@ struct Lester::Instance::Backup::Endpoint
     name : String,
     project : String? = nil
   ) : Operation::Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
 
-    @client.delete("#{uri_path}/#{name}?project=#{project}") do |response|
+    @client.delete("#{base_path}/#{name}?project=#{project}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -54,10 +54,10 @@ struct Lester::Instance::Backup::Endpoint
   end
 
   def fetch(instance_name : String, name : String, **params) : Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{uri_path}/#{name}?#{params}") do |response|
+    @client.get("#{base_path}/#{name}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -72,10 +72,10 @@ struct Lester::Instance::Backup::Endpoint
     new_name : String,
     project : String? = nil
   ) : Operation::Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
 
     @client.post(
-      "#{uri_path}/#{name}?project=#{project}",
+      "#{base_path}/#{name}?project=#{project}",
       body: {name: new_name}.to_json
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -92,10 +92,10 @@ struct Lester::Instance::Backup::Endpoint
     destination,
     **params
   ) : Operation::Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{uri_path}/#{name}/export?#{params}") do |response|
+    @client.get("#{base_path}/#{name}/export?#{params}") do |response|
       unless response.status.success?
         return Operation::Item.from_json(response.body_io)
       end

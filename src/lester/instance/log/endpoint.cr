@@ -6,10 +6,10 @@ struct Lester::Instance::Log::Endpoint
   end
 
   def list(instance_name : String, **params) : List
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{uri_path}?#{params}") do |response|
+    @client.get("#{base_path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -23,9 +23,9 @@ struct Lester::Instance::Log::Endpoint
     filename : String,
     project : String? = nil
   ) : Operation::Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
 
-    @client.delete("#{uri_path}/#{filename}?project=#{project}") do |response|
+    @client.delete("#{base_path}/#{filename}?project=#{project}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -40,10 +40,10 @@ struct Lester::Instance::Log::Endpoint
     destination,
     **params
   ) : Item
-    uri_path = uri(instance_name).path
+    base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{uri_path}/#{filename}?#{params}") do |response|
+    @client.get("#{base_path}/#{filename}?#{params}") do |response|
       return Item.from_json(response.body_io) unless response.status.success?
       ::File.write(destination, response.body_io, mode: "wb")
 
