@@ -97,6 +97,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 - [ ] Network ACLs
 - [ ] Networks
 - [ ] Network Forwards
+- [ ] Network Peers
 - [ ] Operations
 - [ ] Profiles
 - [ ] Projects
