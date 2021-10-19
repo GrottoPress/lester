@@ -91,6 +91,10 @@ class Lester
     @server ||= Server::Endpoint.new(self)
   end
 
+  def volumes : Volume::Endpoint
+    @volumes ||= Volume::Endpoint.new(self)
+  end
+
   protected def recurse(**params)
     params.merge({recursion: "1"})
   end

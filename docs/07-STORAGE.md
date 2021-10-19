@@ -97,3 +97,127 @@ See <https://linuxcontainers.org/lxd/api/master/#/storage> for the raw JSON sche
      end
    end
    ```
+
+### Storage Volumes
+
+A storage volume is represented as `Lester::Volume`.
+
+#### Usage examples
+
+1. List all storage volumes:
+
+   ```crystal
+   lxd.volumes.list(pool_name: "pool0", type: "custom") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |volume|
+       puts volume.config.try &.["size"]?
+       puts volume.content_type
+       puts volume.description
+       # ...
+     end
+   end
+   ```
+
+1. Create storage volume:
+
+   ```crystal
+   lxd.volumes.create(
+     pool_name: "pool0",
+     type: "custom",
+     content_type: "filesystem",
+     description: "My custom volume",
+     name: "volume0",
+     restore: "snap0"
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.class
+       puts operation.created_at
+       puts operation.description
+       # ...
+     end
+   end
+   ```
+
+1. Delete storage volume:
+
+   ```crystal
+   lxd.volumes.delete(
+     pool_name: "pool0",
+     name: "volume0",
+     type: "some_type",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Fetch storage volume:
+
+   ```crystal
+   lxd.volumes.fetch(
+     pool_name: "pool0",
+     name: "volume0",
+     type: "some_type",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |volume|
+       puts volume.location
+       puts volume.name
+       puts volume.restore
+       # ...
+     end
+   end
+   ```
+
+1. Update storage volume:
+
+   ```crystal
+   # Uses the `PATCH` request method
+   # Call `lxd.volumes.replace(...)` to use `PUT` instead.
+   lxd.volumes.update(
+     pool_name: "pool0",
+     name: "volume0",
+     type: "custom",
+     description: "My awesome volume",
+     restore: "snap0",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Rename a storage volume:
+
+   ```crystal
+   lxd.volumes.rename(
+     pool_name: "pool0",
+     name: "current-name",
+     new_name: "new-name",
+     type: "custom",
+     migration: false,
+     volume_only: false,
+     pool: "remote",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.err
+       puts operation.id
+       puts operation.location
+       # ...
+     end
+   end
+   ```
