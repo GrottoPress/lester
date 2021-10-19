@@ -69,6 +69,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 
 ## Todo
 
+- [x] Server
 - [x] Certificates
 - [ ] Cluster
 - [x] Images

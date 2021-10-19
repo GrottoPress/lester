@@ -9,6 +9,8 @@ class Lester
   getter :uri
   private getter :http_client
 
+  getter socket : UNIXSocket?
+
   def initialize(base_uri : URI, tls : OpenSSL::SSL::Context::Client)
     @uri = base_uri
     @uri.path = @uri.path.rchop("/").rchop("/1.0")
@@ -20,7 +22,7 @@ class Lester
     set_headers
   end
 
-  def initialize(socket : UNIXSocket)
+  def initialize(@socket)
     @uri = URI.new("http+unix", socket.path, path: "/1.0")
     @http_client = HTTP::Client.new(socket)
 
@@ -81,6 +83,10 @@ class Lester
     @instances ||= Instance::Endpoint.new(self)
   end
 
+  def server : Server::Endpoint
+    @server ||= Server::Endpoint.new(self)
+  end
+
   protected def recurse(**params)
     params.merge({recursion: "1"})
   end
@@ -105,11 +111,11 @@ class Lester
     end
   end
 
-  private def set_content_type(headers)
+  protected def set_content_type(headers)
     headers["Content-Type"] = "application/json; charset=UTF-8"
   end
 
-  private def set_user_agent(headers)
+  protected def set_user_agent(headers)
     headers["User-Agent"] = "Lester/#{Lester::VERSION} \
       (+https://github.com/GrottoPress/lester)"
   end
