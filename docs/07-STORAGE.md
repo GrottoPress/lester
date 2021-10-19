@@ -221,3 +221,125 @@ A storage volume is represented as `Lester::Volume`.
      end
    end
    ```
+
+### Storage Volume Backups
+
+A storage volume backup is represented as `Lester::Volume::Backup`.
+
+1. List all volume backups:
+
+   ```crystal
+   lxd.volumes.backups.list(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     project: "default",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |backup|
+       puts backup.created_at
+       puts backup.expires_at
+       puts backup.name
+       # ...
+     end
+   end
+   ```
+
+1. Create volume backup:
+
+   ```crystal
+   lxd.volumes.backups.create(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "backup0",
+     compression_algorithm: "gzip"
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.class
+       puts operation.created_at
+       puts operation.description
+       # ...
+     end
+   end
+   ```
+
+1. Delete volume backup:
+
+   ```crystal
+   lxd.volumes.backups.delete(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "backup0"
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.err
+       puts operation.id
+       puts operation.location
+       # ...
+     end
+   end
+   ```
+
+1. Fetch volume backup:
+
+   ```crystal
+   lxd.volumes.backups.fetch(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "backup0"
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |backup|
+       puts backup.optimized_storage?
+       puts backup.volume_only?
+       puts backup.name
+       # ...
+     end
+   end
+   ```
+
+1. Rename volume backup:
+
+   ```crystal
+   lxd.volumes.backups.rename(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "backup0",
+     new_name: "backup-2021-10-14"
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.id
+       puts operation.location
+       puts operation.metadata.try &.status
+     end
+   end
+   ```
+
+1. Download volume backup:
+
+   ```crystal
+   lxd.volumes.backups.export(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "backup0",
+     destination: "/home/user/Downloads/backup.zip"
+   ) do |response|
+     puts response.message
+   end
+   ```

@@ -1,6 +1,10 @@
 struct Lester::Volume::Endpoint
   include Hapi::Endpoint
 
+  def backups : Backup::Endpoint
+    @backups ||= Backup::Endpoint.new(@client)
+  end
+
   def list(pool_name, **params)
     yield list(pool_name, **params)
   end
