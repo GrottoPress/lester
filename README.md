@@ -63,6 +63,25 @@
    end
    ```
 
+1. Add new storage pool:
+
+   ```crystal
+   lxd.pools.create(
+     project: "default",
+     target: "lxd0",
+     config: {"volume.block.filesystem": "ext4", "volume.size": "50GiB"},
+     description: "Local SSD pool",
+     driver: "zfs",
+     name: "local",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
 ## Documentation
 
 Find the complete documentation in the `docs/` directory of this repository.
