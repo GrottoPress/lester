@@ -81,7 +81,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 - [ ] Operations
 - [ ] Profiles
 - [ ] Projects
-- [ ] Storage
+- [x] Storage
 - [ ] Warnings
 
 ## Development

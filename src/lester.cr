@@ -83,6 +83,10 @@ class Lester
     @instances ||= Instance::Endpoint.new(self)
   end
 
+  def pools : Pool::Endpoint
+    @pools ||= Pool::Endpoint.new(self)
+  end
+
   def server : Server::Endpoint
     @server ||= Server::Endpoint.new(self)
   end
