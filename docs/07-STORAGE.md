@@ -226,6 +226,8 @@ A storage volume is represented as `Lester::Volume`.
 
 A storage volume backup is represented as `Lester::Volume::Backup`.
 
+#### Usage examples
+
 1. List all volume backups:
 
    ```crystal
