@@ -99,6 +99,10 @@ class Lester
     @volumes ||= Volume::Endpoint.new(self)
   end
 
+  def warnings : Warning::Endpoint
+    @warnings ||= Warning::Endpoint.new(self)
+  end
+
   protected def recurse(**params)
     params.merge({recursion: "1"})
   end

@@ -102,7 +102,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 - [ ] Profiles
 - [ ] Projects
 - [x] Storage
-- [ ] Warnings
+- [x] Warnings
 
 ## Development
 
