@@ -5,6 +5,10 @@ struct Lester::Volume::Endpoint
     @backups ||= Backup::Endpoint.new(@client)
   end
 
+  def snapshots : Snapshot::Endpoint
+    @snapshots ||= Snapshot::Endpoint.new(@client)
+  end
+
   def list(pool_name, **params)
     yield list(pool_name, **params)
   end

@@ -345,3 +345,132 @@ A storage volume backup is represented as `Lester::Volume::Backup`.
      puts response.message
    end
    ```
+
+### Storage Volume Snapshots
+
+#### Usage examples
+
+1. List all storage volume snapshots:
+
+   ```crystal
+   lxd.volumes.snapshots.list(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     target: "lxd0",
+     # ...
+    ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |volume|
+       puts volume.config.try &.["size"]?
+       puts volume.content_type
+       puts volume.description
+       # ...
+     end
+   end
+   ```
+
+1. Create storage volume snapshot:
+
+   ```crystal
+   lxd.volumes.snapshots.create(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "snap0",
+     stateful: false,
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.class
+       puts operation.created_at
+       puts operation.description
+       # ...
+     end
+   end
+   ```
+
+1. Delete storage volume snapshot:
+
+   ```crystal
+   lxd.volumes.snapshots.delete(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "snap0",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.err
+       puts operation.id
+       puts operation.location
+       # ...
+     end
+   end
+   ```
+
+1. Fetch storage volume snapshot:
+
+   ```crystal
+   lxd.volumes.snapshots.fetch(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "snap0",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |volume|
+       puts volume.expires_at
+       puts volume.name
+       puts volume.description
+       # ...
+     end
+   end
+   ```
+
+1. Update storage volume snapshot:
+
+   ```crystal
+   # Uses the `PATCH` request method
+   # Call `lxd.volumes.snapshots.replace(...)` to use `PUT` instead.
+   lxd.volumes.snapshots.update(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "snap0",
+     expires_at: 10.days.from_now,
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Rename storage volume snapshot:
+
+   ```crystal
+   lxd.volumes.snapshots.rename(
+     pool_name: "pool0",
+     volume_name: "volume0",
+     volume_type: "custom",
+     name: "snap0",
+     new_name: "snapshot-2021-10-14"
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.id
+       puts operation.location
+       puts operation.metadata.try &.status
+     end
+   end
+   ```

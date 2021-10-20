@@ -4,6 +4,7 @@ struct Lester::Volume
   getter config : Hash(String, String)?
   getter content_type : ContentType?
   getter description : String?
+  getter expires_at : Time?
   getter location : String?
   getter name : String?
   getter restore : String?
