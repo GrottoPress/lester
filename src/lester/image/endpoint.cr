@@ -147,11 +147,11 @@ struct Lester::Image::Endpoint
     end
   end
 
-  def generate_secret(fingerprint, project = nil)
-    yield generate_secret(fingerprint, project)
+  def secret(fingerprint, project = nil)
+    yield secret(fingerprint, project)
   end
 
-  def generate_secret(
+  def secret(
     fingerprint : String,
     project : String? = nil
   ) : Operation::Item

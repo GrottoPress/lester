@@ -145,7 +145,7 @@ See <https://linuxcontainers.org/lxd/api/master/#/images> for the raw JSON schem
 1. Generate secret for use by untrusted clients:
 
    ```crystal
-   lxd.images.generate_secret(fingerprint: "a1b2c3...") do |response|
+   lxd.images.secret(fingerprint: "a1b2c3...") do |response|
      return puts response.message unless response.success?
 
      response.metadata.try do |operation|

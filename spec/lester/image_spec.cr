@@ -345,7 +345,7 @@ describe Lester::Image::Endpoint do
     end
   end
 
-  describe "#generate_secret" do
+  describe "#secret" do
     it "generates secret key" do
       body_io = IO::Memory.new <<-JSON
         {
@@ -376,7 +376,7 @@ describe Lester::Image::Endpoint do
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
-      LXD.images.generate_secret(
+      LXD.images.secret(
         fingerprint: "a1b2c3",
         project: "default"
       ) do |response|
