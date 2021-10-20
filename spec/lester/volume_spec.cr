@@ -431,4 +431,41 @@ describe Lester::Volume::Endpoint do
       end
     end
   end
+
+  describe "#state" do
+    it "fetches volume state" do
+      body_io = IO::Memory.new <<-JSON
+        {
+          "type": "sync",
+          "status": "Success",
+          "status_code": 200,
+          "operation": "",
+          "error_code": 0,
+          "error": "",
+          "metadata": {
+            "usage": {
+              "used": 1693552640
+            }
+          }
+        }
+        JSON
+
+      WebMock.stub(
+        :GET,
+        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/state"
+      )
+        .with(query: {"project" => "default"})
+        .to_return(body_io: body_io)
+
+      LXD.volumes.state(
+        pool_name: "pool0",
+        name: "volume0",
+        type: "custom",
+        project: "default"
+      ) do |response|
+        response.success?.should be_true
+        response.metadata.should be_a(Lester::Volume::State)
+      end
+    end
+  end
 end

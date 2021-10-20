@@ -190,6 +190,24 @@ struct Lester::Volume::Endpoint
     end
   end
 
+  def state(pool_name, name, type, **params)
+    yield state(pool_name, name, type, **params)
+  end
+
+  def state(
+    pool_name : String,
+    name : String,
+    type : String,
+    **params
+  ) : State::Item
+    base_path = uri(pool_name).path
+    params = URI::Params.encode(params)
+
+    @client.get("#{base_path}/#{type}/#{name}/state?#{params}") do |response|
+      State::Item.from_json(response.body_io)
+    end
+  end
+
   def uri(pool_name) : URI
     uri = @client.uri.dup
     uri.path += "/storage-pools/#{pool_name}/volumes"

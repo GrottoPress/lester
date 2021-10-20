@@ -222,6 +222,24 @@ A storage volume is represented as `Lester::Volume`.
    end
    ```
 
+1. Get storage volume state:
+
+   ```crystal
+   lxd.volumes.state(
+     pool_name: "pool0",
+     name: "volume0",
+     type: "custom",
+     #...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |state|
+       puts state.usage.try &.used
+       # ...
+     end
+   end
+   ```
+
 ### Storage Volume Backups
 
 A storage volume backup is represented as `Lester::Volume::Backup`.
