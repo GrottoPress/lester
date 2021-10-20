@@ -45,17 +45,11 @@ struct Lester::Server::Endpoint
 
   def events(**params) : HTTP::WebSocket
     params = URI::Params.encode(params)
-    headers = HTTP::Headers.new
-    uri_path = "#{uri.path}/events?#{params}"
 
-    if websocket = websocket_for_unix_socket(uri_path, headers)
-      return websocket
-    end
+    uri = self.uri.dup
+    uri.path += "/events?#{params}"
 
-    @client.set_content_type(headers)
-    @client.set_user_agent(headers)
-
-    HTTP::WebSocket.new(uri.host.to_s, uri_path, headers: headers, tls: true)
+    @client.websocket(uri)
   end
 
   def resources(**params)
@@ -72,42 +66,5 @@ struct Lester::Server::Endpoint
 
   def uri : URI
     @client.uri
-  end
-
-  # Adapted from `HTTP::Websocket::Protocol.new`
-  private def websocket_for_unix_socket(uri_path, headers)
-    @client.socket.try do |socket|
-      key = Random::Secure.base64(16)
-
-      headers["Host"] = "#{@client.host}:#{@client.port}"
-      headers["Connection"] = "Upgrade"
-      headers["Upgrade"] = "websocket"
-      headers["Sec-WebSocket-Version"] = HTTP::WebSocket::Protocol::VERSION
-      headers["Sec-WebSocket-Key"] = key
-
-      HTTP::Request.new("GET", uri_path, headers).to_io(socket)
-      socket.flush
-
-      response = HTTP::Client::Response.from_io(socket, ignore_body: true)
-
-      unless response.status.switching_protocols?
-        raise Socket::Error.new(
-          "Handshake got denied. Status code was #{response.status.code}."
-        )
-      end
-
-      challenge_response = HTTP::WebSocket::Protocol.key_challenge(key)
-
-      unless response.headers["Sec-WebSocket-Accept"]? == challenge_response
-        raise Socket::Error.new(
-          "Handshake got denied. Server did not verify WebSocket challenge."
-        )
-      end
-
-      HTTP::WebSocket.new(socket)
-    rescue error
-      socket.close
-      raise error
-    end
   end
 end

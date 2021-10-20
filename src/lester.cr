@@ -83,6 +83,10 @@ class Lester
     @instances ||= Instance::Endpoint.new(self)
   end
 
+  def operations : Operation::Endpoint
+    @operations ||= Operation::Endpoint.new(self)
+  end
+
   def pools : Pool::Endpoint
     @pools ||= Pool::Endpoint.new(self)
   end
@@ -97,6 +101,17 @@ class Lester
 
   protected def recurse(**params)
     params.merge({recursion: "1"})
+  end
+
+  protected def websocket(uri, headers = HTTP::Headers.new)
+    if websocket = websocket_for_unix_socket(uri, headers)
+      return websocket
+    end
+
+    set_content_type(headers)
+    set_user_agent(headers)
+
+    HTTP::WebSocket.new(uri.host.to_s, uri.path, headers: headers, tls: true)
   end
 
   private def configure_tls(tls)
@@ -119,12 +134,49 @@ class Lester
     end
   end
 
-  protected def set_content_type(headers)
+  private def set_content_type(headers)
     headers["Content-Type"] = "application/json; charset=UTF-8"
   end
 
-  protected def set_user_agent(headers)
+  private def set_user_agent(headers)
     headers["User-Agent"] = "Lester/#{Lester::VERSION} \
       (+https://github.com/GrottoPress/lester)"
+  end
+
+  # Adapted from `HTTP::Websocket::Protocol.new`
+  private def websocket_for_unix_socket(uri, headers)
+    socket.try do |socket|
+      key = Random::Secure.base64(16)
+
+      headers["Host"] = "#{host}:#{port}"
+      headers["Connection"] = "Upgrade"
+      headers["Upgrade"] = "websocket"
+      headers["Sec-WebSocket-Version"] = HTTP::WebSocket::Protocol::VERSION
+      headers["Sec-WebSocket-Key"] = key
+
+      HTTP::Request.new("GET", uri.path, headers).to_io(socket)
+      socket.flush
+
+      response = HTTP::Client::Response.from_io(socket, ignore_body: true)
+
+      unless response.status.switching_protocols?
+        raise Socket::Error.new(
+          "Handshake got denied. Status code was #{response.status.code}."
+        )
+      end
+
+      challenge_response = HTTP::WebSocket::Protocol.key_challenge(key)
+
+      unless response.headers["Sec-WebSocket-Accept"]? == challenge_response
+        raise Socket::Error.new(
+          "Handshake got denied. Server did not verify WebSocket challenge."
+        )
+      end
+
+      HTTP::WebSocket.new(socket)
+    rescue error
+      socket.close
+      raise error
+    end
   end
 end

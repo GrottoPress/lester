@@ -98,7 +98,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 - [ ] Networks
 - [ ] Network Forwards
 - [ ] Network Peers
-- [ ] Operations
+- [x] Operations
 - [ ] Profiles
 - [ ] Projects
 - [x] Storage
