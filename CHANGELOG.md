@@ -16,5 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add network ACLs endpoints
 - Add networks endpoints
 - Add operations endpoints
+- Add profiles endpoints
 - Add storage endpoints
 - Add warnings endpoints

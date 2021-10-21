@@ -99,7 +99,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 - [ ] Network Forwards
 - [ ] Network Peers
 - [x] Operations
-- [ ] Profiles
+- [x] Profiles
 - [ ] Projects
 - [x] Storage
 - [x] Warnings

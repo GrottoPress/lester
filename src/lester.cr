@@ -99,6 +99,10 @@ class Lester
     @pools ||= Pool::Endpoint.new(self)
   end
 
+  def profiles : Profile::Endpoint
+    @profiles ||= Profile::Endpoint.new(self)
+  end
+
   def server : Server::Endpoint
     @server ||= Server::Endpoint.new(self)
   end
