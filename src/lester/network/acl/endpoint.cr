@@ -1,9 +1,5 @@
-struct Lester::Network::Endpoint
+struct Lester::Network::Acl::Endpoint
   include Hapi::Endpoint
-
-  def acls : Acl::Endpoint
-    @acls ||= Acl::Endpoint.new(@client)
-  end
 
   def list(**params)
     yield list(**params)
@@ -17,17 +13,13 @@ struct Lester::Network::Endpoint
     end
   end
 
-  def create(project = nil, target = nil, **params)
-    yield create(project, target, **params)
+  def create(project = nil, **params)
+    yield create(project, **params)
   end
 
-  def create(
-    project : String? = nil,
-    target : String? = nil,
-    **params
-  ) : Operation::Item
+  def create(project : String? = nil, **params) : Operation::Item
     @client.post(
-      "#{uri.path}?project=#{project}&target=#{target}",
+      "#{uri.path}?project=#{project}",
       body: params.to_json
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -56,18 +48,17 @@ struct Lester::Network::Endpoint
     end
   end
 
-  def update(name, project = nil, target = nil, **params)
-    yield update(name, project, target, **params)
+  def update(name, project = nil, **params)
+    yield update(name, project, **params)
   end
 
   def update(
     name : String,
     project : String? = nil,
-    target : String? = nil,
     **params
   ) : Operation::Item
     @client.patch(
-      "#{uri.path}/#{name}?project=#{project}&target=#{target}",
+      "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -93,51 +84,26 @@ struct Lester::Network::Endpoint
     end
   end
 
-  def replace(name, project = nil, target = nil, **params)
-    yield replace(name, project, target, **params)
+  def replace(name, project = nil, **params)
+    yield replace(name, project, **params)
   end
 
   def replace(
     name : String,
     project : String? = nil,
-    target : String? = nil,
     **params
   ) : Operation::Item
     @client.put(
-      "#{uri.path}/#{name}?project=#{project}&target=#{target}",
+      "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     ) do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
 
-  def leases(name, **params)
-    yield leases(name, **params)
-  end
-
-  def leases(name : String, **params) : Lease::List
-    params = URI::Params.encode(params)
-
-    @client.get("#{uri.path}/#{name}/leases?#{params}") do |response|
-      Lease::List.from_json(response.body_io)
-    end
-  end
-
-  def state(name, **params)
-    yield state(name, **params)
-  end
-
-  def state(name : String, **params) : State::Item
-    params = URI::Params.encode(params)
-
-    @client.get("#{uri.path}/#{name}/state?#{params}") do |response|
-      State::Item.from_json(response.body_io)
-    end
-  end
-
   def uri : URI
     uri = @client.uri.dup
-    uri.path += "/networks"
+    uri.path += "/network-acls"
     uri
   end
 end
