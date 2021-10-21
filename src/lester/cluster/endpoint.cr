@@ -1,6 +1,10 @@
 struct Lester::Cluster::Endpoint
   include Hapi::Endpoint
 
+  def members : Member::Endpoint
+    @members ||= Member::Endpoint.new(@client)
+  end
+
   def fetch
     yield fetch
   end

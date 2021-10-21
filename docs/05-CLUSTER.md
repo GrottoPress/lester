@@ -40,3 +40,113 @@ See <https://linuxcontainers.org/lxd/api/master/#/cluster> for the raw JSON sche
      puts response.code
    end
    ```
+
+### Cluster Members
+
+A cluster member is represented as `Lester::Cluster::Member`.
+
+#### Usage examples
+
+1. List all cluster members:
+
+   ```crystal
+   lxd.cluster.members.list do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try &.each do |member|
+       puts member.architecture
+       puts member.database?
+       puts member.description
+       # ...
+     end
+   end
+   ```
+
+1. Request a join token to add a cluster member:
+
+   ```crystal
+   lxd.cluster.members.add(server_name: "lxd02") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.err
+       puts operation.id
+       puts operation.location
+       # ...
+     end
+   end
+   ```
+
+1. Delete cluster member:
+
+   ```crystal
+   lxd.cluster.members.delete(name: "lxd01") do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Fetch cluster member:
+
+   ```crystal
+   lxd.cluster.members.fetch(name: "lxd01") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |member|
+       puts member.failure_domain
+       puts member.message
+       puts member.roles.try &.first?
+       # ...
+     end
+   end
+   ```
+
+1. Update cluster member:
+
+   ```crystal
+   # Uses the `PATCH` request method.
+   # Call `lxd.cluster.members.replace(...)` to use the `PUT` method instead.
+   lxd.cluster.members.update(
+     name: "lxd01",
+     config: {"scheduler.instance": "all"},
+     description: "AMD Epyc 32c/64t",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Rename cluster member:
+
+   ```crystal
+   lxd.cluster.members.rename(
+     name: "lxd01",
+     new_name: "lxd02",
+     # ...
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
+1. Evacuate or restore a cluster member:
+
+   ```crystal
+   lxd.cluster.members.state(name: "lxd01", action: "evacuate") do |response|
+     return puts response.message unless response.success?
+
+     response.metadata.try do |operation|
+       puts operation.class
+       puts operation.created_at
+       puts operation.description
+       # ...
+     end
+   end
+   ```
