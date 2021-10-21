@@ -41,6 +41,25 @@ See <https://linuxcontainers.org/lxd/api/master/#/cluster> for the raw JSON sche
    end
    ```
 
+### Cluster Certificate
+
+#### Usage examples
+
+1. Update cluster certificate:
+
+   ```crystal
+   # Uses the `PUT` request method
+   lxd.cluster.certificate.replace(
+     cluster_certificate: "X509 PEM certificate...",
+     cluster_certificate_key: "X509 PEM certificate key..."
+   ) do |response|
+     return puts response.message unless response.success?
+
+     puts response.type
+     puts response.code
+   end
+   ```
+
 ### Cluster Members
 
 A cluster member is represented as `Lester::Cluster::Member`.

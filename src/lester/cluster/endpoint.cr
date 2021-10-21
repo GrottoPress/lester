@@ -1,6 +1,10 @@
 struct Lester::Cluster::Endpoint
   include Hapi::Endpoint
 
+  def certificate : Certificate::Endpoint
+    @certificate ||= Certificate::Endpoint.new(@client)
+  end
+
   def members : Member::Endpoint
     @members ||= Member::Endpoint.new(@client)
   end
