@@ -90,7 +90,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 
 - [x] Server
 - [x] Certificates
-- [ ] Cluster
+- [x] Cluster
 - [x] Images
 - [x] Instances
 - [ ] Metrics

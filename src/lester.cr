@@ -75,6 +75,10 @@ class Lester
     @certificates ||= Certificate::Endpoint.new(self)
   end
 
+  def cluster : Cluster::Endpoint
+    @cluster ||= Cluster::Endpoint.new(self)
+  end
+
   def images : Image::Endpoint
     @images ||= Image::Endpoint.new(self)
   end
