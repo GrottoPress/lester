@@ -95,7 +95,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 - [x] Instances
 - [ ] Metrics
 - [ ] Network ACLs
-- [ ] Networks
+- [x] Networks
 - [ ] Network Forwards
 - [ ] Network Peers
 - [x] Operations

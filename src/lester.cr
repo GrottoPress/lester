@@ -83,6 +83,10 @@ class Lester
     @instances ||= Instance::Endpoint.new(self)
   end
 
+  def networks : Network::Endpoint
+    @networks ||= Network::Endpoint.new(self)
+  end
+
   def operations : Operation::Endpoint
     @operations ||= Operation::Endpoint.new(self)
   end
