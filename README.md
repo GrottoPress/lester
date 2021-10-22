@@ -86,24 +86,6 @@
 
 Find the complete documentation in the `docs/` directory of this repository.
 
-## Todo
-
-- [x] Server
-- [x] Certificates
-- [x] Cluster
-- [x] Images
-- [x] Instances
-- [ ] Metrics
-- [x] Network ACLs
-- [x] Networks
-- [x] Network Forwards
-- [x] Network Peers
-- [x] Operations
-- [x] Profiles
-- [x] Projects
-- [x] Storage
-- [x] Warnings
-
 ## Development
 
 1. Create a `.env.sh` file:
