@@ -5,6 +5,10 @@ struct Lester::Network::Endpoint
     @acls ||= Acl::Endpoint.new(@client)
   end
 
+  def forwards : Forward::Endpoint
+    @forwards ||= Forward::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end
