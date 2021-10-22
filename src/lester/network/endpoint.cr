@@ -9,6 +9,10 @@ struct Lester::Network::Endpoint
     @forwards ||= Forward::Endpoint.new(@client)
   end
 
+  def peers : Peer::Endpoint
+    @peers ||= Peer::Endpoint.new(@client)
+  end
+
   def list(**params)
     yield list(**params)
   end
