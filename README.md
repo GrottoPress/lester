@@ -100,7 +100,7 @@ Find the complete documentation in the `docs/` directory of this repository.
 - [ ] Network Peers
 - [x] Operations
 - [x] Profiles
-- [ ] Projects
+- [x] Projects
 - [x] Storage
 - [x] Warnings
 

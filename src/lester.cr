@@ -103,6 +103,10 @@ class Lester
     @profiles ||= Profile::Endpoint.new(self)
   end
 
+  def projects : Project::Endpoint
+    @projects ||= Project::Endpoint.new(self)
+  end
+
   def server : Server::Endpoint
     @server ||= Server::Endpoint.new(self)
   end

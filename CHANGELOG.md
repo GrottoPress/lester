@@ -17,5 +17,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add networks endpoints
 - Add operations endpoints
 - Add profiles endpoints
+- Add projects endpoints
 - Add storage endpoints
 - Add warnings endpoints
