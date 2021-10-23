@@ -260,6 +260,24 @@ describe Lester::Image::Endpoint do
         File.delete(destination)
       end
     end
+
+    it "saves image to IO" do
+      body_io = IO::Memory.new("Lester::Image::Endpoint#export")
+      destination = IO::Memory.new
+
+      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/images/a1b2/export")
+        .with(query: {"project" => "default"})
+        .to_return(body_io: body_io)
+
+      LXD.images.export(
+        fingerprint: "a1b2",
+        project: "default",
+        destination: destination
+      ) do |response|
+        response.success?.should be_true
+        destination.to_s.should eq(body_io.to_s)
+      end
+    end
   end
 
   describe "#push" do

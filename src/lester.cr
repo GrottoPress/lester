@@ -138,6 +138,15 @@ class Lester
     HTTP::WebSocket.new(uri.host.to_s, uri.path, headers: headers, tls: true)
   end
 
+  protected def copy(source, destination) : Nil
+    case destination
+    when IO
+      IO.copy(source, destination)
+    else
+      File.write(destination, source, mode: "wb")
+    end
+  end
+
   private def configure_tls(tls)
     tls.cipher_suites = OpenSSL::SSL::Context::CIPHER_SUITES_MODERN
 

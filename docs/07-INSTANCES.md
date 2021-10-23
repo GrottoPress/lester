@@ -210,7 +210,7 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
    lxd.instances.backups.export(
      instance_name: "instance-04",
      name: "backup0",
-     destination: "/home/user/Downloads/backup.zip"
+     destination: "/home/user/Downloads/backup.zip" # May be an `IO`
    ) do |response|
      puts response.message
    end
@@ -244,7 +244,7 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
    ```crystal
    lxd.instances.console.output(
      instance_name: "instance-04",
-     outfile: "/home/user/console.log"
+     destination: "/home/user/console.log" # May be an `IO`
    ) do |response|
      puts response.message
    end
@@ -282,7 +282,7 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
    lxd.instances.files.fetch(
      instance_name: "instance-04",
      path: "/path/to/file",
-     destination: "/home/user/Downloads/file.txt"
+     destination: "/home/user/Downloads/file.txt" # May be an `IO`
    ) do |response|
      puts response.message
    end
@@ -380,7 +380,7 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
    lxd.instances.logs.fetch(
      instance_name: "instance-04",
      filename: "file.log",
-     destination: "/home/user/Downloads/file.log",
+     destination: "/home/user/Downloads/file.log", # May be an `IO`
      #...
    ) do |response|
      puts response.message
@@ -476,7 +476,7 @@ See <https://linuxcontainers.org/lxd/api/master/#/instances> for the raw JSON sc
    lxd.instances.templates.fetch(
      instance_name: "instance-04",
      path: "/path/to/file",
-     destination: "/home/user/Downloads/file.tpl"
+     destination: "/home/user/Downloads/file.tpl" # May be an `IO`
    ) do |response|
      puts response.message
    end

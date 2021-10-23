@@ -246,5 +246,27 @@ describe Lester::Volume::Backup::Endpoint do
         File.delete(destination)
       end
     end
+
+    it "saves backup to IO" do
+      body_io = IO::Memory.new("Lester::Volume::Backup::Endpoint#export")
+      destination = IO::Memory.new
+
+      WebMock.stub(
+        :GET,
+        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+          backups/backup0/export"
+      ).to_return(body_io: body_io)
+
+      LXD.volumes.backups.export(
+        pool_name: "pool0",
+        volume_name: "volume0",
+        volume_type: "custom",
+        name: "backup0",
+        destination: destination
+      ) do |response|
+        response.success?.should be_true
+        destination.to_s.should eq(body_io.to_s)
+      end
+    end
   end
 end

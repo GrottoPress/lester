@@ -50,16 +50,29 @@ describe Lester::Instance::Console::Endpoint do
   describe "#output" do
     it "writes console log to a file" do
       body_io = IO::Memory.new("Lester::Instance::Console::Endpoint#output")
-      outfile = File.tempname("lester-instance-console-endpoint-output")
+      destination = File.tempname("lester-instance-console-endpoint-output")
 
       WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/console")
         .to_return(body_io: body_io)
 
-      LXD.instances.console.output("inst4", outfile) do |response|
+      LXD.instances.console.output("inst4", destination) do |response|
         response.success?.should be_true
-        File.read_lines(outfile).first?.should eq(body_io.to_s)
+        File.read_lines(destination).first?.should eq(body_io.to_s)
       ensure
-        File.delete(outfile)
+        File.delete(destination)
+      end
+    end
+
+    it "saves output to IO" do
+      body_io = IO::Memory.new("Lester::Instance::Console::Endpoint#output")
+      destination = IO::Memory.new
+
+      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/console")
+        .to_return(body_io: body_io)
+
+      LXD.instances.console.output("inst4", destination) do |response|
+        response.success?.should be_true
+        destination.to_s.should eq(body_io.to_s)
       end
     end
   end

@@ -216,5 +216,20 @@ describe Lester::Instance::Backup::Endpoint do
         File.delete(destination)
       end
     end
+
+    it "saves backup to IO" do
+      body_io = IO::Memory.new("Lester::Instance::Backup::Endpoint#export")
+      destination = IO::Memory.new
+
+      WebMock.stub(
+        :GET,
+        "#{LXD_BASE_URI}/1.0/instances/inst4/backups/bak0/export"
+      ).to_return(body_io: body_io)
+
+      LXD.instances.backups.export("inst4", "bak0", destination) do |response|
+        response.success?.should be_true
+        destination.to_s.should eq(body_io.to_s)
+      end
+    end
   end
 end

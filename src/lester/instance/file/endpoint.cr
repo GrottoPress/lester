@@ -80,7 +80,8 @@ struct Lester::Instance::File::Endpoint
 
     @client.get("#{base_path}?#{params}") do |response|
       return Item.from_json(response.body_io) unless response.status.success?
-      ::File.write(destination, response.body_io, mode: "wb")
+
+      @client.copy(response.body_io, destination)
 
       Item.from_json({
         type: "sync",

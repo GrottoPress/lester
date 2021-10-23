@@ -20,11 +20,11 @@ struct Lester::Instance::Console::Endpoint
     end
   end
 
-  def output(instance_name, outfile, **params)
-    yield output(instance_name, outfile, **params)
+  def output(instance_name, destination, **params)
+    yield output(instance_name, destination, **params)
   end
 
-  def output(instance_name : String, outfile, **params) : Operation::Item
+  def output(instance_name : String, destination, **params) : Operation::Item
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
@@ -33,7 +33,7 @@ struct Lester::Instance::Console::Endpoint
         return Operation::Item.from_json(response.body_io)
       end
 
-      ::File.write(outfile, response.body_io, mode: "wb")
+      @client.copy(response.body_io, destination)
 
       Operation::Item.from_json({
         type: "sync",

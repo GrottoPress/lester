@@ -78,7 +78,7 @@ describe Lester::Instance::Template::Endpoint do
   end
 
   describe "#fetch" do
-    it "fetches template" do
+    it "downloads template" do
       body_io = IO::Memory.new("Lester::Instance::Template::Endpoint#fetch")
       destination = File.tempname("lester-instance-file-endpoint-fetch")
 
@@ -98,6 +98,27 @@ describe Lester::Instance::Template::Endpoint do
         File.read_lines(destination).first?.should eq(body_io.to_s)
       ensure
         File.delete(destination)
+      end
+    end
+
+    it "saved template to IO" do
+      body_io = IO::Memory.new("Lester::Instance::Template::Endpoint#fetch")
+      destination = IO::Memory.new
+
+      WebMock.stub(
+        :GET,
+        "#{LXD_BASE_URI}/1.0/instances/inst4/metadata/templates"
+      )
+        .with(query: {"path" => "file.tpl"})
+        .to_return(body_io: body_io)
+
+      LXD.instances.templates.fetch(
+        instance_name: "inst4",
+        path: "file.tpl",
+        destination: destination
+      ) do |response|
+        response.success?.should be_true
+        destination.to_s.should eq(body_io.to_s)
       end
     end
   end

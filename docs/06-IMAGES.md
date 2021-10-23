@@ -98,7 +98,7 @@ See <https://linuxcontainers.org/lxd/api/master/#/images> for the raw JSON schem
    ```crystal
    lxd.images.export(
      fingerprint: "a1b2c3...",
-     destination: "/home/user/Downloads/image.zip",
+     destination: "/home/user/Downloads/image.zip", # May be an `IO`
      project: "my-project",
    ) do |response|
      puts response.message

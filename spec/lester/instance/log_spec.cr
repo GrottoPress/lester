@@ -68,5 +68,22 @@ describe Lester::Instance::Log::Endpoint do
         File.delete(destination)
       end
     end
+
+    it "saves log file to IO" do
+      body_io = IO::Memory.new("Lester::Instance::Log::Endpoint#fetch")
+      destination = IO::Memory.new
+
+      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/logs/file.log")
+        .to_return(body_io: body_io)
+
+      LXD.instances.logs.fetch(
+        instance_name: "inst4",
+        filename: "file.log",
+        destination: destination
+      ) do |response|
+        response.success?.should be_true
+        destination.to_s.should eq(body_io.to_s)
+      end
+    end
   end
 end

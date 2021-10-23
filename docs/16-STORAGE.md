@@ -358,7 +358,7 @@ A storage volume backup is represented as `Lester::Volume::Backup`.
      volume_name: "volume0",
      volume_type: "custom",
      name: "backup0",
-     destination: "/home/user/Downloads/backup.zip"
+     destination: "/home/user/Downloads/backup.zip" # May be an `IO`
    ) do |response|
      puts response.message
    end
