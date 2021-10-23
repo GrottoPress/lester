@@ -13,6 +13,7 @@ class Lester
 
   def initialize(base_uri : URI, tls : OpenSSL::SSL::Context::Client)
     @uri = base_uri
+    @uri.scheme = "https"
     @uri.path = @uri.path.rchop("/").rchop("/1.0")
     @uri.path += "/1.0"
     @uri.fragment = nil
