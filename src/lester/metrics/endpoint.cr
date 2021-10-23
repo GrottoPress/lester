@@ -10,7 +10,7 @@ struct Lester::Metrics::Endpoint
 
     @client.get("#{uri.path}?#{params}") do |response|
       unless response.status.success?
-        raise Lester::Error.new("Could not retrieve metrics. \
+        raise Error.new("Could not retrieve metrics. \
           Remote server returned status code #{response.status_code}")
       end
 
