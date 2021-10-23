@@ -28,7 +28,7 @@ describe Lester::Certificate::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/certificates")
+      WebMock.stub(:GET, "#{LXD.uri}/certificates")
         .with(query: {"recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -52,7 +52,7 @@ describe Lester::Certificate::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/certificates?public")
+      WebMock.stub(:POST, "#{LXD.uri}/certificates?public")
         .with(body: %({"password":"secret"}))
         .to_return(body_io: body_io)
 
@@ -75,7 +75,7 @@ describe Lester::Certificate::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/certificates/a1b2c3")
+      WebMock.stub(:DELETE, "#{LXD.uri}/certificates/a1b2c3")
         .to_return(body_io: body_io)
 
       LXD.certificates.delete(fingerprint: "a1b2c3") do |response|
@@ -109,7 +109,7 @@ describe Lester::Certificate::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/certificates/a1b2c3")
+      WebMock.stub(:GET, "#{LXD.uri}/certificates/a1b2c3")
         .to_return(body_io: body_io)
 
       LXD.certificates.fetch(fingerprint: "a1b2c3") do |response|
@@ -132,7 +132,7 @@ describe Lester::Certificate::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/certificates/a1b2c3")
+      WebMock.stub(:PATCH, "#{LXD.uri}/certificates/a1b2c3")
         .with(body: %({"name":"castiana","restricted":true}))
         .to_return(body_io: body_io)
 
@@ -159,7 +159,7 @@ describe Lester::Certificate::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/certificates/a1b2c3")
+      WebMock.stub(:PUT, "#{LXD.uri}/certificates/a1b2c3")
         .with(body: %({"name":"castiana","restricted":true}))
         .to_return(body_io: body_io)
 

@@ -15,7 +15,7 @@ describe Lester::Instance::File::Endpoint do
 
       WebMock.stub(
         :POST,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/files?path=file.txt&project="
+        "#{LXD.uri}/instances/inst4/files?path=file.txt&project="
       ).to_return(body_io: body_io)
 
       LXD.instances.files.create(
@@ -33,7 +33,7 @@ describe Lester::Instance::File::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::File::Endpoint#fetch")
       destination = File.tempname("lester-instance-file-endpoint-fetch")
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/files")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/files")
         .with(query: {"path" => "file.txt"})
         .to_return(body_io: body_io)
 
@@ -53,7 +53,7 @@ describe Lester::Instance::File::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::File::Endpoint#fetch")
       destination = IO::Memory.new
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/files")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/files")
         .with(query: {"path" => "file.txt"})
         .to_return(body_io: body_io)
 
@@ -80,7 +80,7 @@ describe Lester::Instance::File::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/files?path=file.txt&project="
+        "#{LXD.uri}/instances/inst4/files?path=file.txt&project="
       ).to_return(body_io: body_io)
 
       LXD.instances.files.delete("inst4", "file.txt") do |response|

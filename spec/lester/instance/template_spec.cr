@@ -15,10 +15,8 @@ describe Lester::Instance::Template::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :GET,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/metadata/templates"
-      ).to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/metadata/templates")
+        .to_return(body_io: body_io)
 
       LXD.instances.templates.list(instance_name: "inst4") do |response|
         response.success?.should be_true
@@ -41,8 +39,7 @@ describe Lester::Instance::Template::Endpoint do
 
       WebMock.stub(
         :POST,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/metadata/templates?\
-          path=file.tpl&project="
+        "#{LXD.uri}/instances/inst4/metadata/templates?path=file.tpl&project="
       ).to_return(body_io: body_io)
 
       LXD.instances.templates.create(
@@ -67,8 +64,7 @@ describe Lester::Instance::Template::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/metadata/templates?\
-          path=file.tpl&project="
+        "#{LXD.uri}/instances/inst4/metadata/templates?path=file.tpl&project="
       ).to_return(body_io: body_io)
 
       LXD.instances.templates.delete("inst4", "file.tpl") do |response|
@@ -82,10 +78,7 @@ describe Lester::Instance::Template::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::Template::Endpoint#fetch")
       destination = File.tempname("lester-instance-file-endpoint-fetch")
 
-      WebMock.stub(
-        :GET,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/metadata/templates"
-      )
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/metadata/templates")
         .with(query: {"path" => "file.tpl"})
         .to_return(body_io: body_io)
 
@@ -105,10 +98,7 @@ describe Lester::Instance::Template::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::Template::Endpoint#fetch")
       destination = IO::Memory.new
 
-      WebMock.stub(
-        :GET,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/metadata/templates"
-      )
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/metadata/templates")
         .with(query: {"path" => "file.tpl"})
         .to_return(body_io: body_io)
 

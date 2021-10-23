@@ -31,7 +31,7 @@ describe Lester::Project::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/projects")
+      WebMock.stub(:GET, "#{LXD.uri}/projects")
         .with(query: {"recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -55,7 +55,7 @@ describe Lester::Project::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/projects")
+      WebMock.stub(:POST, "#{LXD.uri}/projects")
         .with(body: %({\
           "name":"project1",\
           "config":{"features.profiles":"true"},\
@@ -86,7 +86,7 @@ describe Lester::Project::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/projects/project0")
+      WebMock.stub(:DELETE, "#{LXD.uri}/projects/project0")
         .to_return(body_io: body_io)
 
       LXD.projects.delete(name: "project0") do |response|
@@ -123,7 +123,7 @@ describe Lester::Project::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/projects/project0")
+      WebMock.stub(:GET, "#{LXD.uri}/projects/project0")
         .to_return(body_io: body_io)
 
       LXD.projects.fetch(name: "project0") do |response|
@@ -146,7 +146,7 @@ describe Lester::Project::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/projects/project0")
+      WebMock.stub(:PATCH, "#{LXD.uri}/projects/project0")
         .with(body: %({"config":{"features.profiles":"true"}}))
         .to_return(body_io: body_io)
 
@@ -172,7 +172,7 @@ describe Lester::Project::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/projects/project0")
+      WebMock.stub(:POST, "#{LXD.uri}/projects/project0")
         .with(body: %({"name":"project1"}))
         .to_return(body_io: body_io)
 
@@ -195,7 +195,7 @@ describe Lester::Project::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/projects/project0")
+      WebMock.stub(:PUT, "#{LXD.uri}/projects/project0")
         .with(body: %({"config":{"features.profiles":"true"}}))
         .to_return(body_io: body_io)
 
@@ -257,7 +257,7 @@ describe Lester::Project::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/projects/project0/state")
+      WebMock.stub(:GET, "#{LXD.uri}/projects/project0/state")
         .to_return(body_io: body_io)
 
       LXD.projects.state(name: "project0") do |response|

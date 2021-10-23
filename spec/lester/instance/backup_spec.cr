@@ -24,7 +24,7 @@ describe Lester::Instance::Backup::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/backups")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/backups")
         .with(query: {"recursion" => "1", "project" => "default"})
         .to_return(body_io: body_io)
 
@@ -62,10 +62,7 @@ describe Lester::Instance::Backup::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :POST,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/backups?project="
-      )
+      WebMock.stub(:POST, "#{LXD.uri}/instances/inst4/backups?project=")
         .with(body: %({"name":"backup0","compression_algorithm":"gzip"}))
         .to_return(body_io: body_io)
 
@@ -109,9 +106,8 @@ describe Lester::Instance::Backup::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/instances/debian-10/backups/backup0?project="
-      )
-        .to_return(body_io: body_io)
+        "#{LXD.uri}/instances/debian-10/backups/backup0?project="
+      ).to_return(body_io: body_io)
 
       LXD.instances.backups.delete(
         instance_name: "debian-10",
@@ -144,7 +140,7 @@ describe Lester::Instance::Backup::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/backups/bak0")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/backups/bak0")
         .to_return(body_io: body_io)
 
       LXD.instances.backups.fetch("inst4", "bak0") do |response|
@@ -183,7 +179,7 @@ describe Lester::Instance::Backup::Endpoint do
 
       WebMock.stub(
         :POST,
-        "#{LXD_BASE_URI}/1.0/instances/debian-10/backups/bak0?project="
+        "#{LXD.uri}/instances/debian-10/backups/bak0?project="
       )
         .with(body: %({"name":"debian-bak"}))
         .to_return(body_io: body_io)
@@ -204,10 +200,8 @@ describe Lester::Instance::Backup::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::Backup::Endpoint#export")
       destination = File.tempname("lester-instance-backup-endpoint-export")
 
-      WebMock.stub(
-        :GET,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/backups/bak0/export"
-      ).to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/backups/bak0/export")
+        .to_return(body_io: body_io)
 
       LXD.instances.backups.export("inst4", "bak0", destination) do |response|
         response.success?.should be_true
@@ -221,10 +215,8 @@ describe Lester::Instance::Backup::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::Backup::Endpoint#export")
       destination = IO::Memory.new
 
-      WebMock.stub(
-        :GET,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/backups/bak0/export"
-      ).to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/backups/bak0/export")
+        .to_return(body_io: body_io)
 
       LXD.instances.backups.export("inst4", "bak0", destination) do |response|
         response.success?.should be_true

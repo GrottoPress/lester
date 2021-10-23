@@ -16,7 +16,7 @@ describe Lester::Metrics::Endpoint do
         lxd_cpu_seconds_total{cpu="3",mode="user",name="buster"} 690
         TEXT
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/metrics")
+      WebMock.stub(:GET, "#{LXD.uri}/metrics")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 

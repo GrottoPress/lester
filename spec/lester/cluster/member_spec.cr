@@ -32,7 +32,7 @@ describe Lester::Cluster::Member::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/cluster/members")
+      WebMock.stub(:GET, "#{LXD.uri}/cluster/members")
         .with(query: {"recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -93,7 +93,7 @@ describe Lester::Cluster::Member::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/cluster/members")
+      WebMock.stub(:POST, "#{LXD.uri}/cluster/members")
         .with(body: %({"server_name":"lxd02"}))
         .to_return(body_io: body_io)
 
@@ -117,7 +117,7 @@ describe Lester::Cluster::Member::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/cluster/members/lxd01")
+      WebMock.stub(:DELETE, "#{LXD.uri}/cluster/members/lxd01")
         .to_return(body_io: body_io)
 
       LXD.cluster.members.delete(name: "lxd01") do |response|
@@ -155,7 +155,7 @@ describe Lester::Cluster::Member::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/cluster/members/lxd01")
+      WebMock.stub(:GET, "#{LXD.uri}/cluster/members/lxd01")
         .to_return(body_io: body_io)
 
       LXD.cluster.members.fetch(name: "lxd01") do |response|
@@ -178,7 +178,7 @@ describe Lester::Cluster::Member::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/cluster/members/lxd01")
+      WebMock.stub(:PATCH, "#{LXD.uri}/cluster/members/lxd01")
         .with(body: %({"failure_domain":"rack1","roles":["database"]}))
         .to_return(body_io: body_io)
 
@@ -205,7 +205,7 @@ describe Lester::Cluster::Member::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/cluster/members/lxd01")
+      WebMock.stub(:POST, "#{LXD.uri}/cluster/members/lxd01")
         .with(body: %({"server_name":"lxd02"}))
         .to_return(body_io: body_io)
 
@@ -228,7 +228,7 @@ describe Lester::Cluster::Member::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/cluster/members/lxd01")
+      WebMock.stub(:PUT, "#{LXD.uri}/cluster/members/lxd01")
         .with(body: %({"failure_domain":"rack1","roles":["database"]}))
         .to_return(body_io: body_io)
 
@@ -292,7 +292,7 @@ describe Lester::Cluster::Member::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/cluster/members/lxd01/state")
+      WebMock.stub(:POST, "#{LXD.uri}/cluster/members/lxd01/state")
         .with(body: %({"action":"evacuate"}))
         .to_return(body_io: body_io)
 

@@ -47,7 +47,7 @@ describe Lester::Instance::Snapshot::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/snapshots")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/snapshots")
         .with(query: {"recursion" => "1", "project" => "default"})
         .to_return(body_io: body_io)
 
@@ -85,10 +85,7 @@ describe Lester::Instance::Snapshot::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :POST,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/snapshots?project="
-      )
+      WebMock.stub(:POST, "#{LXD.uri}/instances/inst4/snapshots?project=")
         .with(body: %({"name":"snap0"}))
         .to_return(body_io: body_io)
 
@@ -131,7 +128,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/snapshots/snap0?project="
+        "#{LXD.uri}/instances/inst4/snapshots/snap0?project="
       )
         .to_return(body_io: body_io)
 
@@ -189,7 +186,7 @@ describe Lester::Instance::Snapshot::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/snapshots/snap0")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/snapshots/snap0")
         .to_return(body_io: body_io)
 
       LXD.instances.snapshots.fetch("inst4", "snap0") do |response|
@@ -228,7 +225,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
       WebMock.stub(
         :PATCH,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/snapshots/snap0?project="
+        "#{LXD.uri}/instances/inst4/snapshots/snap0?project="
       )
         .with(body: %({"expires_at":"2021-10-26T13:11:03Z"}))
         .to_return(body_io: body_io)
@@ -271,10 +268,7 @@ describe Lester::Instance::Snapshot::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :POST,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/snapshots/snap0?project="
-      )
+      WebMock.stub(:POST, "#{LXD.uri}/instances/inst4/snapshots/snap0?project=")
         .with(body: %({"live":false,"name":"debian-snap"}))
         .to_return(body_io: body_io)
 
@@ -317,10 +311,7 @@ describe Lester::Instance::Snapshot::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :PUT,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/snapshots/snap0?project="
-      )
+      WebMock.stub(:PUT, "#{LXD.uri}/instances/inst4/snapshots/snap0?project=")
         .with(body: %({"expires_at":"2021-10-26T13:11:03Z"}))
         .to_return(body_io: body_io)
 

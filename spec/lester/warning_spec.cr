@@ -29,7 +29,7 @@ describe Lester::Warning::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/warnings")
+      WebMock.stub(:GET, "#{LXD.uri}/warnings")
         .with(query: {"project" => "default", "recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -53,7 +53,7 @@ describe Lester::Warning::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/warnings/a1b2c3")
+      WebMock.stub(:DELETE, "#{LXD.uri}/warnings/a1b2c3")
         .to_return(body_io: body_io)
 
       LXD.warnings.delete(uuid: "a1b2c3") do |response|
@@ -88,7 +88,7 @@ describe Lester::Warning::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/warnings/a1b2c3")
+      WebMock.stub(:GET, "#{LXD.uri}/warnings/a1b2c3")
         .to_return(body_io: body_io)
 
       LXD.warnings.fetch(uuid: "a1b2c3") do |response|
@@ -111,7 +111,7 @@ describe Lester::Warning::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/warnings/a1b2c3")
+      WebMock.stub(:PATCH, "#{LXD.uri}/warnings/a1b2c3")
         .with(body: %({"status":"new"}))
         .to_return(body_io: body_io)
 
@@ -134,7 +134,7 @@ describe Lester::Warning::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/warnings/a1b2c3")
+      WebMock.stub(:PUT, "#{LXD.uri}/warnings/a1b2c3")
         .with(body: %({"status":"new"}))
         .to_return(body_io: body_io)
 

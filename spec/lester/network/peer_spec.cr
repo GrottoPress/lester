@@ -26,7 +26,7 @@ describe Lester::Network::Peer::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/networks/lxdbr0/peers")
+      WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/peers")
         .with(query: {"recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -50,7 +50,7 @@ describe Lester::Network::Peer::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/networks/lxdbr0/peers?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/networks/lxdbr0/peers?project=")
         .with(body: %({\
           "name":"peer1",\
           "config":{"user.mykey":"foo"},\
@@ -84,7 +84,7 @@ describe Lester::Network::Peer::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/networks/lxdbr0/peers/peer0?project="
+        "#{LXD.uri}/networks/lxdbr0/peers/peer0?project="
       ).to_return(body_io: body_io)
 
       LXD.networks.peers.delete(
@@ -119,7 +119,7 @@ describe Lester::Network::Peer::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/networks/lxdbr0/peers/peer0")
+      WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/peers/peer0")
         .to_return(body_io: body_io)
 
       LXD.networks.peers.fetch(
@@ -145,10 +145,7 @@ describe Lester::Network::Peer::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :PATCH,
-        "#{LXD_BASE_URI}/1.0/networks/lxdbr0/peers/peer0?project="
-      )
+      WebMock.stub(:PATCH, "#{LXD.uri}/networks/lxdbr0/peers/peer0?project=")
         .with(body: %({"config":{"user.mykey":"bar"}}))
         .to_return(body_io: body_io)
 
@@ -175,10 +172,7 @@ describe Lester::Network::Peer::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :PUT,
-        "#{LXD_BASE_URI}/1.0/networks/lxdbr0/peers/peer0?project="
-      )
+      WebMock.stub(:PUT, "#{LXD.uri}/networks/lxdbr0/peers/peer0?project=")
         .with(body: %({"config":{"user.mykey":"bar"}}))
         .to_return(body_io: body_io)
 

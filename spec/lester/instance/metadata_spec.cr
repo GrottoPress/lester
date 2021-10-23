@@ -39,7 +39,7 @@ describe Lester::Instance::Metadata::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/metadata")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/metadata")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
@@ -66,10 +66,7 @@ describe Lester::Instance::Metadata::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :PATCH,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/metadata?project="
-      )
+      WebMock.stub(:PATCH, "#{LXD.uri}/instances/inst4/metadata?project=")
         .with(body: %({"architecture":"x86_64","expiry_date":1620685757}))
         .to_return(body_io: body_io)
 
@@ -96,10 +93,7 @@ describe Lester::Instance::Metadata::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :PUT,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/metadata?project="
-      )
+      WebMock.stub(:PUT, "#{LXD.uri}/instances/inst4/metadata?project=")
         .with(body: %({"architecture":"x86_64","expiry_date":1620685757}))
         .to_return(body_io: body_io)
 

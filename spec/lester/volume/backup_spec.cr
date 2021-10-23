@@ -25,8 +25,7 @@ describe Lester::Volume::Backup::Endpoint do
 
       WebMock.stub(
         :GET,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/\
-          volume0/backups"
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/backups"
       )
         .with(query: {"recursion" => "1", "project" => "default"})
         .to_return(body_io: body_io)
@@ -72,7 +71,7 @@ describe Lester::Volume::Backup::Endpoint do
 
       WebMock.stub(
         :POST,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           backups?project=&target="
       )
         .with(body: %({"name":"backup0","compression_algorithm":"gzip"}))
@@ -120,7 +119,7 @@ describe Lester::Volume::Backup::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           backups/backup0?project=&target="
       ).to_return(body_io: body_io)
 
@@ -158,8 +157,7 @@ describe Lester::Volume::Backup::Endpoint do
 
       WebMock.stub(
         :GET,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
-          backups/backup0"
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/backups/backup0"
       ).to_return(body_io: body_io)
 
       LXD.volumes.backups.fetch(
@@ -203,7 +201,7 @@ describe Lester::Volume::Backup::Endpoint do
 
       WebMock.stub(
         :POST,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           backups/backup0?project=&target="
       )
         .with(body: %({"name":"backup1"}))
@@ -229,7 +227,7 @@ describe Lester::Volume::Backup::Endpoint do
 
       WebMock.stub(
         :GET,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           backups/backup0/export"
       ).to_return(body_io: body_io)
 
@@ -253,7 +251,7 @@ describe Lester::Volume::Backup::Endpoint do
 
       WebMock.stub(
         :GET,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           backups/backup0/export"
       ).to_return(body_io: body_io)
 

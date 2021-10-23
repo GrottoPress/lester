@@ -37,7 +37,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/networks")
+      WebMock.stub(:GET, "#{LXD.uri}/networks")
         .with(query: {"project" => "default", "recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -61,7 +61,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/networks?project=&target=")
+      WebMock.stub(:POST, "#{LXD.uri}/networks?project=&target=")
         .with(body: %({"name":"lxdbr0","type":"bridge"}))
         .to_return(body_io: body_io)
 
@@ -84,7 +84,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/networks/lxdbr0?project=")
+      WebMock.stub(:DELETE, "#{LXD.uri}/networks/lxdbr0?project=")
         .to_return(body_io: body_io)
 
       LXD.networks.delete(name: "lxdbr0") do |response|
@@ -127,7 +127,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/networks/lxdbr0")
+      WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0")
         .to_return(body_io: body_io)
 
       LXD.networks.fetch(name: "lxdbr0") do |response|
@@ -150,10 +150,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :PATCH,
-        "#{LXD_BASE_URI}/1.0/networks/lxdbr0?project=&target="
-      )
+      WebMock.stub(:PATCH, "#{LXD.uri}/networks/lxdbr0?project=&target=")
         .with(body: %({"config":{"ipv4.nat":"true","ipv6.address":"none"}}))
         .to_return(body_io: body_io)
 
@@ -179,7 +176,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/networks/lxdbr0?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/networks/lxdbr0?project=")
         .with(body: %({"name":"lxdbr10"}))
         .to_return(body_io: body_io)
 
@@ -202,7 +199,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/networks/lxdbr0?project=&target=")
+      WebMock.stub(:PUT, "#{LXD.uri}/networks/lxdbr0?project=&target=")
         .with(body: %({"config":{"ipv4.nat":"true","ipv6.address":"none"}}))
         .to_return(body_io: body_io)
 
@@ -237,7 +234,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/networks/lxdbr0/leases")
+      WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/leases")
         .to_return(body_io: body_io)
 
       LXD.networks.leases(name: "lxdbr0") do |response|
@@ -307,7 +304,7 @@ describe Lester::Network::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/networks/lxdbr0/state")
+      WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/state")
         .to_return(body_io: body_io)
 
       LXD.networks.state(name: "lxdbr0") do |response|

@@ -56,7 +56,7 @@ describe Lester::Network::Acl::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/network-acls")
+      WebMock.stub(:GET, "#{LXD.uri}/network-acls")
         .with(query: {"project" => "default", "recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -80,7 +80,7 @@ describe Lester::Network::Acl::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/network-acls?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/network-acls?project=")
         .with(body: %({\
           "name":"web-out",\
           "egress":[{\
@@ -113,7 +113,7 @@ describe Lester::Network::Acl::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/network-acls/web-out?project=")
+      WebMock.stub(:DELETE, "#{LXD.uri}/network-acls/web-out?project=")
         .to_return(body_io: body_io)
 
       LXD.networks.acls.delete(name: "web-out") do |response|
@@ -175,7 +175,7 @@ describe Lester::Network::Acl::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/network-acls/web-out")
+      WebMock.stub(:GET, "#{LXD.uri}/network-acls/web-out")
         .to_return(body_io: body_io)
 
       LXD.networks.acls.fetch(name: "web-out") do |response|
@@ -198,7 +198,7 @@ describe Lester::Network::Acl::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/network-acls/web-out?project=")
+      WebMock.stub(:PATCH, "#{LXD.uri}/network-acls/web-out?project=")
         .with(body: %({"egress":[{"state":"disabled"}]}))
         .to_return(body_io: body_io)
 
@@ -224,7 +224,7 @@ describe Lester::Network::Acl::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/network-acls/web-out?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/network-acls/web-out?project=")
         .with(body: %({"name":"http-out"}))
         .to_return(body_io: body_io)
 
@@ -250,7 +250,7 @@ describe Lester::Network::Acl::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/network-acls/web-out?project=")
+      WebMock.stub(:PUT, "#{LXD.uri}/network-acls/web-out?project=")
         .with(body: %({"egress":[{"state":"disabled"}]}))
         .to_return(body_io: body_io)
 

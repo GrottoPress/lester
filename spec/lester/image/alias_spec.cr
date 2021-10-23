@@ -22,7 +22,7 @@ describe Lester::Image::Alias::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/images/aliases")
+      WebMock.stub(:GET, "#{LXD.uri}/images/aliases")
         .with(query: {"recursion" => "1", "project" => "default"})
         .to_return(body_io: body_io)
 
@@ -45,7 +45,7 @@ describe Lester::Image::Alias::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/images/aliases?project=default")
+      WebMock.stub(:POST, "#{LXD.uri}/images/aliases?project=default")
         .with(body: %({\
           "description":"Ubuntu image",\
           "name":"ubuntu-20.04",\
@@ -78,7 +78,7 @@ describe Lester::Image::Alias::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/images/aliases/a1b2c3")
+      WebMock.stub(:DELETE, "#{LXD.uri}/images/aliases/a1b2c3")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
@@ -110,7 +110,7 @@ describe Lester::Image::Alias::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/images/aliases/awesome")
+      WebMock.stub(:GET, "#{LXD.uri}/images/aliases/awesome")
         .to_return(body_io: body_io)
 
       LXD.images.aliases.fetch(name: "awesome") do |response|
@@ -133,7 +133,7 @@ describe Lester::Image::Alias::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/images/aliases/a1b2c3?project=")
+      WebMock.stub(:PATCH, "#{LXD.uri}/images/aliases/a1b2c3?project=")
         .with(body: %({"description":"New ubuntu image"}))
         .to_return(body_io: body_io)
 
@@ -159,7 +159,7 @@ describe Lester::Image::Alias::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/images/aliases/a1b2c3?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/images/aliases/a1b2c3?project=")
         .with(body: %({"name":"beautiful"}))
         .to_return(body_io: body_io)
 
@@ -185,7 +185,7 @@ describe Lester::Image::Alias::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/images/aliases/a1b2c3?project=")
+      WebMock.stub(:PUT, "#{LXD.uri}/images/aliases/a1b2c3?project=")
         .with(body: %({"description":"New ubuntu image","target":"06b864547"}))
         .to_return(body_io: body_io)
 

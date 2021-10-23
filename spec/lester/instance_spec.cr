@@ -95,7 +95,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances")
+      WebMock.stub(:GET, "#{LXD.uri}/instances")
         .with(query: {"recursion" => "1", "filter" => "default"})
         .to_return(body_io: body_io)
 
@@ -133,10 +133,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :POST,
-        "#{LXD_BASE_URI}/1.0/instances?project=&target=default"
-      )
+      WebMock.stub(:POST, "#{LXD.uri}/instances?project=&target=default")
         .with(body: %({"architecture":"x86_64"}))
         .to_return(body_io: body_io)
 
@@ -177,7 +174,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/instances/debian-10")
+      WebMock.stub(:DELETE, "#{LXD.uri}/instances/debian-10")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
@@ -280,7 +277,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/debian-10")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/debian-10")
         .to_return(body_io: body_io)
 
       LXD.instances.fetch(name: "debian-10") do |response|
@@ -303,7 +300,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/instances/debian-10?project=")
+      WebMock.stub(:PATCH, "#{LXD.uri}/instances/debian-10?project=")
         .with(body: %({"architecture":"x86_64"}))
         .to_return(body_io: body_io)
 
@@ -343,7 +340,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/instances/debian-10?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/instances/debian-10?project=")
         .with(body: %({"container_only":false,"name":"debian-buster"}))
         .to_return(body_io: body_io)
 
@@ -406,7 +403,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/instances?project=")
+      WebMock.stub(:PUT, "#{LXD.uri}/instances?project=")
         .with(body: %({"state":{"action":"start"}}))
         .to_return(body_io: body_io)
 
@@ -442,7 +439,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/instances/debian-10?project=")
+      WebMock.stub(:PUT, "#{LXD.uri}/instances/debian-10?project=")
         .with(body: %({"architecture":"x86_64","ephemeral":false}))
         .to_return(body_io: body_io)
 
@@ -507,7 +504,7 @@ describe Lester::Instance::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/instances/a1b2/exec?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/instances/a1b2/exec?project=")
         .with(body: %({\
           "command":["bash"],\
           "cwd":"/home/foo/",\

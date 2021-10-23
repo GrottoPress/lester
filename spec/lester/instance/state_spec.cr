@@ -61,7 +61,7 @@ describe Lester::Instance::State::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/state")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/state")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
@@ -99,7 +99,7 @@ describe Lester::Instance::State::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/instances/inst4/state?project=")
+      WebMock.stub(:PUT, "#{LXD.uri}/instances/inst4/state?project=")
         .with(body: %({"action":"start","force":false}))
         .to_return(body_io: body_io)
 

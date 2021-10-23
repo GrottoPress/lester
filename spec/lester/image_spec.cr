@@ -50,7 +50,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/images")
+      WebMock.stub(:GET, "#{LXD.uri}/images")
         .with(query: {"recursion" => "1", "filter" => "default"})
         .to_return(body_io: body_io)
 
@@ -88,7 +88,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/images?project=&public")
+      WebMock.stub(:POST, "#{LXD.uri}/images?project=&public")
         .with(body: %({"auto_update":false}))
         .to_return(body_io: body_io)
 
@@ -126,7 +126,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/images/a1b2c3")
+      WebMock.stub(:DELETE, "#{LXD.uri}/images/a1b2c3")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
@@ -184,8 +184,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/images/a1b2c3")
-        .to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/images/a1b2c3").to_return(body_io: body_io)
 
       LXD.images.fetch(fingerprint: "a1b2c3") do |response|
         response.success?.should be_true
@@ -207,7 +206,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/images/a1b2c3?project=")
+      WebMock.stub(:PATCH, "#{LXD.uri}/images/a1b2c3?project=")
         .with(body: %({"public":true}))
         .to_return(body_io: body_io)
 
@@ -230,7 +229,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/images/a1b2c3?project=")
+      WebMock.stub(:PUT, "#{LXD.uri}/images/a1b2c3?project=")
         .with(body: %({"public":true}))
         .to_return(body_io: body_io)
 
@@ -245,7 +244,7 @@ describe Lester::Image::Endpoint do
       body_io = IO::Memory.new("Lester::Image::Endpoint#export")
       destination = File.tempname("lester-image-endpoint-export")
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/images/a1b2/export")
+      WebMock.stub(:GET, "#{LXD.uri}/images/a1b2/export")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
@@ -265,7 +264,7 @@ describe Lester::Image::Endpoint do
       body_io = IO::Memory.new("Lester::Image::Endpoint#export")
       destination = IO::Memory.new
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/images/a1b2/export")
+      WebMock.stub(:GET, "#{LXD.uri}/images/a1b2/export")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
@@ -307,7 +306,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/images/a1b2c3/export?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/images/a1b2c3/export?project=")
         .with(body: %({\
           "aliases":[{"description":"Ubuntu image","name":"ubuntu-20.04"}],\
           "target":"https://1.2.3.4:8443"\
@@ -352,7 +351,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/images/a1b2/refresh")
+      WebMock.stub(:POST, "#{LXD.uri}/images/a1b2/refresh")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 
@@ -390,7 +389,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/images/a1b2c3/secret")
+      WebMock.stub(:POST, "#{LXD.uri}/images/a1b2c3/secret")
         .with(query: {"project" => "default"})
         .to_return(body_io: body_io)
 

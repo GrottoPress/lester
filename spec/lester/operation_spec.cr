@@ -30,8 +30,7 @@ describe Lester::Operation::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/operations")
-        .to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/operations").to_return(body_io: body_io)
 
       LXD.operations.list do |response|
         response.success?.should be_true
@@ -53,7 +52,7 @@ describe Lester::Operation::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/operations/a1b2c3")
+      WebMock.stub(:DELETE, "#{LXD.uri}/operations/a1b2c3")
         .to_return(body_io: body_io)
 
       LXD.operations.delete(id: "a1b2c3") do |response|
@@ -89,7 +88,7 @@ describe Lester::Operation::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/operations/a1b2c3")
+      WebMock.stub(:GET, "#{LXD.uri}/operations/a1b2c3")
         .to_return(body_io: body_io)
 
       LXD.operations.fetch(id: "a1b2c3") do |response|
@@ -126,7 +125,7 @@ describe Lester::Operation::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/operations/a1b2c3/wait")
+      WebMock.stub(:GET, "#{LXD.uri}/operations/a1b2c3/wait")
         .with(query: {"timeout" => "-1", "public" => "", "secret" => "abc"})
         .to_return(body_io: body_io)
 

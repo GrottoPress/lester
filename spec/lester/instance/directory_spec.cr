@@ -15,7 +15,7 @@ describe Lester::Instance::Directory::Endpoint do
 
       WebMock.stub(
         :POST,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/files?path=dirname&project="
+        "#{LXD.uri}/instances/inst4/files?path=dirname&project="
       ).to_return(body_io: body_io)
 
       LXD.instances.directories.create(
@@ -41,7 +41,7 @@ describe Lester::Instance::Directory::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/files")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/files")
         .with(query: {"path" => "dirname"})
         .to_return(body_io: body_io)
 
@@ -64,7 +64,7 @@ describe Lester::Instance::Directory::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/files?path=dirname&project="
+        "#{LXD.uri}/instances/inst4/files?path=dirname&project="
       ).to_return(body_io: body_io)
 
       LXD.instances.directories.delete("inst4", "dirname") do |response|

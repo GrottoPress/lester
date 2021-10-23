@@ -28,10 +28,7 @@ describe Lester::Instance::Console::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :POST,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/console?project="
-      )
+      WebMock.stub(:POST, "#{LXD.uri}/instances/inst4/console?project=")
         .with(body: %({"height":24,"type":"console","width":80}))
         .to_return(body_io: body_io)
 
@@ -52,7 +49,7 @@ describe Lester::Instance::Console::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::Console::Endpoint#output")
       destination = File.tempname("lester-instance-console-endpoint-output")
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/console")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/console")
         .to_return(body_io: body_io)
 
       LXD.instances.console.output("inst4", destination) do |response|
@@ -67,7 +64,7 @@ describe Lester::Instance::Console::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::Console::Endpoint#output")
       destination = IO::Memory.new
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/console")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/console")
         .to_return(body_io: body_io)
 
       LXD.instances.console.output("inst4", destination) do |response|
@@ -87,10 +84,8 @@ describe Lester::Instance::Console::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :DELETE,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/console?project="
-      ).to_return(body_io: body_io)
+      WebMock.stub(:DELETE, "#{LXD.uri}/instances/inst4/console?project=")
+        .to_return(body_io: body_io)
 
       LXD.instances.console.clear(instance_name: "inst4") do |response|
         response.success?.should be_true

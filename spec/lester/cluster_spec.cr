@@ -19,8 +19,7 @@ describe Lester::Cluster::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/cluster")
-        .to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/cluster").to_return(body_io: body_io)
 
       LXD.cluster.fetch do |response|
         response.success?.should be_true
@@ -42,7 +41,7 @@ describe Lester::Cluster::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/cluster")
+      WebMock.stub(:PUT, "#{LXD.uri}/cluster")
         .with(body: %({"cluster_password":"blah","enabled":true}))
         .to_return(body_io: body_io)
 

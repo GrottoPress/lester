@@ -40,7 +40,7 @@ describe Lester::Profile::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/profiles")
+      WebMock.stub(:GET, "#{LXD.uri}/profiles")
         .with(query: {"project" => "default", "recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -64,7 +64,7 @@ describe Lester::Profile::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/profiles?project=")
+      WebMock.stub(:POST, "#{LXD.uri}/profiles?project=")
         .with(body: %({"name":"profile1","config":{"limits.cpu":"4"}}))
         .to_return(body_io: body_io)
 
@@ -90,7 +90,7 @@ describe Lester::Profile::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/profiles/profile0?project=")
+      WebMock.stub(:DELETE, "#{LXD.uri}/profiles/profile0?project=")
         .to_return(body_io: body_io)
 
       LXD.profiles.delete(name: "profile0") do |response|
@@ -136,7 +136,7 @@ describe Lester::Profile::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/profiles/profile0")
+      WebMock.stub(:GET, "#{LXD.uri}/profiles/profile0")
         .to_return(body_io: body_io)
 
       LXD.profiles.fetch(name: "profile0") do |response|
@@ -159,7 +159,7 @@ describe Lester::Profile::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0/profiles/profile0?project=")
+      WebMock.stub(:PATCH, "#{LXD.uri}/profiles/profile0?project=")
         .with(body: %({"config":{"limits.cpu":"4","limits.memory":"4GiB"}}))
         .to_return(body_io: body_io)
 
@@ -185,7 +185,7 @@ describe Lester::Profile::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/profiles/profile0")
+      WebMock.stub(:POST, "#{LXD.uri}/profiles/profile0")
         .with(body: %({"name":"profile1"}))
         .to_return(body_io: body_io)
 
@@ -208,7 +208,7 @@ describe Lester::Profile::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/profiles/profile0?project=")
+      WebMock.stub(:PUT, "#{LXD.uri}/profiles/profile0?project=")
         .with(body: %({"config":{"limits.cpu":"4","limits.memory":"4GiB"}}))
         .to_return(body_io: body_io)
 

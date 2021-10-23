@@ -33,7 +33,7 @@ describe Lester::Network::Forward::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/networks/lxdbr0/forwards")
+      WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/forwards")
         .with(query: {"recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -57,10 +57,7 @@ describe Lester::Network::Forward::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :POST,
-        "#{LXD_BASE_URI}/1.0/networks/lxdbr0/forwards?project="
-      )
+      WebMock.stub(:POST, "#{LXD.uri}/networks/lxdbr0/forwards?project=")
         .with(body: %({\
           "listen_address":"4.5.6.7",\
           "config":{"user.mykey":"foo"},\
@@ -94,7 +91,7 @@ describe Lester::Network::Forward::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/networks/lxdbr0/forwards/1.2.3.4?project="
+        "#{LXD.uri}/networks/lxdbr0/forwards/1.2.3.4?project="
       ).to_return(body_io: body_io)
 
       LXD.networks.forwards.delete(
@@ -136,7 +133,7 @@ describe Lester::Network::Forward::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/networks/lxdbr0/forwards/1.2.3.4")
+      WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/forwards/1.2.3.4")
         .to_return(body_io: body_io)
 
       LXD.networks.forwards.fetch(
@@ -164,7 +161,7 @@ describe Lester::Network::Forward::Endpoint do
 
       WebMock.stub(
         :PATCH,
-        "#{LXD_BASE_URI}/1.0/networks/lxdbr0/forwards/1.2.3.4?project="
+        "#{LXD.uri}/networks/lxdbr0/forwards/1.2.3.4?project="
       )
         .with(body: %({"config":{"user.mykey":"bar"}}))
         .to_return(body_io: body_io)
@@ -194,7 +191,7 @@ describe Lester::Network::Forward::Endpoint do
 
       WebMock.stub(
         :PUT,
-        "#{LXD_BASE_URI}/1.0/networks/lxdbr0/forwards/1.2.3.4?project="
+        "#{LXD.uri}/networks/lxdbr0/forwards/1.2.3.4?project="
       )
         .with(body: %({"config":{"user.mykey":"bar"}}))
         .to_return(body_io: body_io)

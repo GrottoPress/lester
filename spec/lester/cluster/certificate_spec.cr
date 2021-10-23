@@ -14,7 +14,7 @@ describe Lester::Cluster::Certificate::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0/cluster/certificate")
+      WebMock.stub(:PUT, "#{LXD.uri}/cluster/certificate")
         .with(body: %({\
           "cluster_certificate":"X509 PEM certificate",\
           "cluster_certificate_key":"X509 PEM certificate key"\

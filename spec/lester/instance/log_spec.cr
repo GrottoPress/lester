@@ -18,7 +18,7 @@ describe Lester::Instance::Log::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/logs")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/logs")
         .to_return(body_io: body_io)
 
       LXD.instances.logs.list(instance_name: "inst4") do |response|
@@ -38,10 +38,8 @@ describe Lester::Instance::Log::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :DELETE,
-        "#{LXD_BASE_URI}/1.0/instances/inst4/logs/file.log?project="
-      ).to_return(body_io: body_io)
+      WebMock.stub(:DELETE, "#{LXD.uri}/instances/inst4/logs/file.log?project=")
+        .to_return(body_io: body_io)
 
       LXD.instances.logs.delete("inst4", "file.log") do |response|
         response.success?.should be_true
@@ -54,7 +52,7 @@ describe Lester::Instance::Log::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::Log::Endpoint#fetch")
       destination = File.tempname("lester-instance-file-endpoint-fetch")
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/logs/file.log")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/logs/file.log")
         .to_return(body_io: body_io)
 
       LXD.instances.logs.fetch(
@@ -73,7 +71,7 @@ describe Lester::Instance::Log::Endpoint do
       body_io = IO::Memory.new("Lester::Instance::Log::Endpoint#fetch")
       destination = IO::Memory.new
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/instances/inst4/logs/file.log")
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/logs/file.log")
         .to_return(body_io: body_io)
 
       LXD.instances.logs.fetch(

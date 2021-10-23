@@ -77,7 +77,7 @@ describe Lester::Server::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0").to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}").to_return(body_io: body_io)
 
       LXD.server.fetch do |response|
         response.success?.should be_true
@@ -99,7 +99,7 @@ describe Lester::Server::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PATCH, "#{LXD_BASE_URI}/1.0?target=")
+      WebMock.stub(:PATCH, "#{LXD.uri}?target=")
         .with(body: %({"config":{"core.https_address":":8443"}}))
         .to_return(body_io: body_io)
 
@@ -122,7 +122,7 @@ describe Lester::Server::Endpoint do
         }
         JSON
 
-      WebMock.stub(:PUT, "#{LXD_BASE_URI}/1.0?target=")
+      WebMock.stub(:PUT, "#{LXD.uri}?target=")
         .with(body: %({"config":{"core.https_address":":8443"}}))
         .to_return(body_io: body_io)
 
@@ -394,8 +394,7 @@ describe Lester::Server::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/resources")
-        .to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/resources").to_return(body_io: body_io)
 
       LXD.server.resources do |response|
         response.success?.should be_true

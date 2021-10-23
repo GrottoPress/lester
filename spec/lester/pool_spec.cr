@@ -35,7 +35,7 @@ describe Lester::Pool::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/storage-pools")
+      WebMock.stub(:GET, "#{LXD.uri}/storage-pools")
         .with(query: {"recursion" => "1"})
         .to_return(body_io: body_io)
 
@@ -59,7 +59,7 @@ describe Lester::Pool::Endpoint do
         }
         JSON
 
-      WebMock.stub(:POST, "#{LXD_BASE_URI}/1.0/storage-pools?project=&target=")
+      WebMock.stub(:POST, "#{LXD.uri}/storage-pools?project=&target=")
         .with(body: %({"driver":"zfs","name":"local"}))
         .to_return(body_io: body_io)
 
@@ -82,7 +82,7 @@ describe Lester::Pool::Endpoint do
         }
         JSON
 
-      WebMock.stub(:DELETE, "#{LXD_BASE_URI}/1.0/storage-pools/pool0?project=")
+      WebMock.stub(:DELETE, "#{LXD.uri}/storage-pools/pool0?project=")
         .to_return(body_io: body_io)
 
       LXD.pools.delete(name: "pool0") do |response|
@@ -123,7 +123,7 @@ describe Lester::Pool::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/storage-pools/pool0")
+      WebMock.stub(:GET, "#{LXD.uri}/storage-pools/pool0")
         .with(query: {"target" => "lxd0"})
         .to_return(body_io: body_io)
 
@@ -147,10 +147,7 @@ describe Lester::Pool::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :PATCH,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0?project=&target="
-      )
+      WebMock.stub(:PATCH, "#{LXD.uri}/storage-pools/pool0?project=&target=")
         .with(body: %({"description":"Local SSD pool"}))
         .to_return(body_io: body_io)
 
@@ -176,10 +173,7 @@ describe Lester::Pool::Endpoint do
         }
         JSON
 
-      WebMock.stub(
-        :PUT,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0?project=&target="
-      )
+      WebMock.stub(:PUT, "#{LXD.uri}/storage-pools/pool0?project=&target=")
         .with(body: %({"description":"Local SSD pool"}))
         .to_return(body_io: body_io)
 
@@ -215,7 +209,7 @@ describe Lester::Pool::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD_BASE_URI}/1.0/storage-pools/pool0/resources")
+      WebMock.stub(:GET, "#{LXD.uri}/storage-pools/pool0/resources")
         .with(query: {"target" => "lxd0"})
         .to_return(body_io: body_io)
 

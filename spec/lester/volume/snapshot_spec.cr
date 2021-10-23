@@ -28,8 +28,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
       WebMock.stub(
         :GET,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
-          snapshots"
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/snapshots"
       )
         .with(query: {"recursion" => "1", "target" => "lxd0"})
         .to_return(body_io: body_io)
@@ -75,7 +74,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
       WebMock.stub(
         :POST,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           snapshots?project=&target="
       )
         .with(body: %({"name":"snap0"}))
@@ -122,7 +121,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
       WebMock.stub(
         :DELETE,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           snapshots/snap0?project=&target="
       )
         .to_return(body_io: body_io)
@@ -164,8 +163,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
       WebMock.stub(
         :GET,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
-          snapshots/snap0"
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/snapshots/snap0"
       ).to_return(body_io: body_io)
 
       LXD.volumes.snapshots.fetch(
@@ -195,7 +193,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
       WebMock.stub(
         :PATCH,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           snapshots/snap0?project=&target="
       )
         .with(body: %({"expires_at":"2021-10-26T13:11:03Z"}))
@@ -242,7 +240,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
       WebMock.stub(
         :POST,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           snapshots/snap0?project=&target="
       )
         .with(body: %({"name":"snap10"}))
@@ -276,7 +274,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
       WebMock.stub(
         :PUT,
-        "#{LXD_BASE_URI}/1.0/storage-pools/pool0/volumes/custom/volume0/\
+        "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           snapshots/snap0?project=&target="
       )
         .with(body: %({"expires_at":"2021-10-26T13:11:03Z"}))
