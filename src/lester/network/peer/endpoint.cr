@@ -1,5 +1,5 @@
 struct Lester::Network::Peer::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def list(network_name, **params)
     yield list(network_name, **params)
@@ -7,9 +7,9 @@ struct Lester::Network::Peer::Endpoint
 
   def list(network_name : String, **params) : List
     base_path = uri(network_name).path
-    params = URI::Params.encode(@client.recurse **params)
+    params = URI::Params.encode(client.recurse **params)
 
-    @client.get("#{base_path}?#{params}") do |response|
+    client.get("#{base_path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -25,7 +25,7 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    @client.post(
+    client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json
     ) do |response|
@@ -44,7 +44,7 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    @client.delete(
+    client.delete(
       "#{base_path}/#{name}?project=#{project}"
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -59,7 +59,7 @@ struct Lester::Network::Peer::Endpoint
     base_path = uri(network_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{base_path}/#{name}?#{params}") do |response|
+    client.get("#{base_path}/#{name}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -76,7 +76,7 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    @client.patch(
+    client.patch(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
     ) do |response|
@@ -96,7 +96,7 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    @client.put(
+    client.put(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
     ) do |response|
@@ -105,7 +105,7 @@ struct Lester::Network::Peer::Endpoint
   end
 
   def uri(network_name) : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/networks/#{network_name}/peers"
     uri
   end

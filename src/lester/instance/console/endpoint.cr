@@ -1,5 +1,5 @@
 struct Lester::Instance::Console::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def connect(instance_name, project = nil, **params)
     yield connect(instance_name, project, **params)
@@ -12,7 +12,7 @@ struct Lester::Instance::Console::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    @client.post(
+    client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json,
     ) do |response|
@@ -28,12 +28,12 @@ struct Lester::Instance::Console::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{base_path}?#{params}") do |response|
+    client.get("#{base_path}?#{params}") do |response|
       unless response.status.success?
         return Operation::Item.from_json(response.body_io)
       end
 
-      @client.copy(response.body_io, destination)
+      client.copy(response.body_io, destination)
 
       Operation::Item.from_json({
         type: "sync",
@@ -50,13 +50,13 @@ struct Lester::Instance::Console::Endpoint
   def clear(instance_name : String, project : String? = nil) : Operation::Item
     base_path = uri(instance_name).path
 
-    @client.delete("#{base_path}?project=#{project}") do |response|
+    client.delete("#{base_path}?project=#{project}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
 
   def uri(instance_name) : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/instances/#{instance_name}/console"
     uri
   end

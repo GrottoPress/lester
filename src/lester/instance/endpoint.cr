@@ -1,40 +1,40 @@
 struct Lester::Instance::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def backups : Backup::Endpoint
-    @backups ||= Backup::Endpoint.new(@client)
+    @backups ||= Backup::Endpoint.new(client)
   end
 
   def console : Console::Endpoint
-    @console ||= Console::Endpoint.new(@client)
+    @console ||= Console::Endpoint.new(client)
   end
 
   def directories : Directory::Endpoint
-    @directories ||= Directory::Endpoint.new(@client)
+    @directories ||= Directory::Endpoint.new(client)
   end
 
   def files : File::Endpoint
-    @files ||= File::Endpoint.new(@client)
+    @files ||= File::Endpoint.new(client)
   end
 
   def logs : Log::Endpoint
-    @logs ||= Log::Endpoint.new(@client)
+    @logs ||= Log::Endpoint.new(client)
   end
 
   def metadata : Metadata::Endpoint
-    @metadata ||= Metadata::Endpoint.new(@client)
+    @metadata ||= Metadata::Endpoint.new(client)
   end
 
   def snapshots : Snapshot::Endpoint
-    @snapshots ||= Snapshot::Endpoint.new(@client)
+    @snapshots ||= Snapshot::Endpoint.new(client)
   end
 
   def state : State::Endpoint
-    @state ||= State::Endpoint.new(@client)
+    @state ||= State::Endpoint.new(client)
   end
 
   def templates : Template::Endpoint
-    @templates ||= Template::Endpoint.new(@client)
+    @templates ||= Template::Endpoint.new(client)
   end
 
   def list(**params)
@@ -42,9 +42,9 @@ struct Lester::Instance::Endpoint
   end
 
   def list(**params) : List
-    params = URI::Params.encode(@client.recurse **params)
+    params = URI::Params.encode(client.recurse **params)
 
-    @client.get("#{uri.path}?#{params}") do |response|
+    client.get("#{uri.path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -61,7 +61,7 @@ struct Lester::Instance::Endpoint
   ) : Operation::Item
     body = backup ? ::File.open(backup, "rb") : params.to_json
 
-    @client.post(
+    client.post(
       "#{uri.path}?project=#{project}&target=#{target}",
       body: body,
     ) do |response|
@@ -74,7 +74,7 @@ struct Lester::Instance::Endpoint
   end
 
   def delete(name : String, project : String? = nil) : Operation::Item
-    @client.delete(
+    client.delete(
       "#{uri.path}/#{name}?project=#{project}"
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -88,7 +88,7 @@ struct Lester::Instance::Endpoint
   def fetch(name : String, **params) : Item
     params = URI::Params.encode(params)
 
-    @client.get("#{uri.path}/#{name}?#{params}") do |response|
+    client.get("#{uri.path}/#{name}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -102,7 +102,7 @@ struct Lester::Instance::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    @client.patch(
+    client.patch(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     ) do |response|
@@ -120,7 +120,7 @@ struct Lester::Instance::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    @client.post(
+    client.post(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.merge({name: new_name}).to_json
     ) do |response|
@@ -133,7 +133,7 @@ struct Lester::Instance::Endpoint
   end
 
   def replace(project : String? = nil, **params) : Operation::Item
-    @client.put(
+    client.put(
       "#{uri.path}?project=#{project}",
       body: params.to_json
     ) do |response|
@@ -150,7 +150,7 @@ struct Lester::Instance::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    @client.put(
+    client.put(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     ) do |response|
@@ -163,7 +163,7 @@ struct Lester::Instance::Endpoint
   end
 
   def exec(name : String, project : String? = nil, **params) : Operation::Item
-    @client.post(
+    client.post(
       "#{uri.path}/#{name}/exec?project=#{project}",
       body: params.to_json
     ) do |response|
@@ -172,7 +172,7 @@ struct Lester::Instance::Endpoint
   end
 
   def uri : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/instances"
     uri
   end

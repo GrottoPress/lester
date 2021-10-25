@@ -1,14 +1,14 @@
 struct Lester::Warning::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def list(**params)
     yield list(**params)
   end
 
   def list(**params) : List
-    params = URI::Params.encode(@client.recurse **params)
+    params = URI::Params.encode(client.recurse **params)
 
-    @client.get("#{uri.path}?#{params}") do |response|
+    client.get("#{uri.path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -18,7 +18,7 @@ struct Lester::Warning::Endpoint
   end
 
   def delete(uuid : String) : Operation::Item
-    @client.delete("#{uri.path}/#{uuid}") do |response|
+    client.delete("#{uri.path}/#{uuid}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -28,7 +28,7 @@ struct Lester::Warning::Endpoint
   end
 
   def fetch(uuid : String) : Item
-    @client.get("#{uri.path}/#{uuid}") do |response|
+    client.get("#{uri.path}/#{uuid}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -38,7 +38,7 @@ struct Lester::Warning::Endpoint
   end
 
   def update(uuid : String, **params) : Operation::Item
-    @client.patch("#{uri.path}/#{uuid}", body: params.to_json) do |response|
+    client.patch("#{uri.path}/#{uuid}", body: params.to_json) do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -48,13 +48,13 @@ struct Lester::Warning::Endpoint
   end
 
   def replace(uuid : String, **params) : Operation::Item
-    @client.put("#{uri.path}/#{uuid}", body: params.to_json) do |response|
+    client.put("#{uri.path}/#{uuid}", body: params.to_json) do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
 
   def uri : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/warnings"
     uri
   end

@@ -1,14 +1,14 @@
 struct Lester::Certificate::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def list
     yield list
   end
 
   def list : List
-    params = URI::Params.encode(@client.recurse)
+    params = URI::Params.encode(client.recurse)
 
-    @client.get("#{uri.path}?#{params}") do |response|
+    client.get("#{uri.path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -21,7 +21,7 @@ struct Lester::Certificate::Endpoint
     uri_path = uri.path
     uri_path += "?public" if params[:password]?
 
-    @client.post(uri_path, body: params.to_json) do |response|
+    client.post(uri_path, body: params.to_json) do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -31,7 +31,7 @@ struct Lester::Certificate::Endpoint
   end
 
   def delete(fingerprint : String) : Operation::Item
-    @client.delete("#{uri.path}/#{fingerprint}") do |response|
+    client.delete("#{uri.path}/#{fingerprint}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -41,7 +41,7 @@ struct Lester::Certificate::Endpoint
   end
 
   def fetch(fingerprint : String) : Item
-    @client.get("#{uri.path}/#{fingerprint}") do |response|
+    client.get("#{uri.path}/#{fingerprint}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -51,7 +51,7 @@ struct Lester::Certificate::Endpoint
   end
 
   def update(fingerprint : String, **params) : Operation::Item
-    @client.patch(
+    client.patch(
       "#{uri.path}/#{fingerprint}",
       body: params.to_json
     ) do |response|
@@ -64,7 +64,7 @@ struct Lester::Certificate::Endpoint
   end
 
   def replace(fingerprint : String, **params) : Operation::Item
-    @client.put(
+    client.put(
       "#{uri.path}/#{fingerprint}",
       body: params.to_json
     ) do |response|
@@ -73,7 +73,7 @@ struct Lester::Certificate::Endpoint
   end
 
   def uri : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/certificates"
     uri
   end

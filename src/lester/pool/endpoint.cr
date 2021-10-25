@@ -1,14 +1,14 @@
 struct Lester::Pool::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def list(**params)
     yield list(**params)
   end
 
   def list(**params) : List
-    params = URI::Params.encode(@client.recurse **params)
+    params = URI::Params.encode(client.recurse **params)
 
-    @client.get("#{uri.path}?#{params}") do |response|
+    client.get("#{uri.path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -22,7 +22,7 @@ struct Lester::Pool::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    @client.post(
+    client.post(
       "#{uri.path}?project=#{project}&target=#{target}",
       body: params.to_json
     ) do |response|
@@ -35,7 +35,7 @@ struct Lester::Pool::Endpoint
   end
 
   def delete(name : String, project : String? = nil) : Operation::Item
-    @client.delete("#{uri.path}/#{name}?project=#{project}") do |response|
+    client.delete("#{uri.path}/#{name}?project=#{project}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -47,7 +47,7 @@ struct Lester::Pool::Endpoint
   def fetch(name : String, **params) : Item
     params = URI::Params.encode(params)
 
-    @client.get("#{uri.path}/#{name}?#{params}") do |response|
+    client.get("#{uri.path}/#{name}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -62,7 +62,7 @@ struct Lester::Pool::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    @client.patch(
+    client.patch(
       "#{uri.path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
     ) do |response|
@@ -80,7 +80,7 @@ struct Lester::Pool::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    @client.put(
+    client.put(
       "#{uri.path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
     ) do |response|
@@ -95,13 +95,13 @@ struct Lester::Pool::Endpoint
   def resources(name : String, **params) : Resources::Item
     params = URI::Params.encode(params)
 
-    @client.get("#{uri.path}/#{name}/resources?#{params}") do |response|
+    client.get("#{uri.path}/#{name}/resources?#{params}") do |response|
       Resources::Item.from_json(response.body_io)
     end
   end
 
   def uri : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/storage-pools"
     uri
   end

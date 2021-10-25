@@ -1,5 +1,5 @@
 struct Lester::Server::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def fetch(**params)
     yield fetch(**params)
@@ -8,7 +8,7 @@ struct Lester::Server::Endpoint
   def fetch(**params) : Item
     params = URI::Params.encode(params)
 
-    @client.get("#{uri.path}?#{params}") do |response|
+    client.get("#{uri.path}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -18,7 +18,7 @@ struct Lester::Server::Endpoint
   end
 
   def update(target : String? = nil, **params) : Operation::Item
-    @client.patch(
+    client.patch(
       "#{uri.path}?target=#{target}",
       body: params.to_json
     ) do |response|
@@ -31,7 +31,7 @@ struct Lester::Server::Endpoint
   end
 
   def replace(target : String? = nil, **params) : Operation::Item
-    @client.put(
+    client.put(
       "#{uri.path}?target=#{target}",
       body: params.to_json
     ) do |response|
@@ -49,7 +49,7 @@ struct Lester::Server::Endpoint
     uri = self.uri.dup
     uri.path += "/events?#{params}"
 
-    @client.websocket(uri)
+    client.websocket(uri)
   end
 
   def resources(**params)
@@ -59,12 +59,12 @@ struct Lester::Server::Endpoint
   def resources(**params) : Resources::Item
     params = URI::Params.encode(params)
 
-    @client.get("#{uri.path}/resources?#{params}") do |response|
+    client.get("#{uri.path}/resources?#{params}") do |response|
       Resources::Item.from_json(response.body_io)
     end
   end
 
   def uri : URI
-    @client.uri
+    client.uri
   end
 end

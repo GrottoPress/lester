@@ -1,5 +1,5 @@
 struct Lester::Instance::State::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def fetch(instance_name, **params)
     yield fetch(instance_name, **params)
@@ -9,7 +9,7 @@ struct Lester::Instance::State::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{base_path}?#{params}") do |response|
+    client.get("#{base_path}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -25,7 +25,7 @@ struct Lester::Instance::State::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    @client.put(
+    client.put(
       "#{base_path}?project=#{project}",
       body: params.to_json
     ) do |response|
@@ -34,7 +34,7 @@ struct Lester::Instance::State::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/instances/#{instance_name}/state"
     uri
   end

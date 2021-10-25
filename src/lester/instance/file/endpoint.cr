@@ -1,5 +1,5 @@
 struct Lester::Instance::File::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def create(
     instance_name,
@@ -45,7 +45,7 @@ struct Lester::Instance::File::Endpoint
     headers["X-LXD-type"] = type.to_s.downcase if type
     headers["X-LXD-write"] = write_mode.to_s.downcase if write_mode
 
-    @client.post(
+    client.post(
       "#{base_path}?path=#{path}&project=#{project}",
       body: content,
       headers: headers
@@ -65,7 +65,7 @@ struct Lester::Instance::File::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    @client.delete("#{base_path}?path=#{path}&project=#{project}") do |response|
+    client.delete("#{base_path}?path=#{path}&project=#{project}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -78,10 +78,10 @@ struct Lester::Instance::File::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode params.merge({path: path})
 
-    @client.get("#{base_path}?#{params}") do |response|
+    client.get("#{base_path}?#{params}") do |response|
       return Item.from_json(response.body_io) unless response.status.success?
 
-      @client.copy(response.body_io, destination)
+      client.copy(response.body_io, destination)
 
       Item.from_json({
         type: "sync",
@@ -92,7 +92,7 @@ struct Lester::Instance::File::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/instances/#{instance_name}/files"
     uri
   end

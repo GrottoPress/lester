@@ -1,5 +1,5 @@
 struct Lester::Volume::Snapshot::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def list(pool_name, volume_name, volume_type, **params)
     yield list(pool_name, volume_name, volume_type, **params)
@@ -12,9 +12,9 @@ struct Lester::Volume::Snapshot::Endpoint
     **params
   ) : List
     base_path = uri(pool_name, volume_name, volume_type).path
-    params = URI::Params.encode(@client.recurse **params)
+    params = URI::Params.encode(client.recurse **params)
 
-    @client.get("#{base_path}?#{params}") do |response|
+    client.get("#{base_path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -40,7 +40,7 @@ struct Lester::Volume::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name, volume_name, volume_type).path
 
-    @client.post(
+    client.post(
       "#{base_path}?project=#{project}&target=#{target}",
       body: params.to_json
     ) do |response|
@@ -69,7 +69,7 @@ struct Lester::Volume::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name, volume_name, volume_type).path
 
-    @client.delete(
+    client.delete(
       "#{base_path}/#{name}?project=#{project}&target=#{target}"
     ) do |response|
       Operation::Item.from_json(response.body_io)
@@ -90,7 +90,7 @@ struct Lester::Volume::Snapshot::Endpoint
     base_path = uri(pool_name, volume_name, volume_type).path
     params = URI::Params.encode(params)
 
-    @client.get("#{base_path}/#{name}?#{params}") do |response|
+    client.get("#{base_path}/#{name}?#{params}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -126,7 +126,7 @@ struct Lester::Volume::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name, volume_name, volume_type).path
 
-    @client.patch(
+    client.patch(
       "#{base_path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
     ) do |response|
@@ -166,7 +166,7 @@ struct Lester::Volume::Snapshot::Endpoint
     base_path = uri(pool_name, volume_name, volume_type).path
     params = {name: new_name}
 
-    @client.post(
+    client.post(
       "#{base_path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
     ) do |response|
@@ -205,7 +205,7 @@ struct Lester::Volume::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name, volume_name, volume_type).path
 
-    @client.put(
+    client.put(
       "#{base_path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
     ) do |response|
@@ -214,7 +214,7 @@ struct Lester::Volume::Snapshot::Endpoint
   end
 
   def uri(pool_name, volume_name, volume_type) : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
 
     uri.path += "/storage-pools/#{pool_name}/volumes/#{volume_type}/\
       #{volume_name}/snapshots"

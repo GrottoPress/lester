@@ -1,5 +1,5 @@
 struct Lester::Instance::Template::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def list(instance_name, **params)
     yield list(instance_name, **params)
@@ -9,7 +9,7 @@ struct Lester::Instance::Template::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    @client.get("#{base_path}?#{params}") do |response|
+    client.get("#{base_path}?#{params}") do |response|
       List.from_json(response.body_io)
     end
   end
@@ -26,7 +26,7 @@ struct Lester::Instance::Template::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    @client.post(
+    client.post(
       "#{base_path}?path=#{path}&project=#{project}",
       body: content
     ) do |response|
@@ -45,7 +45,7 @@ struct Lester::Instance::Template::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    @client.delete("#{base_path}?path=#{path}&project=#{project}") do |response|
+    client.delete("#{base_path}?path=#{path}&project=#{project}") do |response|
       Operation::Item.from_json(response.body_io)
     end
   end
@@ -58,10 +58,10 @@ struct Lester::Instance::Template::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode params.merge({path: path})
 
-    @client.get("#{base_path}?#{params}") do |response|
+    client.get("#{base_path}?#{params}") do |response|
       return Item.from_json(response.body_io) unless response.status.success?
 
-      @client.copy(response.body_io, destination)
+      client.copy(response.body_io, destination)
 
       Item.from_json({
         type: "sync",
@@ -72,7 +72,7 @@ struct Lester::Instance::Template::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/instances/#{instance_name}/metadata/templates"
     uri
   end

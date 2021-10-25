@@ -1,12 +1,12 @@
 struct Lester::Operation::Endpoint
-  include Hapi::Endpoint
+  include Lester::Endpoint
 
   def list
     yield list
   end
 
   def list : List
-    @client.get(uri.path) do |response|
+    client.get(uri.path) do |response|
       List.from_json(response.body_io)
     end
   end
@@ -16,7 +16,7 @@ struct Lester::Operation::Endpoint
   end
 
   def delete(id : String) : Item
-    @client.delete("#{uri.path}/#{id}") do |response|
+    client.delete("#{uri.path}/#{id}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -26,7 +26,7 @@ struct Lester::Operation::Endpoint
   end
 
   def fetch(id : String) : Item
-    @client.get("#{uri.path}/#{id}") do |response|
+    client.get("#{uri.path}/#{id}") do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -39,7 +39,7 @@ struct Lester::Operation::Endpoint
     uri_path = "#{uri.path}/#{id}/wait?timeout=#{timeout}"
     uri_path += "&public&secret=#{secret}" if secret
 
-    @client.get(uri_path) do |response|
+    client.get(uri_path) do |response|
       Item.from_json(response.body_io)
     end
   end
@@ -53,11 +53,11 @@ struct Lester::Operation::Endpoint
     uri.path += "/#{id}/websocket"
     uri.path += "?public&secret=#{secret}" if secret
 
-    @client.websocket(uri)
+    client.websocket(uri)
   end
 
   def uri : URI
-    uri = @client.uri.dup
+    uri = client.uri.dup
     uri.path += "/operations"
     uri
   end
