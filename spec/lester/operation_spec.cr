@@ -94,6 +94,7 @@ describe Lester::Operation::Endpoint do
       LXD.operations.fetch(id: "a1b2c3") do |response|
         response.success?.should be_true
         response.metadata.should be_a(Lester::Operation)
+        response.metadata.try(&.success?).should be_true
       end
     end
   end

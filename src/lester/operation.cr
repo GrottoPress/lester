@@ -13,4 +13,8 @@ struct Lester::Operation
   getter status : String?
   getter status_code : Int32?
   getter updated_at : Time?
+
+  def success? : Bool?
+    status_code.try(&.< 400)
+  end
 end
