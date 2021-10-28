@@ -43,6 +43,7 @@ describe Lester::Instance::File::Endpoint do
         destination: destination
       ) do |response|
         response.success?.should be_true
+        response.metadata.should be_nil
         File.read_lines(destination).first?.should eq(body_io.to_s)
       ensure
         File.delete(destination)
