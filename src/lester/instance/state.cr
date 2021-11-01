@@ -7,6 +7,6 @@ struct Lester::Instance::State
   getter network : Hash(String, Network::State)?
   getter pid : Int32?
   getter processes : Int32?
-  getter status : String?
+  getter status : Status?
   getter status_code : Int32?
 end
