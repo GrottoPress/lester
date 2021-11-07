@@ -1,6 +1,6 @@
 # Lester
 
-*Lester* is a low-level API client for [*LXD*](https://linuxcontainers.org/lxd/). It features an intuitive interface that maps perfectly to the *LXD* API.
+*Lester* is a low-level API client for [*LXD*](https://linuxcontainers.org/lxd/). It features an intuitive interface that maps directly to the *LXD* API.
 
 ### Usage Examples
 

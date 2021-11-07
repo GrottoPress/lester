@@ -1,6 +1,6 @@
 ## Getting Started
 
-*Lester* is a low-level API client for *LXD*. It features an intuitive interface that maps perfectly to the *LXD* API.
+*Lester* is a low-level API client for *LXD*. It features an intuitive interface that maps directly to the *LXD* API.
 
 ### Architecture
 
