@@ -9,10 +9,6 @@ struct Lester::Instance::Endpoint
     @console ||= Console::Endpoint.new(client)
   end
 
-  def directories : Directory::Endpoint
-    @directories ||= Directory::Endpoint.new(client)
-  end
-
   def files : File::Endpoint
     @files ||= File::Endpoint.new(client)
   end

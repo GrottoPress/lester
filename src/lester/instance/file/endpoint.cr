@@ -70,24 +70,21 @@ struct Lester::Instance::File::Endpoint
     end
   end
 
-  def fetch(instance_name, path, destination, **params)
+  def fetch(instance_name, path, destination = nil, **params)
     yield fetch(instance_name, path, destination, **params)
   end
 
-  def fetch(instance_name : String, path : String, destination, **params) : Item
+  def fetch(
+    instance_name : String,
+    path : String,
+    destination = nil,
+    **params
+  ) : Item
     base_path = uri(instance_name).path
     params = URI::Params.encode params.merge({path: path})
 
     client.get("#{base_path}?#{params}") do |response|
-      return Item.from_json(response.body_io) unless response.status.success?
-
-      client.copy(response.body_io, destination)
-
-      Item.from_json({
-        type: "sync",
-        status: "Success",
-        status_code: 200
-      }.to_json)
+      item(response, destination)
     end
   end
 
@@ -95,5 +92,27 @@ struct Lester::Instance::File::Endpoint
     uri = client.uri.dup
     uri.path += "/instances/#{instance_name}/files"
     uri
+  end
+
+  private def item(response, destination)
+    return Item.from_json(response.body_io) unless response.status.success?
+
+    file = {
+      group_id: response.headers["X-Lxd-Gid"]?.try(&.to_i),
+      permissions: response.headers["X-Lxd-Mode"]?,
+      type: response.headers["X-Lxd-Type"]?,
+      user_id: response.headers["X-Lxd-Uid"]?.try(&.to_i),
+    }
+
+    if file[:type] == "directory"
+      body = JSON.parse(response.body_io).as_h
+      file = file.merge({content: body["metadata"]?})
+      body["metadata"] = JSON.parse(file.to_json)
+    else
+      client.copy(response.body_io, destination) if destination
+      body = {type: "sync", status: "Success", status_code: 200, metadata: file}
+    end
+
+    Item.from_json(body.to_json)
   end
 end

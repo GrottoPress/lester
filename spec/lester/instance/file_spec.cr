@@ -35,7 +35,12 @@ describe Lester::Instance::File::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/files")
         .with(query: {"path" => "file.txt"})
-        .to_return(body_io: body_io)
+        .to_return(body_io: body_io, headers: {
+          "X-Lxd-Gid" => "0",
+          "X-Lxd-Mode" => "0644",
+          "X-Lxd-Type" => "file",
+          "X-Lxd-Uid" => "0",
+        })
 
       LXD.instances.files.fetch(
         instance_name: "inst4",
@@ -43,7 +48,16 @@ describe Lester::Instance::File::Endpoint do
         destination: destination
       ) do |response|
         response.success?.should be_true
-        response.metadata.should be_nil
+        response.metadata.should be_a(Lester::Instance::File)
+
+        response.metadata.try do |metadata|
+          metadata.content.should be_nil
+          metadata.group_id.should eq(0)
+          metadata.permissions.should eq("0644")
+          metadata.type.try(&.file?).should be_true
+          metadata.user_id.should eq(0)
+        end
+
         File.read_lines(destination).first?.should eq(body_io.to_s)
       ensure
         File.delete(destination)
@@ -56,7 +70,12 @@ describe Lester::Instance::File::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/files")
         .with(query: {"path" => "file.txt"})
-        .to_return(body_io: body_io)
+        .to_return(body_io: body_io, headers: {
+          "X-Lxd-Gid" => "0",
+          "X-Lxd-Mode" => "0644",
+          "X-Lxd-Type" => "file",
+          "X-Lxd-Uid" => "0",
+        })
 
       LXD.instances.files.fetch(
         instance_name: "inst4",
@@ -65,6 +84,42 @@ describe Lester::Instance::File::Endpoint do
       ) do |response|
         response.success?.should be_true
         destination.to_s.should eq(body_io.to_s)
+      end
+    end
+
+    it "fetches directory" do
+      body_io = IO::Memory.new <<-JSON
+        {
+          "type": "sync",
+          "status": "Success",
+          "status_code": 200,
+          "operation": "",
+          "error_code": 0,
+          "error": "",
+          "metadata": [".config", ".bash_history", ".profile", ".bashrc"]
+        }
+        JSON
+
+      WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/files")
+        .with(query: {"path" => "/root"})
+        .to_return(body_io: body_io, headers: {
+          "X-Lxd-Gid" => "0",
+          "X-Lxd-Mode" => "0700",
+          "X-Lxd-Type" => "directory",
+          "X-Lxd-Uid" => "0",
+        })
+
+      LXD.instances.files.fetch("inst4", path: "/root") do |response|
+        response.success?.should be_true
+        response.metadata.should be_a(Lester::Instance::File)
+
+        response.metadata.try do |metadata|
+          metadata.content.should be_a(Array(String))
+          metadata.group_id.should eq(0)
+          metadata.permissions.should eq("0700")
+          metadata.type.try(&.directory?).should be_true
+          metadata.user_id.should eq(0)
+        end
       end
     end
   end
