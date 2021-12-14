@@ -39,6 +39,7 @@ struct Lester::Instance::File::Endpoint
     base_path = uri(instance_name).path
     headers = HTTP::Headers.new
 
+    headers["Content-Type"] = "application/octet-stream"
     headers["X-LXD-uid"] = user_id.to_s if user_id
     headers["X-LXD-gid"] = group_id.to_s if group_id
     headers["X-LXD-mode"] = permissions.to_s if permissions
