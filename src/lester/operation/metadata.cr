@@ -3,6 +3,6 @@ struct Lester::Operation::Metadata
 
   getter command : Array(String)?
   getter environment : Hash(String, String)?
-  getter fds : Hash(String, String)?
+  getter fds : Hash(Int32, String)?
   getter? interactive : Bool?
 end

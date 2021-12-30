@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Set content type to *octet-stream* for create instance file endpoint
 
+### Changed
+- Change `Lester::Operation::Metadata#fds` return hash key type to `Int32`
+
 ## [0.1.0] - 2021-11-16
 
 ### Added
