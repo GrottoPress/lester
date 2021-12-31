@@ -4,8 +4,10 @@ struct Lester::Operation::Metadata
   @return : Int32?
 
   getter command : Array(String)?
+  getter control : String?
   getter environment : Hash(String, String)?
   getter fds : Hash(Int32, String)?
+  getter fs : String?
   getter? interactive : Bool?
   getter output : Hash(Int32, String)?
 
