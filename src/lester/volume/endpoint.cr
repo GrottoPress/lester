@@ -16,10 +16,9 @@ struct Lester::Volume::Endpoint
   def list(pool_name : String, **params) : List
     base_path = uri(pool_name).path
     params = URI::Params.encode(client.recurse **params)
+    response = client.get("#{base_path}?#{params}")
 
-    client.get("#{base_path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def list(pool_name : String, type, **params)
@@ -29,10 +28,9 @@ struct Lester::Volume::Endpoint
   def list(pool_name : String, type : String, **params) : List
     base_path = uri(pool_name).path
     params = URI::Params.encode(client.recurse **params)
+    response = client.get("#{base_path}/#{type}?#{params}")
 
-    client.get("#{base_path}/#{type}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def create(pool_name, project = nil, target = nil, **params)
@@ -47,12 +45,12 @@ struct Lester::Volume::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name).path
 
-    client.post(
+    response = client.post(
       "#{base_path}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def create(pool_name : String, type, project = nil, target = nil, **params)
@@ -68,12 +66,12 @@ struct Lester::Volume::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name).path
 
-    client.post(
+    response = client.post(
       "#{base_path}/#{type}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def delete(pool_name, name, type, project = nil, target = nil)
@@ -89,11 +87,11 @@ struct Lester::Volume::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name).path
 
-    client.delete(
+    response = client.delete(
       "#{base_path}/#{type}/#{name}?project=#{project}&target=#{target}"
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(pool_name, name, type, **params)
@@ -108,10 +106,9 @@ struct Lester::Volume::Endpoint
   ) : Item
     base_path = uri(pool_name).path
     params = URI::Params.encode(params)
+    response = client.get("#{base_path}/#{type}/#{name}?#{params}")
 
-    client.get("#{base_path}/#{type}/#{name}?#{params}") do |response|
-      Item.from_json(response.body_io)
-    end
+    Item.from_json(response.body)
   end
 
   def update(pool_name, name, type, project = nil, target = nil, **params)
@@ -128,12 +125,12 @@ struct Lester::Volume::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name).path
 
-    client.patch(
+    response = client.patch(
       "#{base_path}/#{type}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def rename(
@@ -160,12 +157,12 @@ struct Lester::Volume::Endpoint
     base_path = uri(pool_name).path
     params = params.merge({name: new_name})
 
-    client.post(
+    response = client.post(
       "#{base_path}/#{type}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def replace(pool_name, name, type, project = nil, target = nil, **params)
@@ -182,12 +179,12 @@ struct Lester::Volume::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name).path
 
-    client.put(
+    response = client.put(
       "#{base_path}/#{type}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def state(pool_name, name, type, **params)
@@ -202,10 +199,9 @@ struct Lester::Volume::Endpoint
   ) : State::Item
     base_path = uri(pool_name).path
     params = URI::Params.encode(params)
+    response = client.get("#{base_path}/#{type}/#{name}/state?#{params}")
 
-    client.get("#{base_path}/#{type}/#{name}/state?#{params}") do |response|
-      State::Item.from_json(response.body_io)
-    end
+    State::Item.from_json(response.body)
   end
 
   def uri(pool_name) : URI

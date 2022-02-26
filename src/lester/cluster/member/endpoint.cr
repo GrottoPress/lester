@@ -7,10 +7,9 @@ struct Lester::Cluster::Member::Endpoint
 
   def list : List
     params = URI::Params.encode(client.recurse)
+    response = client.get("#{uri.path}?#{params}")
 
-    client.get("#{uri.path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def add(**params)
@@ -18,9 +17,8 @@ struct Lester::Cluster::Member::Endpoint
   end
 
   def add(**params) : Operation::Item
-    client.post(uri.path, body: params.to_json) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.post(uri.path, body: params.to_json)
+    Operation::Item.from_json(response.body)
   end
 
   def delete(name)
@@ -28,9 +26,8 @@ struct Lester::Cluster::Member::Endpoint
   end
 
   def delete(name : String) : Operation::Item
-    client.delete("#{uri.path}/#{name}") do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.delete("#{uri.path}/#{name}")
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(name)
@@ -38,9 +35,8 @@ struct Lester::Cluster::Member::Endpoint
   end
 
   def fetch(name : String) : Item
-    client.get("#{uri.path}/#{name}") do |response|
-      Item.from_json(response.body_io)
-    end
+    response = client.get("#{uri.path}/#{name}")
+    Item.from_json(response.body)
   end
 
   def update(name, **params)
@@ -48,9 +44,8 @@ struct Lester::Cluster::Member::Endpoint
   end
 
   def update(name : String, **params) : Operation::Item
-    client.patch("#{uri.path}/#{name}", body: params.to_json) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.patch("#{uri.path}/#{name}", body: params.to_json)
+    Operation::Item.from_json(response.body)
   end
 
   def rename(name, new_name)
@@ -59,10 +54,9 @@ struct Lester::Cluster::Member::Endpoint
 
   def rename(name : String, new_name : String) : Operation::Item
     params = {server_name: new_name}
+    response = client.post("#{uri.path}/#{name}", body: params.to_json)
 
-    client.post("#{uri.path}/#{name}", body: params.to_json) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    Operation::Item.from_json(response.body)
   end
 
   def replace(name, **params)
@@ -70,9 +64,8 @@ struct Lester::Cluster::Member::Endpoint
   end
 
   def replace(name : String, **params) : Operation::Item
-    client.put("#{uri.path}/#{name}", body: params.to_json) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.put("#{uri.path}/#{name}", body: params.to_json)
+    Operation::Item.from_json(response.body)
   end
 
   def state(name, **params)
@@ -80,12 +73,8 @@ struct Lester::Cluster::Member::Endpoint
   end
 
   def state(name : String, **params) : Operation::Item
-    client.post(
-      "#{uri.path}/#{name}/state",
-      body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.post("#{uri.path}/#{name}/state", body: params.to_json)
+    Operation::Item.from_json(response.body)
   end
 
   def uri : URI

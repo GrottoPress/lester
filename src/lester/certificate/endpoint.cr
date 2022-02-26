@@ -7,10 +7,9 @@ struct Lester::Certificate::Endpoint
 
   def list : List
     params = URI::Params.encode(client.recurse)
+    response = client.get("#{uri.path}?#{params}")
 
-    client.get("#{uri.path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def add(**params)
@@ -20,10 +19,9 @@ struct Lester::Certificate::Endpoint
   def add(**params) : Operation::Item
     uri_path = uri.path
     uri_path += "?public" if params[:password]?
+    response = client.post(uri_path, body: params.to_json)
 
-    client.post(uri_path, body: params.to_json) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    Operation::Item.from_json(response.body)
   end
 
   def delete(fingerprint)
@@ -31,9 +29,8 @@ struct Lester::Certificate::Endpoint
   end
 
   def delete(fingerprint : String) : Operation::Item
-    client.delete("#{uri.path}/#{fingerprint}") do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.delete("#{uri.path}/#{fingerprint}")
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(fingerprint)
@@ -41,9 +38,8 @@ struct Lester::Certificate::Endpoint
   end
 
   def fetch(fingerprint : String) : Item
-    client.get("#{uri.path}/#{fingerprint}") do |response|
-      Item.from_json(response.body_io)
-    end
+    response = client.get("#{uri.path}/#{fingerprint}")
+    Item.from_json(response.body)
   end
 
   def update(fingerprint, **params)
@@ -51,12 +47,8 @@ struct Lester::Certificate::Endpoint
   end
 
   def update(fingerprint : String, **params) : Operation::Item
-    client.patch(
-      "#{uri.path}/#{fingerprint}",
-      body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.patch("#{uri.path}/#{fingerprint}", body: params.to_json)
+    Operation::Item.from_json(response.body)
   end
 
   def replace(fingerprint, **params)
@@ -64,12 +56,8 @@ struct Lester::Certificate::Endpoint
   end
 
   def replace(fingerprint : String, **params) : Operation::Item
-    client.put(
-      "#{uri.path}/#{fingerprint}",
-      body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.put("#{uri.path}/#{fingerprint}", body: params.to_json)
+    Operation::Item.from_json(response.body)
   end
 
   def uri : URI

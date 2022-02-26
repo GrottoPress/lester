@@ -11,10 +11,9 @@ struct Lester::Image::Endpoint
 
   def list(**params) : List
     params = URI::Params.encode(client.recurse **params)
+    response = client.get("#{uri.path}?#{params}")
 
-    client.get("#{uri.path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def add(fingerprint = nil, secret = nil, project = nil, file = nil, **params)
@@ -37,9 +36,8 @@ struct Lester::Image::Endpoint
     uri_path = "#{uri.path}?project=#{project}"
     uri_path += "&public" if secret
 
-    client.post(uri_path, body: body, headers: headers) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.post(uri_path, body: body, headers: headers)
+    Operation::Item.from_json(response.body)
   end
 
   def delete(fingerprint, project = nil)
@@ -47,11 +45,8 @@ struct Lester::Image::Endpoint
   end
 
   def delete(fingerprint : String, project : String? = nil) : Operation::Item
-    client.delete(
-      "#{uri.path}/#{fingerprint}?project=#{project}"
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.delete("#{uri.path}/#{fingerprint}?project=#{project}")
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(fingerprint, **params)
@@ -60,10 +55,9 @@ struct Lester::Image::Endpoint
 
   def fetch(fingerprint : String, **params) : Item
     params = URI::Params.encode(params)
+    response = client.get("#{uri.path}/#{fingerprint}?#{params}")
 
-    client.get("#{uri.path}/#{fingerprint}?#{params}") do |response|
-      Item.from_json(response.body_io)
-    end
+    Item.from_json(response.body)
   end
 
   def update(fingerprint, project = nil, **params)
@@ -75,12 +69,12 @@ struct Lester::Image::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    client.patch(
+    response = client.patch(
       "#{uri.path}/#{fingerprint}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def replace(fingerprint, project = nil, **params)
@@ -88,12 +82,12 @@ struct Lester::Image::Endpoint
   end
 
   def replace(fingerprint : String, project = nil, **params) : Operation::Item
-    client.put(
+    response = client.put(
       "#{uri.path}/#{fingerprint}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def export(fingerprint, destination, **params)
@@ -127,12 +121,12 @@ struct Lester::Image::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    client.post(
+    response = client.post(
       "#{uri.path}/#{fingerprint}/export?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def refresh(fingerprint, project = nil)
@@ -140,11 +134,11 @@ struct Lester::Image::Endpoint
   end
 
   def refresh(fingerprint : String, project : String? = nil) : Operation::Item
-    client.post(
+    response = client.post(
       "#{uri.path}/#{fingerprint}/refresh?project=#{project}",
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def secret(fingerprint, project = nil)
@@ -155,11 +149,11 @@ struct Lester::Image::Endpoint
     fingerprint : String,
     project : String? = nil
   ) : Operation::Item
-    client.post(
+    response = client.post(
       "#{uri.path}/#{fingerprint}/secret?project=#{project}",
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def uri : URI

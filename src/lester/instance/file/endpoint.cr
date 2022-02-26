@@ -46,13 +46,13 @@ struct Lester::Instance::File::Endpoint
     headers["X-LXD-type"] = type.to_s.downcase if type
     headers["X-LXD-write"] = write_mode.to_s.downcase if write_mode
 
-    client.post(
+    response = client.post(
       "#{base_path}?path=#{path}&project=#{project}",
       body: content,
       headers: headers
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def delete(instance_name, path, project = nil)
@@ -66,9 +66,8 @@ struct Lester::Instance::File::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    client.delete("#{base_path}?path=#{path}&project=#{project}") do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.delete("#{base_path}?path=#{path}&project=#{project}")
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(instance_name, path, destination = nil, **params)

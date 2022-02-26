@@ -8,10 +8,9 @@ struct Lester::Instance::Template::Endpoint
   def list(instance_name : String, **params) : List
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
+    response = client.get("#{base_path}?#{params}")
 
-    client.get("#{base_path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def create(instance_name, path, content, project = nil)
@@ -26,12 +25,12 @@ struct Lester::Instance::Template::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    client.post(
+    response = client.post(
       "#{base_path}?path=#{path}&project=#{project}",
       body: content
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def delete(instance_name, path, project = nil)
@@ -44,10 +43,9 @@ struct Lester::Instance::Template::Endpoint
     project : String? = nil
   ) : Operation::Item
     base_path = uri(instance_name).path
+    response = client.delete("#{base_path}?path=#{path}&project=#{project}")
 
-    client.delete("#{base_path}?path=#{path}&project=#{project}") do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(instance_name, path, destination, **params)

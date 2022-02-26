@@ -7,10 +7,9 @@ struct Lester::Pool::Endpoint
 
   def list(**params) : List
     params = URI::Params.encode(client.recurse **params)
+    response = client.get("#{uri.path}?#{params}")
 
-    client.get("#{uri.path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def create(project = nil, target = nil, **params)
@@ -22,12 +21,12 @@ struct Lester::Pool::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    client.post(
+    response = client.post(
       "#{uri.path}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def delete(name, project = nil)
@@ -35,9 +34,8 @@ struct Lester::Pool::Endpoint
   end
 
   def delete(name : String, project : String? = nil) : Operation::Item
-    client.delete("#{uri.path}/#{name}?project=#{project}") do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.delete("#{uri.path}/#{name}?project=#{project}")
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(name, **params)
@@ -46,10 +44,9 @@ struct Lester::Pool::Endpoint
 
   def fetch(name : String, **params) : Item
     params = URI::Params.encode(params)
+    response = client.get("#{uri.path}/#{name}?#{params}")
 
-    client.get("#{uri.path}/#{name}?#{params}") do |response|
-      Item.from_json(response.body_io)
-    end
+    Item.from_json(response.body)
   end
 
   def update(name, project = nil, target = nil, **params)
@@ -62,12 +59,12 @@ struct Lester::Pool::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    client.patch(
+    response = client.patch(
       "#{uri.path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def replace(name, project = nil, target = nil, **params)
@@ -80,12 +77,12 @@ struct Lester::Pool::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    client.put(
+    response = client.put(
       "#{uri.path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def resources(name, **params)
@@ -94,10 +91,9 @@ struct Lester::Pool::Endpoint
 
   def resources(name : String, **params) : Resources::Item
     params = URI::Params.encode(params)
+    response = client.get("#{uri.path}/#{name}/resources?#{params}")
 
-    client.get("#{uri.path}/#{name}/resources?#{params}") do |response|
-      Resources::Item.from_json(response.body_io)
-    end
+    Resources::Item.from_json(response.body)
   end
 
   def uri : URI

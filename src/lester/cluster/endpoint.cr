@@ -14,9 +14,8 @@ struct Lester::Cluster::Endpoint
   end
 
   def fetch : Item
-    client.get(uri.path) do |response|
-      Item.from_json(response.body_io)
-    end
+    response = client.get(uri.path)
+    Item.from_json(response.body)
   end
 
   def replace(**params)
@@ -24,9 +23,8 @@ struct Lester::Cluster::Endpoint
   end
 
   def replace(**params) : Operation::Item
-    client.put(uri.path, body: params.to_json) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.put(uri.path, body: params.to_json)
+    Operation::Item.from_json(response.body)
   end
 
   def uri : URI

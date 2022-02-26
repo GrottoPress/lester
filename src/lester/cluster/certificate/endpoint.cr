@@ -6,9 +6,8 @@ struct Lester::Cluster::Certificate::Endpoint
   end
 
   def replace(**params) : Operation::Item
-    client.put(uri.path, body: params.to_json) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.put(uri.path, body: params.to_json)
+    Operation::Item.from_json(response.body)
   end
 
   def uri : URI

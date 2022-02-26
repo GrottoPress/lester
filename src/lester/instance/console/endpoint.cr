@@ -12,12 +12,12 @@ struct Lester::Instance::Console::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    client.post(
+    response = client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json,
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def output(instance_name, destination, **params)
@@ -50,9 +50,8 @@ struct Lester::Instance::Console::Endpoint
   def clear(instance_name : String, project : String? = nil) : Operation::Item
     base_path = uri(instance_name).path
 
-    client.delete("#{base_path}?project=#{project}") do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.delete("#{base_path}?project=#{project}")
+    Operation::Item.from_json(response.body)
   end
 
   def uri(instance_name) : URI

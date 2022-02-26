@@ -13,10 +13,9 @@ struct Lester::Volume::Backup::Endpoint
   ) : List
     base_path = uri(pool_name, volume_name, volume_type).path
     params = URI::Params.encode(client.recurse **params)
+    response = client.get("#{base_path}?#{params}")
 
-    client.get("#{base_path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def create(
@@ -40,12 +39,12 @@ struct Lester::Volume::Backup::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name, volume_name, volume_type).path
 
-    client.post(
+    response = client.post(
       "#{base_path}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def delete(
@@ -69,11 +68,11 @@ struct Lester::Volume::Backup::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name, volume_name, volume_type).path
 
-    client.delete(
+    response = client.delete(
       "#{base_path}/#{name}?project=#{project}&target=#{target}"
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(pool_name, volume_name, volume_type, name, **params)
@@ -89,10 +88,9 @@ struct Lester::Volume::Backup::Endpoint
   ) : Item
     base_path = uri(pool_name, volume_name, volume_type).path
     params = URI::Params.encode(params)
+    response = client.get("#{base_path}/#{name}?#{params}")
 
-    client.get("#{base_path}/#{name}?#{params}") do |response|
-      Item.from_json(response.body_io)
-    end
+    Item.from_json(response.body)
   end
 
   def rename(
@@ -127,12 +125,12 @@ struct Lester::Volume::Backup::Endpoint
     base_path = uri(pool_name, volume_name, volume_type).path
     params = {name: new_name}
 
-    client.post(
+    response = client.post(
       "#{base_path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def export(pool_name, volume_name, volume_type, name, destination, **params)

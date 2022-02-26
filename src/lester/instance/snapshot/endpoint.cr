@@ -8,10 +8,9 @@ struct Lester::Instance::Snapshot::Endpoint
   def list(instance_name : String, **params) : List
     base_path = uri(instance_name).path
     params = URI::Params.encode(client.recurse **params)
+    response = client.get("#{base_path}?#{params}")
 
-    client.get("#{base_path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def create(instance_name, project = nil, **params)
@@ -25,12 +24,12 @@ struct Lester::Instance::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    client.post(
+    response = client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def delete(instance_name, name, project = nil)
@@ -43,10 +42,9 @@ struct Lester::Instance::Snapshot::Endpoint
     project : String? = nil
   ) : Operation::Item
     base_path = uri(instance_name).path
+    response = client.delete("#{base_path}/#{name}?project=#{project}")
 
-    client.delete("#{base_path}/#{name}?project=#{project}") do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(instance_name, name, **params)
@@ -56,10 +54,9 @@ struct Lester::Instance::Snapshot::Endpoint
   def fetch(instance_name : String, name : String, **params) : Item
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
+    response = client.get("#{base_path}/#{name}?#{params}")
 
-    client.get("#{base_path}/#{name}?#{params}") do |response|
-      Item.from_json(response.body_io)
-    end
+    Item.from_json(response.body)
   end
 
   def update(instance_name, name, project = nil, **params)
@@ -74,12 +71,12 @@ struct Lester::Instance::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    client.patch(
+    response = client.patch(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def rename(instance_name, name, new_name, project = nil, **params)
@@ -96,12 +93,12 @@ struct Lester::Instance::Snapshot::Endpoint
     base_path = uri(instance_name).path
     params = params.merge({name: new_name})
 
-    client.post(
+    response = client.post(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def replace(instance_name, name, project = nil, **params)
@@ -116,12 +113,12 @@ struct Lester::Instance::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    client.put(
+    response = client.put(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def uri(instance_name) : URI

@@ -8,10 +8,9 @@ struct Lester::Network::Peer::Endpoint
   def list(network_name : String, **params) : List
     base_path = uri(network_name).path
     params = URI::Params.encode(client.recurse **params)
+    response = client.get("#{base_path}?#{params}")
 
-    client.get("#{base_path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def create(network_name, project = nil, **params)
@@ -25,12 +24,12 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    client.post(
+    response = client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def delete(network_name, name, project = nil)
@@ -44,11 +43,8 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    client.delete(
-      "#{base_path}/#{name}?project=#{project}"
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.delete("#{base_path}/#{name}?project=#{project}")
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(network_name, name, **params)
@@ -58,10 +54,9 @@ struct Lester::Network::Peer::Endpoint
   def fetch(network_name : String, name : String, **params) : Item
     base_path = uri(network_name).path
     params = URI::Params.encode(params)
+    response = client.get("#{base_path}/#{name}?#{params}")
 
-    client.get("#{base_path}/#{name}?#{params}") do |response|
-      Item.from_json(response.body_io)
-    end
+    Item.from_json(response.body)
   end
 
   def update(network_name, name, project = nil, **params)
@@ -76,12 +71,12 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    client.patch(
+    response = client.patch(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def replace(network_name, name, project = nil, **params)
@@ -96,12 +91,12 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    client.put(
+    response = client.put(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def uri(network_name) : URI

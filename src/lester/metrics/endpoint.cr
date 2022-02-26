@@ -7,15 +7,14 @@ struct Lester::Metrics::Endpoint
 
   def fetch(**params) : String
     params = URI::Params.encode(params)
+    response = client.get("#{uri.path}?#{params}")
 
-    client.get("#{uri.path}?#{params}") do |response|
-      unless response.status.success?
-        raise Error.new("Could not retrieve metrics. \
-          Remote server returned status code #{response.status_code}")
-      end
-
-      response.body_io.gets_to_end
+    unless response.status.success?
+      raise Error.new("Could not retrieve metrics. \
+        Remote server returned status code #{response.status_code}")
     end
+
+    response.body
   end
 
   def uri : URI

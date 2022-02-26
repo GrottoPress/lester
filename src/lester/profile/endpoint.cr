@@ -7,10 +7,9 @@ struct Lester::Profile::Endpoint
 
   def list(**params) : List
     params = URI::Params.encode(client.recurse **params)
+    response = client.get("#{uri.path}?#{params}")
 
-    client.get("#{uri.path}?#{params}") do |response|
-      List.from_json(response.body_io)
-    end
+    List.from_json(response.body)
   end
 
   def create(project = nil, **params)
@@ -18,12 +17,12 @@ struct Lester::Profile::Endpoint
   end
 
   def create(project : String? = nil, **params) : Operation::Item
-    client.post(
+    response = client.post(
       "#{uri.path}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def delete(name, project = nil)
@@ -31,9 +30,8 @@ struct Lester::Profile::Endpoint
   end
 
   def delete(name : String, project : String? = nil) : Operation::Item
-    client.delete("#{uri.path}/#{name}?project=#{project}") do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    response = client.delete("#{uri.path}/#{name}?project=#{project}")
+    Operation::Item.from_json(response.body)
   end
 
   def fetch(name, **params)
@@ -42,10 +40,9 @@ struct Lester::Profile::Endpoint
 
   def fetch(name : String, **params) : Item
     params = URI::Params.encode(params)
+    response = client.get("#{uri.path}/#{name}?#{params}")
 
-    client.get("#{uri.path}/#{name}?#{params}") do |response|
-      Item.from_json(response.body_io)
-    end
+    Item.from_json(response.body)
   end
 
   def update(name, project = nil, **params)
@@ -53,12 +50,12 @@ struct Lester::Profile::Endpoint
   end
 
   def update(name : String, project : String? = nil, **params) : Operation::Item
-    client.patch(
+    response = client.patch(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def rename(name, new_name)
@@ -67,10 +64,9 @@ struct Lester::Profile::Endpoint
 
   def rename(name : String, new_name : String) : Operation::Item
     params = {name: new_name}
+    response = client.post("#{uri.path}/#{name}", body: params.to_json)
 
-    client.post("#{uri.path}/#{name}", body: params.to_json) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    Operation::Item.from_json(response.body)
   end
 
   def replace(name, project = nil, **params)
@@ -82,12 +78,12 @@ struct Lester::Profile::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    client.put(
+    response = client.put(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
-    ) do |response|
-      Operation::Item.from_json(response.body_io)
-    end
+    )
+
+    Operation::Item.from_json(response.body)
   end
 
   def uri : URI
