@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Instance::Metadata::Endpoint do
   describe "#fetch" do
     it "retrieves metadata" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -41,7 +41,7 @@ describe Lester::Instance::Metadata::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/metadata")
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.metadata.fetch(
         instance_name: "inst4",
@@ -55,7 +55,7 @@ describe Lester::Instance::Metadata::Endpoint do
 
   describe "#update" do
     it "updates metadata" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -68,7 +68,7 @@ describe Lester::Instance::Metadata::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/instances/inst4/metadata?project=")
         .with(body: %({"architecture":"x86_64","expiry_date":1620685757}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.metadata.update(
         instance_name: "inst4",
@@ -82,7 +82,7 @@ describe Lester::Instance::Metadata::Endpoint do
 
   describe "#replace" do
     it "updates metadata" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -95,7 +95,7 @@ describe Lester::Instance::Metadata::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/instances/inst4/metadata?project=")
         .with(body: %({"architecture":"x86_64","expiry_date":1620685757}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.metadata.replace(
         instance_name: "inst4",

@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Network::Endpoint do
   describe "#list" do
     it "lists networks" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -39,7 +39,7 @@ describe Lester::Network::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/networks")
         .with(query: {"project" => "default", "recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.list(project: "default") do |response|
         response.success?.should be_true
@@ -50,7 +50,7 @@ describe Lester::Network::Endpoint do
 
   describe "#create" do
     it "creates network" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Network created",
@@ -63,7 +63,7 @@ describe Lester::Network::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/networks?project=&target=")
         .with(body: %({"name":"lxdbr0","type":"bridge"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.create(name: "lxdbr0", type: "bridge") do |response|
         response.success?.should be_true
@@ -73,7 +73,7 @@ describe Lester::Network::Endpoint do
 
   describe "#delete" do
     it "deletes network" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Network created",
@@ -85,7 +85,7 @@ describe Lester::Network::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/networks/lxdbr0?project=")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.delete(name: "lxdbr0") do |response|
         response.success?.should be_true
@@ -95,7 +95,7 @@ describe Lester::Network::Endpoint do
 
   describe "#fetch" do
     it "fetches network" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -128,7 +128,7 @@ describe Lester::Network::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.fetch(name: "lxdbr0") do |response|
         response.success?.should be_true
@@ -139,7 +139,7 @@ describe Lester::Network::Endpoint do
 
   describe "#update" do
     it "updates network" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -152,7 +152,7 @@ describe Lester::Network::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/networks/lxdbr0?project=&target=")
         .with(body: %({"config":{"ipv4.nat":"true","ipv6.address":"none"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.update(
         name: "lxdbr0",
@@ -165,7 +165,7 @@ describe Lester::Network::Endpoint do
 
   describe "#rename" do
     it "renames network" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Network created",
@@ -178,7 +178,7 @@ describe Lester::Network::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/networks/lxdbr0?project=")
         .with(body: %({"name":"lxdbr10"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.rename(name: "lxdbr0", new_name: "lxdbr10") do |response|
         response.success?.should be_true
@@ -188,7 +188,7 @@ describe Lester::Network::Endpoint do
 
   describe "#replace" do
     it "updates network" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -201,7 +201,7 @@ describe Lester::Network::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/networks/lxdbr0?project=&target=")
         .with(body: %({"config":{"ipv4.nat":"true","ipv6.address":"none"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.replace(
         name: "lxdbr0",
@@ -214,7 +214,7 @@ describe Lester::Network::Endpoint do
 
   describe "#leases" do
     it "lists DHCP leases for the network" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -235,7 +235,7 @@ describe Lester::Network::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/leases")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.leases(name: "lxdbr0") do |response|
         response.success?.should be_true
@@ -246,7 +246,7 @@ describe Lester::Network::Endpoint do
 
   describe "#state" do
     it "gets network state" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -305,7 +305,7 @@ describe Lester::Network::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/state")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.state(name: "lxdbr0") do |response|
         response.success?.should be_true

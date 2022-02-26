@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Instance::Template::Endpoint do
   describe "#list" do
     it "lists templates" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -16,7 +16,7 @@ describe Lester::Instance::Template::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/metadata/templates")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.templates.list(instance_name: "inst4") do |response|
         response.success?.should be_true
@@ -27,7 +27,7 @@ describe Lester::Instance::Template::Endpoint do
 
   describe "#create" do
     it "creates template" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -40,7 +40,7 @@ describe Lester::Instance::Template::Endpoint do
       WebMock.stub(
         :POST,
         "#{LXD.uri}/instances/inst4/metadata/templates?path=file.tpl&project="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.instances.templates.create(
         instance_name: "inst4",
@@ -54,7 +54,7 @@ describe Lester::Instance::Template::Endpoint do
 
   describe "#delete" do
     it "deletes template" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -65,7 +65,7 @@ describe Lester::Instance::Template::Endpoint do
       WebMock.stub(
         :DELETE,
         "#{LXD.uri}/instances/inst4/metadata/templates?path=file.tpl&project="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.instances.templates.delete("inst4", "file.tpl") do |response|
         response.success?.should be_true

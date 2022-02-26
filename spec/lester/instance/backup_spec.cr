@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Instance::Backup::Endpoint do
   describe "#list" do
     it "lists backups" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -26,7 +26,7 @@ describe Lester::Instance::Backup::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/backups")
         .with(query: {"recursion" => "1", "project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.backups.list("inst4", project: "default") do |response|
         response.success?.should be_true
@@ -37,7 +37,7 @@ describe Lester::Instance::Backup::Endpoint do
 
   describe "#create" do
     it "creates backup" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -64,7 +64,7 @@ describe Lester::Instance::Backup::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/instances/inst4/backups?project=")
         .with(body: %({"name":"backup0","compression_algorithm":"gzip"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.backups.create(
         instance_name: "inst4",
@@ -79,7 +79,7 @@ describe Lester::Instance::Backup::Endpoint do
 
   describe "#delete" do
     it "deletes backup" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -107,7 +107,7 @@ describe Lester::Instance::Backup::Endpoint do
       WebMock.stub(
         :DELETE,
         "#{LXD.uri}/instances/debian-10/backups/backup0?project="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.instances.backups.delete(
         instance_name: "debian-10",
@@ -121,7 +121,7 @@ describe Lester::Instance::Backup::Endpoint do
 
   describe "#fetch" do
     it "fetches backup" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -141,7 +141,7 @@ describe Lester::Instance::Backup::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/backups/bak0")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.backups.fetch("inst4", "bak0") do |response|
         response.success?.should be_true
@@ -152,7 +152,7 @@ describe Lester::Instance::Backup::Endpoint do
 
   describe "#rename" do
     it "renames backup" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -182,7 +182,7 @@ describe Lester::Instance::Backup::Endpoint do
         "#{LXD.uri}/instances/debian-10/backups/bak0?project="
       )
         .with(body: %({"name":"debian-bak"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.backups.rename(
         instance_name: "debian-10",

@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Pool::Endpoint do
   describe "#list" do
     it "lists storage pools" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -37,7 +37,7 @@ describe Lester::Pool::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/storage-pools")
         .with(query: {"recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.pools.list do |response|
         response.success?.should be_true
@@ -48,7 +48,7 @@ describe Lester::Pool::Endpoint do
 
   describe "#create" do
     it "creates storage pool" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -61,7 +61,7 @@ describe Lester::Pool::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/storage-pools?project=&target=")
         .with(body: %({"driver":"zfs","name":"local"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.pools.create(driver: "zfs", name: "local") do |response|
         response.success?.should be_true
@@ -71,7 +71,7 @@ describe Lester::Pool::Endpoint do
 
   describe "#delete" do
     it "deletes storage pool" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -83,7 +83,7 @@ describe Lester::Pool::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/storage-pools/pool0?project=")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.pools.delete(name: "pool0") do |response|
         response.success?.should be_true
@@ -93,7 +93,7 @@ describe Lester::Pool::Endpoint do
 
   describe "#fetch" do
     it "fetches storage pool" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -125,7 +125,7 @@ describe Lester::Pool::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/storage-pools/pool0")
         .with(query: {"target" => "lxd0"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.pools.fetch(name: "pool0", target: "lxd0") do |response|
         response.success?.should be_true
@@ -136,7 +136,7 @@ describe Lester::Pool::Endpoint do
 
   describe "#update" do
     it "updates storage pool" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -149,7 +149,7 @@ describe Lester::Pool::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/storage-pools/pool0?project=&target=")
         .with(body: %({"description":"Local SSD pool"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.pools.update(
         name: "pool0",
@@ -162,7 +162,7 @@ describe Lester::Pool::Endpoint do
 
   describe "#replace" do
     it "updates storage pool" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -175,7 +175,7 @@ describe Lester::Pool::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/storage-pools/pool0?project=&target=")
         .with(body: %({"description":"Local SSD pool"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.pools.replace(
         name: "pool0",
@@ -188,7 +188,7 @@ describe Lester::Pool::Endpoint do
 
   describe "#resources" do
     it "retrieves storage pool resource usage" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -211,7 +211,7 @@ describe Lester::Pool::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/storage-pools/pool0/resources")
         .with(query: {"target" => "lxd0"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.pools.resources(name: "pool0", target: "lxd0") do |response|
         response.success?.should be_true

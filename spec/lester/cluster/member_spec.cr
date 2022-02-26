@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Cluster::Member::Endpoint do
   describe "#list" do
     it "lists members" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -34,7 +34,7 @@ describe Lester::Cluster::Member::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/cluster/members")
         .with(query: {"recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.members.list do |response|
         response.success?.should be_true
@@ -45,7 +45,7 @@ describe Lester::Cluster::Member::Endpoint do
 
   describe "#add" do
     it "requests join token member" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Member added",
@@ -95,7 +95,7 @@ describe Lester::Cluster::Member::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/cluster/members")
         .with(body: %({"server_name":"lxd02"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.members.add(server_name: "lxd02") do |response|
         response.success?.should be_true
@@ -106,7 +106,7 @@ describe Lester::Cluster::Member::Endpoint do
 
   describe "#delete" do
     it "deletes member" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Cluster::Member created",
@@ -118,7 +118,7 @@ describe Lester::Cluster::Member::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/cluster/members/lxd01")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.members.delete(name: "lxd01") do |response|
         response.success?.should be_true
@@ -128,7 +128,7 @@ describe Lester::Cluster::Member::Endpoint do
 
   describe "#fetch" do
     it "fetches member" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -156,7 +156,7 @@ describe Lester::Cluster::Member::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/cluster/members/lxd01")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.members.fetch(name: "lxd01") do |response|
         response.success?.should be_true
@@ -167,7 +167,7 @@ describe Lester::Cluster::Member::Endpoint do
 
   describe "#update" do
     it "updates member" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -180,7 +180,7 @@ describe Lester::Cluster::Member::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/cluster/members/lxd01")
         .with(body: %({"failure_domain":"rack1","roles":["database"]}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.members.update(
         name: "lxd01",
@@ -194,7 +194,7 @@ describe Lester::Cluster::Member::Endpoint do
 
   describe "#rename" do
     it "renames member" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Cluster::Member created",
@@ -207,7 +207,7 @@ describe Lester::Cluster::Member::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/cluster/members/lxd01")
         .with(body: %({"server_name":"lxd02"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.members.rename(name: "lxd01", new_name: "lxd02") do |response|
         response.success?.should be_true
@@ -217,7 +217,7 @@ describe Lester::Cluster::Member::Endpoint do
 
   describe "#replace" do
     it "updates member" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -230,7 +230,7 @@ describe Lester::Cluster::Member::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/cluster/members/lxd01")
         .with(body: %({"failure_domain":"rack1","roles":["database"]}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.members.replace(
         name: "lxd01",
@@ -244,7 +244,7 @@ describe Lester::Cluster::Member::Endpoint do
 
   describe "#state" do
     it "gets network state" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -294,7 +294,7 @@ describe Lester::Cluster::Member::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/cluster/members/lxd01/state")
         .with(body: %({"action":"evacuate"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.members.state(name: "lxd01", action: "evacuate") do |response|
         response.success?.should be_true

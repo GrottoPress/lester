@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Network::Forward::Endpoint do
   describe "#list" do
     it "lists forwards" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -35,7 +35,7 @@ describe Lester::Network::Forward::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/forwards")
         .with(query: {"recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.forwards.list(network_name: "lxdbr0") do |response|
         response.success?.should be_true
@@ -46,7 +46,7 @@ describe Lester::Network::Forward::Endpoint do
 
   describe "#create" do
     it "creates forward" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Member added",
@@ -63,7 +63,7 @@ describe Lester::Network::Forward::Endpoint do
           "config":{"user.mykey":"foo"},\
           "description":"My public IP forward"\
         }))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.forwards.create(
         network_name: "lxdbr0",
@@ -78,7 +78,7 @@ describe Lester::Network::Forward::Endpoint do
 
   describe "#delete" do
     it "deletes forward" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Project created",
@@ -92,7 +92,7 @@ describe Lester::Network::Forward::Endpoint do
       WebMock.stub(
         :DELETE,
         "#{LXD.uri}/networks/lxdbr0/forwards/1.2.3.4?project="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.networks.forwards.delete(
         network_name: "lxdbr0",
@@ -105,7 +105,7 @@ describe Lester::Network::Forward::Endpoint do
 
   describe "#fetch" do
     it "fetches forward" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -134,7 +134,7 @@ describe Lester::Network::Forward::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/forwards/1.2.3.4")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.forwards.fetch(
         network_name: "lxdbr0",
@@ -148,7 +148,7 @@ describe Lester::Network::Forward::Endpoint do
 
   describe "#update" do
     it "updates forward" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -164,7 +164,7 @@ describe Lester::Network::Forward::Endpoint do
         "#{LXD.uri}/networks/lxdbr0/forwards/1.2.3.4?project="
       )
         .with(body: %({"config":{"user.mykey":"bar"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.forwards.update(
         network_name: "lxdbr0",
@@ -178,7 +178,7 @@ describe Lester::Network::Forward::Endpoint do
 
   describe "#replace" do
     it "updates forward" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -194,7 +194,7 @@ describe Lester::Network::Forward::Endpoint do
         "#{LXD.uri}/networks/lxdbr0/forwards/1.2.3.4?project="
       )
         .with(body: %({"config":{"user.mykey":"bar"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.forwards.replace(
         network_name: "lxdbr0",

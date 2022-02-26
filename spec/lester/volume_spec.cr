@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Volume::Endpoint do
   describe "#list" do
     it "lists volumes" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -33,7 +33,7 @@ describe Lester::Volume::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/storage-pools/pool0/volumes")
         .with(query: {"target" => "lxd0", "recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.list(pool_name: "pool0", target: "lxd0") do |response|
         response.success?.should be_true
@@ -42,7 +42,7 @@ describe Lester::Volume::Endpoint do
     end
 
     it "lists volumes of a given type" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -72,7 +72,7 @@ describe Lester::Volume::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/storage-pools/pool0/volumes/custom")
         .with(query: {"recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.list(pool_name: "pool0", type: "custom") do |response|
         response.success?.should be_true
@@ -83,7 +83,7 @@ describe Lester::Volume::Endpoint do
 
   describe "#create" do
     it "creates volume" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -136,7 +136,7 @@ describe Lester::Volume::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes?project=&target="
       )
         .with(body: %({"content_type":"filesystem","description":"My volume"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.create(
         pool_name: "pool0",
@@ -149,7 +149,7 @@ describe Lester::Volume::Endpoint do
     end
 
     it "creates volume of a given type" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -202,7 +202,7 @@ describe Lester::Volume::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes/custom?project=&target="
       )
         .with(body: %({"content_type":"filesystem","description":"My volume"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.create(
         pool_name: "pool0",
@@ -218,7 +218,7 @@ describe Lester::Volume::Endpoint do
 
   describe "#delete" do
     it "deletes volume" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Operation created",
@@ -232,7 +232,7 @@ describe Lester::Volume::Endpoint do
       WebMock.stub(
         :DELETE,
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/vol0?project=&target="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.volumes.delete(
         pool_name: "pool0",
@@ -246,7 +246,7 @@ describe Lester::Volume::Endpoint do
 
   describe "#fetch" do
     it "fetches volume" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -274,7 +274,7 @@ describe Lester::Volume::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/storage-pools/pool0/volumes/custom/vol0")
         .with(query: {"target" => "lxd0"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.fetch(
         pool_name: "pool0",
@@ -290,7 +290,7 @@ describe Lester::Volume::Endpoint do
 
   describe "#update" do
     it "updates volume" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -306,7 +306,7 @@ describe Lester::Volume::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/vol0?project=&target="
       )
         .with(body: %({"description":"My volume","restore":"snap0"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.update(
         pool_name: "pool0",
@@ -322,7 +322,7 @@ describe Lester::Volume::Endpoint do
 
   describe "#rename" do
     it "renames volume" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -375,7 +375,7 @@ describe Lester::Volume::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/vol0?project=&target="
       )
         .with(body: %({"migration":false,"name":"vol1"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.rename(
         pool_name: "pool0",
@@ -391,7 +391,7 @@ describe Lester::Volume::Endpoint do
 
   describe "#replace" do
     it "updates volume" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -407,7 +407,7 @@ describe Lester::Volume::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/vol0?project=&target="
       )
         .with(body: %({"description":"My volume","restore":"snap0"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.replace(
         pool_name: "pool0",
@@ -423,7 +423,7 @@ describe Lester::Volume::Endpoint do
 
   describe "#state" do
     it "fetches volume state" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -444,7 +444,7 @@ describe Lester::Volume::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/state"
       )
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.state(
         pool_name: "pool0",

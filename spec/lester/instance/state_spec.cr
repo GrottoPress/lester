@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Instance::State::Endpoint do
   describe "#fetch" do
     it "fetches state" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -63,7 +63,7 @@ describe Lester::Instance::State::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/state")
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.state.fetch("inst4", project: "default") do |response|
         response.success?.should be_true
@@ -74,7 +74,7 @@ describe Lester::Instance::State::Endpoint do
 
   describe "#replace" do
     it "updates state" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -101,7 +101,7 @@ describe Lester::Instance::State::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/instances/inst4/state?project=")
         .with(body: %({"action":"start","force":false}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.state.replace(
         instance_name: "inst4",

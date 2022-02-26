@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Server::Endpoint do
   describe "#fetch" do
     it "retrieves server information" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -77,7 +77,7 @@ describe Lester::Server::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD.uri}").to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}").to_return(body: body)
 
       LXD.server.fetch do |response|
         response.success?.should be_true
@@ -88,7 +88,7 @@ describe Lester::Server::Endpoint do
 
   describe "#update" do
     it "updates server configuration" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -101,7 +101,7 @@ describe Lester::Server::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}?target=")
         .with(body: %({"config":{"core.https_address":":8443"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.server.update(config: {"core.https_address" => ":8443"}) do |response|
         response.success?.should be_true
@@ -111,7 +111,7 @@ describe Lester::Server::Endpoint do
 
   describe "#replace" do
     it "updates server configuration" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -124,7 +124,7 @@ describe Lester::Server::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}?target=")
         .with(body: %({"config":{"core.https_address":":8443"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.server.replace(config: {"core.https_address": ":8443"}) do |response|
         response.success?.should be_true
@@ -140,7 +140,7 @@ describe Lester::Server::Endpoint do
 
   describe "#resources" do
     it "retrieves server resources" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -394,7 +394,7 @@ describe Lester::Server::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD.uri}/resources").to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/resources").to_return(body: body)
 
       LXD.server.resources do |response|
         response.success?.should be_true

@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Cluster::Certificate::Endpoint do
   describe "#replace" do
     it "updates member" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -19,7 +19,7 @@ describe Lester::Cluster::Certificate::Endpoint do
           "cluster_certificate":"X509 PEM certificate",\
           "cluster_certificate_key":"X509 PEM certificate key"\
         }))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.certificate.replace(
         cluster_certificate: "X509 PEM certificate",

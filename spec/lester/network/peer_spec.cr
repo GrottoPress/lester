@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Network::Peer::Endpoint do
   describe "#list" do
     it "lists peers" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -28,7 +28,7 @@ describe Lester::Network::Peer::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/peers")
         .with(query: {"recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.peers.list(network_name: "lxdbr0") do |response|
         response.success?.should be_true
@@ -39,7 +39,7 @@ describe Lester::Network::Peer::Endpoint do
 
   describe "#create" do
     it "creates peer" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Member added",
@@ -56,7 +56,7 @@ describe Lester::Network::Peer::Endpoint do
           "config":{"user.mykey":"foo"},\
           "description":"Peering with lxdbr0"\
         }))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.peers.create(
         network_name: "lxdbr0",
@@ -71,7 +71,7 @@ describe Lester::Network::Peer::Endpoint do
 
   describe "#delete" do
     it "deletes peer" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Project created",
@@ -85,7 +85,7 @@ describe Lester::Network::Peer::Endpoint do
       WebMock.stub(
         :DELETE,
         "#{LXD.uri}/networks/lxdbr0/peers/peer0?project="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.networks.peers.delete(
         network_name: "lxdbr0",
@@ -98,7 +98,7 @@ describe Lester::Network::Peer::Endpoint do
 
   describe "#fetch" do
     it "fetches peer" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -120,7 +120,7 @@ describe Lester::Network::Peer::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/networks/lxdbr0/peers/peer0")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.peers.fetch(
         network_name: "lxdbr0",
@@ -134,7 +134,7 @@ describe Lester::Network::Peer::Endpoint do
 
   describe "#update" do
     it "updates peer" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -147,7 +147,7 @@ describe Lester::Network::Peer::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/networks/lxdbr0/peers/peer0?project=")
         .with(body: %({"config":{"user.mykey":"bar"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.peers.update(
         network_name: "lxdbr0",
@@ -161,7 +161,7 @@ describe Lester::Network::Peer::Endpoint do
 
   describe "#replace" do
     it "updates peer" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -174,7 +174,7 @@ describe Lester::Network::Peer::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/networks/lxdbr0/peers/peer0?project=")
         .with(body: %({"config":{"user.mykey":"bar"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.peers.replace(
         network_name: "lxdbr0",

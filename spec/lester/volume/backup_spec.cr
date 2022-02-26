@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Volume::Backup::Endpoint do
   describe "#list" do
     it "lists backups" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -28,7 +28,7 @@ describe Lester::Volume::Backup::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/backups"
       )
         .with(query: {"recursion" => "1", "project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.backups.list(
         pool_name: "pool0",
@@ -44,7 +44,7 @@ describe Lester::Volume::Backup::Endpoint do
 
   describe "#create" do
     it "creates backup" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -75,7 +75,7 @@ describe Lester::Volume::Backup::Endpoint do
           backups?project=&target="
       )
         .with(body: %({"name":"backup0","compression_algorithm":"gzip"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.backups.create(
         pool_name: "pool0",
@@ -92,7 +92,7 @@ describe Lester::Volume::Backup::Endpoint do
 
   describe "#delete" do
     it "deletes backup" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -121,7 +121,7 @@ describe Lester::Volume::Backup::Endpoint do
         :DELETE,
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           backups/backup0?project=&target="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.volumes.backups.delete(
         pool_name: "pool0",
@@ -137,7 +137,7 @@ describe Lester::Volume::Backup::Endpoint do
 
   describe "#fetch" do
     it "fetches backup" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -158,7 +158,7 @@ describe Lester::Volume::Backup::Endpoint do
       WebMock.stub(
         :GET,
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/backups/backup0"
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.volumes.backups.fetch(
         pool_name: "pool0",
@@ -174,7 +174,7 @@ describe Lester::Volume::Backup::Endpoint do
 
   describe "#rename" do
     it "renames backup" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -205,7 +205,7 @@ describe Lester::Volume::Backup::Endpoint do
           backups/backup0?project=&target="
       )
         .with(body: %({"name":"backup1"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.backups.rename(
         pool_name: "pool0",

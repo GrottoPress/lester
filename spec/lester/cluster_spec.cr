@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Cluster::Endpoint do
   describe "#fetch" do
     it "fetches cluster" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -19,7 +19,7 @@ describe Lester::Cluster::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD.uri}/cluster").to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/cluster").to_return(body: body)
 
       LXD.cluster.fetch do |response|
         response.success?.should be_true
@@ -30,7 +30,7 @@ describe Lester::Cluster::Endpoint do
 
   describe "#replace" do
     it "updates cluster" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -43,7 +43,7 @@ describe Lester::Cluster::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/cluster")
         .with(body: %({"cluster_password":"blah","enabled":true}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.cluster.replace(cluster_password: "blah", enabled: true) do |response|
         response.success?.should be_true

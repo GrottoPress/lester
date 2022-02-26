@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Warning::Endpoint do
   describe "#list" do
     it "lists warnings" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -31,7 +31,7 @@ describe Lester::Warning::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/warnings")
         .with(query: {"project" => "default", "recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.warnings.list(project: "default") do |response|
         response.success?.should be_true
@@ -42,7 +42,7 @@ describe Lester::Warning::Endpoint do
 
   describe "#delete" do
     it "deletes warning" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Warning created",
@@ -54,7 +54,7 @@ describe Lester::Warning::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/warnings/a1b2c3")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.warnings.delete(uuid: "a1b2c3") do |response|
         response.success?.should be_true
@@ -64,7 +64,7 @@ describe Lester::Warning::Endpoint do
 
   describe "#fetch" do
     it "fetches warning" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -89,7 +89,7 @@ describe Lester::Warning::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/warnings/a1b2c3")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.warnings.fetch(uuid: "a1b2c3") do |response|
         response.success?.should be_true
@@ -100,7 +100,7 @@ describe Lester::Warning::Endpoint do
 
   describe "#update" do
     it "updates warning" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -113,7 +113,7 @@ describe Lester::Warning::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/warnings/a1b2c3")
         .with(body: %({"status":"new"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.warnings.update(uuid: "a1b2c3", status: "new") do |response|
         response.success?.should be_true
@@ -123,7 +123,7 @@ describe Lester::Warning::Endpoint do
 
   describe "#replace" do
     it "updates warning" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -136,7 +136,7 @@ describe Lester::Warning::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/warnings/a1b2c3")
         .with(body: %({"status":"new"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.warnings.replace(uuid: "a1b2c3", status: "new") do |response|
         response.success?.should be_true

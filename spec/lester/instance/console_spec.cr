@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Instance::Console::Endpoint do
   describe "#connect" do
     it "connects to console" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -30,7 +30,7 @@ describe Lester::Instance::Console::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/instances/inst4/console?project=")
         .with(body: %({"height":24,"type":"console","width":80}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.console.connect(
         instance_name: "inst4",
@@ -76,7 +76,7 @@ describe Lester::Instance::Console::Endpoint do
 
   describe "#clear" do
     it "clears console log" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -85,7 +85,7 @@ describe Lester::Instance::Console::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/instances/inst4/console?project=")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.console.clear(instance_name: "inst4") do |response|
         response.success?.should be_true

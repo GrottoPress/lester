@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Profile::Endpoint do
   describe "#list" do
     it "lists profiles" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -42,7 +42,7 @@ describe Lester::Profile::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/profiles")
         .with(query: {"project" => "default", "recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.profiles.list(project: "default") do |response|
         response.success?.should be_true
@@ -53,7 +53,7 @@ describe Lester::Profile::Endpoint do
 
   describe "#create" do
     it "creates profile" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Member added",
@@ -66,7 +66,7 @@ describe Lester::Profile::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/profiles?project=")
         .with(body: %({"name":"profile1","config":{"limits.cpu":"4"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.profiles.create(
         name: "profile1",
@@ -79,7 +79,7 @@ describe Lester::Profile::Endpoint do
 
   describe "#delete" do
     it "deletes profile" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Profile created",
@@ -91,7 +91,7 @@ describe Lester::Profile::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/profiles/profile0?project=")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.profiles.delete(name: "profile0") do |response|
         response.success?.should be_true
@@ -101,7 +101,7 @@ describe Lester::Profile::Endpoint do
 
   describe "#fetch" do
     it "fetches profile" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -137,7 +137,7 @@ describe Lester::Profile::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/profiles/profile0")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.profiles.fetch(name: "profile0") do |response|
         response.success?.should be_true
@@ -148,7 +148,7 @@ describe Lester::Profile::Endpoint do
 
   describe "#update" do
     it "updates profile" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -161,7 +161,7 @@ describe Lester::Profile::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/profiles/profile0?project=")
         .with(body: %({"config":{"limits.cpu":"4","limits.memory":"4GiB"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.profiles.update(
         name: "profile0",
@@ -174,7 +174,7 @@ describe Lester::Profile::Endpoint do
 
   describe "#rename" do
     it "renames profile" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Profile created",
@@ -187,7 +187,7 @@ describe Lester::Profile::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/profiles/profile0")
         .with(body: %({"name":"profile1"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.profiles.rename(name: "profile0", new_name: "profile1") do |response|
         response.success?.should be_true
@@ -197,7 +197,7 @@ describe Lester::Profile::Endpoint do
 
   describe "#replace" do
     it "updates profile" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -210,7 +210,7 @@ describe Lester::Profile::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/profiles/profile0?project=")
         .with(body: %({"config":{"limits.cpu":"4","limits.memory":"4GiB"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.profiles.replace(
         name: "profile0",

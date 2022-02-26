@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Certificate::Endpoint do
   describe "#list" do
     it "lists certificates" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -30,7 +30,7 @@ describe Lester::Certificate::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/certificates")
         .with(query: {"recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.certificates.list do |response|
         response.success?.should be_true
@@ -41,7 +41,7 @@ describe Lester::Certificate::Endpoint do
 
   describe "#add" do
     it "adds certificate" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -54,7 +54,7 @@ describe Lester::Certificate::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/certificates?public")
         .with(body: %({"password":"secret"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.certificates.add(password: "secret") do |response|
         response.success?.should be_true
@@ -64,7 +64,7 @@ describe Lester::Certificate::Endpoint do
 
   describe "#delete" do
     it "deletes certificate" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -76,7 +76,7 @@ describe Lester::Certificate::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/certificates/a1b2c3")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.certificates.delete(fingerprint: "a1b2c3") do |response|
         response.success?.should be_true
@@ -86,7 +86,7 @@ describe Lester::Certificate::Endpoint do
 
   describe "#fetch" do
     it "fetches certificate" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -110,7 +110,7 @@ describe Lester::Certificate::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/certificates/a1b2c3")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.certificates.fetch(fingerprint: "a1b2c3") do |response|
         response.success?.should be_true
@@ -121,7 +121,7 @@ describe Lester::Certificate::Endpoint do
 
   describe "#update" do
     it "updates certificate" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -134,7 +134,7 @@ describe Lester::Certificate::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/certificates/a1b2c3")
         .with(body: %({"name":"castiana","restricted":true}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.certificates.update(
         fingerprint: "a1b2c3",
@@ -148,7 +148,7 @@ describe Lester::Certificate::Endpoint do
 
   describe "#replace" do
     it "updates certificate" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -161,7 +161,7 @@ describe Lester::Certificate::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/certificates/a1b2c3")
         .with(body: %({"name":"castiana","restricted":true}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.certificates.replace(
         fingerprint: "a1b2c3",

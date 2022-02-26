@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Volume::Snapshot::Endpoint do
   describe "#list" do
     it "lists snapshots" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -31,7 +31,7 @@ describe Lester::Volume::Snapshot::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/snapshots"
       )
         .with(query: {"recursion" => "1", "target" => "lxd0"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.snapshots.list(
         pool_name: "pool0",
@@ -47,7 +47,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
   describe "#create" do
     it "creates snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -78,7 +78,7 @@ describe Lester::Volume::Snapshot::Endpoint do
           snapshots?project=&target="
       )
         .with(body: %({"name":"snap0"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.snapshots.create(
         pool_name: "pool0",
@@ -94,7 +94,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
   describe "#delete" do
     it "deletes snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -124,7 +124,7 @@ describe Lester::Volume::Snapshot::Endpoint do
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/\
           snapshots/snap0?project=&target="
       )
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.snapshots.delete(
         pool_name: "pool0",
@@ -140,7 +140,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
   describe "#fetch" do
     it "fetches snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -164,7 +164,7 @@ describe Lester::Volume::Snapshot::Endpoint do
       WebMock.stub(
         :GET,
         "#{LXD.uri}/storage-pools/pool0/volumes/custom/volume0/snapshots/snap0"
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.volumes.snapshots.fetch(
         pool_name: "pool0",
@@ -180,7 +180,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
   describe "#update" do
     it "updates snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Operation created",
@@ -197,7 +197,7 @@ describe Lester::Volume::Snapshot::Endpoint do
           snapshots/snap0?project=&target="
       )
         .with(body: %({"expires_at":"2021-10-26T13:11:03Z"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.snapshots.update(
         pool_name: "pool0",
@@ -213,7 +213,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
   describe "#rename" do
     it "renames snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -244,7 +244,7 @@ describe Lester::Volume::Snapshot::Endpoint do
           snapshots/snap0?project=&target="
       )
         .with(body: %({"name":"snap10"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.snapshots.rename(
         pool_name: "pool0",
@@ -261,7 +261,7 @@ describe Lester::Volume::Snapshot::Endpoint do
 
   describe "#replace" do
     it "updates snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -278,7 +278,7 @@ describe Lester::Volume::Snapshot::Endpoint do
           snapshots/snap0?project=&target="
       )
         .with(body: %({"expires_at":"2021-10-26T13:11:03Z"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.volumes.snapshots.replace(
         pool_name: "pool0",

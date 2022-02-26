@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Image::Alias::Endpoint do
   describe "#list" do
     it "lists aliases" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -24,7 +24,7 @@ describe Lester::Image::Alias::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/images/aliases")
         .with(query: {"recursion" => "1", "project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.aliases.list(project: "default") do |response|
         response.success?.should be_true
@@ -35,7 +35,7 @@ describe Lester::Image::Alias::Endpoint do
 
   describe "#create" do
     it "creates alias" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -52,7 +52,7 @@ describe Lester::Image::Alias::Endpoint do
           "target":"a1b2c3",\
           "type":"container"\
         }))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.aliases.create(
         project: "default",
@@ -68,7 +68,7 @@ describe Lester::Image::Alias::Endpoint do
 
   describe "#delete" do
     it "deletes alias" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -80,7 +80,7 @@ describe Lester::Image::Alias::Endpoint do
 
       WebMock.stub(:DELETE, "#{LXD.uri}/images/aliases/a1b2c3")
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.aliases.delete(
         name: "a1b2c3",
@@ -93,7 +93,7 @@ describe Lester::Image::Alias::Endpoint do
 
   describe "#fetch" do
     it "fetches alias" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -111,7 +111,7 @@ describe Lester::Image::Alias::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/images/aliases/awesome")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.aliases.fetch(name: "awesome") do |response|
         response.success?.should be_true
@@ -122,7 +122,7 @@ describe Lester::Image::Alias::Endpoint do
 
   describe "#update" do
     it "updates alias" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -135,7 +135,7 @@ describe Lester::Image::Alias::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/images/aliases/a1b2c3?project=")
         .with(body: %({"description":"New ubuntu image"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.aliases.update(
         name: "a1b2c3",
@@ -148,7 +148,7 @@ describe Lester::Image::Alias::Endpoint do
 
   describe "#rename" do
     it "renames alias" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -161,7 +161,7 @@ describe Lester::Image::Alias::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/images/aliases/a1b2c3?project=")
         .with(body: %({"name":"beautiful"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.aliases.rename(
         name: "a1b2c3",
@@ -174,7 +174,7 @@ describe Lester::Image::Alias::Endpoint do
 
   describe "#replace" do
     it "updates alias" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -187,7 +187,7 @@ describe Lester::Image::Alias::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/images/aliases/a1b2c3?project=")
         .with(body: %({"description":"New ubuntu image","target":"06b864547"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.aliases.replace(
         name: "a1b2c3",

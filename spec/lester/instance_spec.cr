@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Instance::Endpoint do
   describe "#list" do
     it "lists instances" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -97,7 +97,7 @@ describe Lester::Instance::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/instances")
         .with(query: {"recursion" => "1", "filter" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.list(filter: "default") do |response|
         response.success?.should be_true
@@ -108,7 +108,7 @@ describe Lester::Instance::Endpoint do
 
   describe "#create" do
     it "creates instance" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -135,7 +135,7 @@ describe Lester::Instance::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/instances?project=&target=default")
         .with(body: %({"architecture":"x86_64"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.create(
         target: "default",
@@ -149,7 +149,7 @@ describe Lester::Instance::Endpoint do
 
   describe "#delete" do
     it "deletes instance" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -176,7 +176,7 @@ describe Lester::Instance::Endpoint do
 
       WebMock.stub(:DELETE, "#{LXD.uri}/instances/debian-10")
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.delete(name: "debian-10", project: "default") do |response|
         response.success?.should be_true
@@ -187,7 +187,7 @@ describe Lester::Instance::Endpoint do
 
   describe "#fetch" do
     it "fetches instance" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -278,7 +278,7 @@ describe Lester::Instance::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/debian-10")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.fetch(name: "debian-10") do |response|
         response.success?.should be_true
@@ -289,7 +289,7 @@ describe Lester::Instance::Endpoint do
 
   describe "#update" do
     it "updates instance" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -302,7 +302,7 @@ describe Lester::Instance::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/instances/debian-10?project=")
         .with(body: %({"architecture":"x86_64"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.update(
         name: "debian-10",
@@ -315,7 +315,7 @@ describe Lester::Instance::Endpoint do
 
   describe "#rename" do
     it "renames instance" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -342,7 +342,7 @@ describe Lester::Instance::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/instances/debian-10?project=")
         .with(body: %({"container_only":false,"name":"debian-buster"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.rename(
         name: "debian-10",
@@ -357,7 +357,7 @@ describe Lester::Instance::Endpoint do
 
   describe "#replace" do
     it "updates all instances" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "metadata": {
             "class": "websocket",
@@ -405,7 +405,7 @@ describe Lester::Instance::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/instances?project=")
         .with(body: %({"state":{"action":"start"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.replace(state: {action: "start"}) do |response|
         response.success?.should be_true
@@ -414,7 +414,7 @@ describe Lester::Instance::Endpoint do
     end
 
     it "updates single instance" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -441,7 +441,7 @@ describe Lester::Instance::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/instances/debian-10?project=")
         .with(body: %({"architecture":"x86_64","ephemeral":false}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.replace(
         name: "debian-10",
@@ -456,7 +456,7 @@ describe Lester::Instance::Endpoint do
 
   describe "#exec" do
     it "executes command inside instance" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -510,7 +510,7 @@ describe Lester::Instance::Endpoint do
           "cwd":"/home/foo/",\
           "environment":{"FOO":"BAR"}\
         }))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.exec(
         name: "a1b2",

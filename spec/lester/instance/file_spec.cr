@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Instance::File::Endpoint do
   describe "#create" do
     it "creates file" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -16,7 +16,7 @@ describe Lester::Instance::File::Endpoint do
       WebMock.stub(
         :POST,
         "#{LXD.uri}/instances/inst4/files?path=file.txt&project="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.instances.files.create(
         instance_name: "inst4",
@@ -126,7 +126,7 @@ describe Lester::Instance::File::Endpoint do
 
   describe "#delete" do
     it "deletes file" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -137,7 +137,7 @@ describe Lester::Instance::File::Endpoint do
       WebMock.stub(
         :DELETE,
         "#{LXD.uri}/instances/inst4/files?path=file.txt&project="
-      ).to_return(body_io: body_io)
+      ).to_return(body: body)
 
       LXD.instances.files.delete("inst4", "file.txt") do |response|
         response.success?.should be_true

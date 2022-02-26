@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Project::Endpoint do
   describe "#list" do
     it "lists projects" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -33,7 +33,7 @@ describe Lester::Project::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/projects")
         .with(query: {"recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.projects.list do |response|
         response.success?.should be_true
@@ -44,7 +44,7 @@ describe Lester::Project::Endpoint do
 
   describe "#create" do
     it "creates project" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Member added",
@@ -61,7 +61,7 @@ describe Lester::Project::Endpoint do
           "config":{"features.profiles":"true"},\
           "description":"My new project"\
         }))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.projects.create(
         name: "project1",
@@ -75,7 +75,7 @@ describe Lester::Project::Endpoint do
 
   describe "#delete" do
     it "deletes project" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Project created",
@@ -87,7 +87,7 @@ describe Lester::Project::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/projects/project0")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.projects.delete(name: "project0") do |response|
         response.success?.should be_true
@@ -97,7 +97,7 @@ describe Lester::Project::Endpoint do
 
   describe "#fetch" do
     it "fetches project" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -124,7 +124,7 @@ describe Lester::Project::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/projects/project0")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.projects.fetch(name: "project0") do |response|
         response.success?.should be_true
@@ -135,7 +135,7 @@ describe Lester::Project::Endpoint do
 
   describe "#update" do
     it "updates project" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -148,7 +148,7 @@ describe Lester::Project::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/projects/project0")
         .with(body: %({"config":{"features.profiles":"true"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.projects.update(
         name: "project0",
@@ -161,7 +161,7 @@ describe Lester::Project::Endpoint do
 
   describe "#rename" do
     it "renames project" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Project created",
@@ -174,7 +174,7 @@ describe Lester::Project::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/projects/project0")
         .with(body: %({"name":"project1"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.projects.rename(name: "project0", new_name: "project1") do |response|
         response.success?.should be_true
@@ -184,7 +184,7 @@ describe Lester::Project::Endpoint do
 
   describe "#replace" do
     it "updates project" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -197,7 +197,7 @@ describe Lester::Project::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/projects/project0")
         .with(body: %({"config":{"features.profiles":"true"}}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.projects.replace(
         name: "project0",
@@ -210,7 +210,7 @@ describe Lester::Project::Endpoint do
 
   describe "#state" do
     it "gets project state" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -258,7 +258,7 @@ describe Lester::Project::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/projects/project0/state")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.projects.state(name: "project0") do |response|
         response.success?.should be_true

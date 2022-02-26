@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Metrics::Endpoint do
   describe "#fetch" do
     it "fetches peer" do
-      body_io = IO::Memory.new <<-TEXT
+      body = <<-TEXT
         # HELP lxd_cpu_seconds_total The total number of CPU seconds.
         # TYPE lxd_cpu_seconds_total counter
         lxd_cpu_seconds_total{cpu="0",mode="system",name="buster"} 194
@@ -18,10 +18,10 @@ describe Lester::Metrics::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/metrics")
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.metrics.fetch(project: "default") do |response|
-        response.should eq(body_io.to_s)
+        response.should eq(body)
       end
     end
   end

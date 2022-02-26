@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Operation::Endpoint do
   describe "#list" do
     it "lists operations" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -30,7 +30,7 @@ describe Lester::Operation::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD.uri}/operations").to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/operations").to_return(body: body)
 
       LXD.operations.list do |response|
         response.success?.should be_true
@@ -41,7 +41,7 @@ describe Lester::Operation::Endpoint do
 
   describe "#delete" do
     it "deletes operation" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -53,7 +53,7 @@ describe Lester::Operation::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/operations/a1b2c3")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.operations.delete(id: "a1b2c3") do |response|
         response.success?.should be_true
@@ -63,7 +63,7 @@ describe Lester::Operation::Endpoint do
 
   describe "#fetch" do
     it "fetches operation" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -89,7 +89,7 @@ describe Lester::Operation::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/operations/a1b2c3")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.operations.fetch(id: "a1b2c3") do |response|
         response.success?.should be_true
@@ -101,7 +101,7 @@ describe Lester::Operation::Endpoint do
 
   describe "#wait" do
     it "waits for operation to complete" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -128,7 +128,7 @@ describe Lester::Operation::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/operations/a1b2c3/wait")
         .with(query: {"timeout" => "-1", "public" => "", "secret" => "abc"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.operations.wait(id: "a1b2c3", secret: "abc") do |response|
         response.success?.should be_true

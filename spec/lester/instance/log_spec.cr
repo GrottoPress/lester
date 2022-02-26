@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Instance::Log::Endpoint do
   describe "#list" do
     it "lists log files" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -19,7 +19,7 @@ describe Lester::Instance::Log::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/logs")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.logs.list(instance_name: "inst4") do |response|
         response.success?.should be_true
@@ -30,7 +30,7 @@ describe Lester::Instance::Log::Endpoint do
 
   describe "#delete" do
     it "deletes log file" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -39,7 +39,7 @@ describe Lester::Instance::Log::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/instances/inst4/logs/file.log?project=")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.logs.delete("inst4", "file.log") do |response|
         response.success?.should be_true

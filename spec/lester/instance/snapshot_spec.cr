@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Instance::Snapshot::Endpoint do
   describe "#list" do
     it "lists snapshots" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -49,7 +49,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/snapshots")
         .with(query: {"recursion" => "1", "project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.snapshots.list("inst4", project: "default") do |response|
         response.success?.should be_true
@@ -60,7 +60,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
   describe "#create" do
     it "creates snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -87,7 +87,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/instances/inst4/snapshots?project=")
         .with(body: %({"name":"snap0"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.snapshots.create(
         instance_name: "inst4",
@@ -101,7 +101,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
   describe "#delete" do
     it "deletes snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -130,7 +130,7 @@ describe Lester::Instance::Snapshot::Endpoint do
         :DELETE,
         "#{LXD.uri}/instances/inst4/snapshots/snap0?project="
       )
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.snapshots.delete(
         instance_name: "inst4",
@@ -144,7 +144,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
   describe "#fetch" do
     it "fetches snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -187,7 +187,7 @@ describe Lester::Instance::Snapshot::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/instances/inst4/snapshots/snap0")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.snapshots.fetch("inst4", "snap0") do |response|
         response.success?.should be_true
@@ -198,7 +198,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
   describe "#update" do
     it "updates snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -228,7 +228,7 @@ describe Lester::Instance::Snapshot::Endpoint do
         "#{LXD.uri}/instances/inst4/snapshots/snap0?project="
       )
         .with(body: %({"expires_at":"2021-10-26T13:11:03Z"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.snapshots.update(
         instance_name: "inst4",
@@ -243,7 +243,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
   describe "#rename" do
     it "renames snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -270,7 +270,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/instances/inst4/snapshots/snap0?project=")
         .with(body: %({"live":false,"name":"debian-snap"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.snapshots.rename(
         instance_name: "inst4",
@@ -286,7 +286,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
   describe "#replace" do
     it "updates snapshot" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -313,7 +313,7 @@ describe Lester::Instance::Snapshot::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/instances/inst4/snapshots/snap0?project=")
         .with(body: %({"expires_at":"2021-10-26T13:11:03Z"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.instances.snapshots.replace(
         instance_name: "inst4",

@@ -3,7 +3,7 @@ require "../../spec_helper"
 describe Lester::Network::Acl::Endpoint do
   describe "#list" do
     it "lists network ACLs" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -58,7 +58,7 @@ describe Lester::Network::Acl::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/network-acls")
         .with(query: {"project" => "default", "recursion" => "1"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.acls.list(project: "default") do |response|
         response.success?.should be_true
@@ -69,7 +69,7 @@ describe Lester::Network::Acl::Endpoint do
 
   describe "#create" do
     it "creates network ACL" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Acl created",
@@ -89,7 +89,7 @@ describe Lester::Network::Acl::Endpoint do
             "destination_port":"80"\
           }]\
         }))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.acls.create(
         name: "web-out",
@@ -102,7 +102,7 @@ describe Lester::Network::Acl::Endpoint do
 
   describe "#delete" do
     it "deletes network ACL" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Acl created",
@@ -114,7 +114,7 @@ describe Lester::Network::Acl::Endpoint do
         JSON
 
       WebMock.stub(:DELETE, "#{LXD.uri}/network-acls/web-out?project=")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.acls.delete(name: "web-out") do |response|
         response.success?.should be_true
@@ -124,7 +124,7 @@ describe Lester::Network::Acl::Endpoint do
 
   describe "#fetch" do
     it "fetches network ACL" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -176,7 +176,7 @@ describe Lester::Network::Acl::Endpoint do
         JSON
 
       WebMock.stub(:GET, "#{LXD.uri}/network-acls/web-out")
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.acls.fetch(name: "web-out") do |response|
         response.success?.should be_true
@@ -187,7 +187,7 @@ describe Lester::Network::Acl::Endpoint do
 
   describe "#update" do
     it "updates network ACL" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -200,7 +200,7 @@ describe Lester::Network::Acl::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/network-acls/web-out?project=")
         .with(body: %({"egress":[{"state":"disabled"}]}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.acls.update(
         name: "web-out",
@@ -213,7 +213,7 @@ describe Lester::Network::Acl::Endpoint do
 
   describe "#rename" do
     it "renames network ACL" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Acl created",
@@ -226,7 +226,7 @@ describe Lester::Network::Acl::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/network-acls/web-out?project=")
         .with(body: %({"name":"http-out"}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.acls.rename(
         name: "web-out",
@@ -239,7 +239,7 @@ describe Lester::Network::Acl::Endpoint do
 
   describe "#replace" do
     it "updates network ACL" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -252,7 +252,7 @@ describe Lester::Network::Acl::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/network-acls/web-out?project=")
         .with(body: %({"egress":[{"state":"disabled"}]}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.networks.acls.replace(
         name: "web-out",

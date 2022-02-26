@@ -3,7 +3,7 @@ require "../spec_helper"
 describe Lester::Image::Endpoint do
   describe "#list" do
     it "lists images" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -52,7 +52,7 @@ describe Lester::Image::Endpoint do
 
       WebMock.stub(:GET, "#{LXD.uri}/images")
         .with(query: {"recursion" => "1", "filter" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.list(filter: "default") do |response|
         response.success?.should be_true
@@ -63,7 +63,7 @@ describe Lester::Image::Endpoint do
 
   describe "#add" do
     it "adds image" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -90,7 +90,7 @@ describe Lester::Image::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/images?project=&public")
         .with(body: %({"auto_update":false}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.add(secret: "a1b2c3", auto_update: false) do |response|
         response.success?.should be_true
@@ -101,7 +101,7 @@ describe Lester::Image::Endpoint do
 
   describe "#delete" do
     it "deletes image" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -128,7 +128,7 @@ describe Lester::Image::Endpoint do
 
       WebMock.stub(:DELETE, "#{LXD.uri}/images/a1b2c3")
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.delete(fingerprint: "a1b2c3", project: "default") do |response|
         response.success?.should be_true
@@ -139,7 +139,7 @@ describe Lester::Image::Endpoint do
 
   describe "#fetch" do
     it "fetches image" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -184,7 +184,7 @@ describe Lester::Image::Endpoint do
         }
         JSON
 
-      WebMock.stub(:GET, "#{LXD.uri}/images/a1b2c3").to_return(body_io: body_io)
+      WebMock.stub(:GET, "#{LXD.uri}/images/a1b2c3").to_return(body: body)
 
       LXD.images.fetch(fingerprint: "a1b2c3") do |response|
         response.success?.should be_true
@@ -195,7 +195,7 @@ describe Lester::Image::Endpoint do
 
   describe "#update" do
     it "updates image" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -208,7 +208,7 @@ describe Lester::Image::Endpoint do
 
       WebMock.stub(:PATCH, "#{LXD.uri}/images/a1b2c3?project=")
         .with(body: %({"public":true}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.update(fingerprint: "a1b2c3", public: true) do |response|
         response.success?.should be_true
@@ -218,7 +218,7 @@ describe Lester::Image::Endpoint do
 
   describe "#replace" do
     it "updates image" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "sync",
           "status": "Success",
@@ -231,7 +231,7 @@ describe Lester::Image::Endpoint do
 
       WebMock.stub(:PUT, "#{LXD.uri}/images/a1b2c3?project=")
         .with(body: %({"public":true}))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.replace(fingerprint: "a1b2c3", public: true) do |response|
         response.success?.should be_true
@@ -281,7 +281,7 @@ describe Lester::Image::Endpoint do
 
   describe "#push" do
     it "pushes image to a remote server" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -311,7 +311,7 @@ describe Lester::Image::Endpoint do
           "aliases":[{"description":"Ubuntu image","name":"ubuntu-20.04"}],\
           "target":"https://1.2.3.4:8443"\
         }))
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.push(
         fingerprint: "a1b2c3",
@@ -326,7 +326,7 @@ describe Lester::Image::Endpoint do
 
   describe "#refresh" do
     it "updates local copy of image" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -353,7 +353,7 @@ describe Lester::Image::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/images/a1b2/refresh")
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.refresh(fingerprint: "a1b2", project: "default") do |response|
         response.success?.should be_true
@@ -364,7 +364,7 @@ describe Lester::Image::Endpoint do
 
   describe "#secret" do
     it "generates secret key" do
-      body_io = IO::Memory.new <<-JSON
+      body = <<-JSON
         {
           "type": "async",
           "status": "Operation created",
@@ -391,7 +391,7 @@ describe Lester::Image::Endpoint do
 
       WebMock.stub(:POST, "#{LXD.uri}/images/a1b2c3/secret")
         .with(query: {"project" => "default"})
-        .to_return(body_io: body_io)
+        .to_return(body: body)
 
       LXD.images.secret(
         fingerprint: "a1b2c3",
