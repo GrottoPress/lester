@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased] - 
 
 ### Changed
-- Read from response `body` instead of `body_io` in endpoint methods
+- Read HTTP responses from `body` instead of `body_io` in endpoint methods
 
 ## [0.2.0] - 2022-02-17
 
