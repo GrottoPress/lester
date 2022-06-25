@@ -55,8 +55,8 @@ struct Lester::Instance::Console::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = client.uri.dup
-    uri.path += "/instances/#{instance_name}/console"
+    uri = client.instances.uri.dup
+    uri.path += "/#{instance_name}/console"
     uri
   end
 end

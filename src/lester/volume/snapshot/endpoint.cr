@@ -212,11 +212,8 @@ struct Lester::Volume::Snapshot::Endpoint
   end
 
   def uri(pool_name, volume_name, volume_type) : URI
-    uri = client.uri.dup
-
-    uri.path += "/storage-pools/#{pool_name}/volumes/#{volume_type}/\
-      #{volume_name}/snapshots"
-
+    uri = client.volumes.uri(pool_name).dup
+    uri.path += "/#{volume_type}/#{volume_name}/snapshots"
     uri
   end
 end

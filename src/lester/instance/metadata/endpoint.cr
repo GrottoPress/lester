@@ -52,8 +52,8 @@ struct Lester::Instance::Metadata::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = client.uri.dup
-    uri.path += "/instances/#{instance_name}/metadata"
+    uri = client.instances.uri.dup
+    uri.path += "/#{instance_name}/metadata"
     uri
   end
 end

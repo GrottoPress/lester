@@ -100,8 +100,8 @@ struct Lester::Network::Peer::Endpoint
   end
 
   def uri(network_name) : URI
-    uri = client.uri.dup
-    uri.path += "/networks/#{network_name}/peers"
+    uri = client.networks.uri.dup
+    uri.path += "/#{network_name}/peers"
     uri
   end
 end

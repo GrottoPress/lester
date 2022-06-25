@@ -11,8 +11,8 @@ struct Lester::Cluster::Certificate::Endpoint
   end
 
   def uri : URI
-    uri = client.uri.dup
-    uri.path += "/cluster/certificate"
+    uri = client.cluster.uri.dup
+    uri.path += "/certificate"
     uri
   end
 end

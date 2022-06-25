@@ -89,8 +89,8 @@ struct Lester::Instance::File::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = client.uri.dup
-    uri.path += "/instances/#{instance_name}/files"
+    uri = client.instances.uri.dup
+    uri.path += "/#{instance_name}/files"
     uri
   end
 

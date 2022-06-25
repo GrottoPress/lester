@@ -122,8 +122,8 @@ struct Lester::Instance::Snapshot::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = client.uri.dup
-    uri.path += "/instances/#{instance_name}/snapshots"
+    uri = client.instances.uri.dup
+    uri.path += "/#{instance_name}/snapshots"
     uri
   end
 end

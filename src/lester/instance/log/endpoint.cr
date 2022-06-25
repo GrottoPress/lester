@@ -55,8 +55,8 @@ struct Lester::Instance::Log::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = client.uri.dup
-    uri.path += "/instances/#{instance_name}/logs"
+    uri = client.instances.uri.dup
+    uri.path += "/#{instance_name}/logs"
     uri
   end
 end

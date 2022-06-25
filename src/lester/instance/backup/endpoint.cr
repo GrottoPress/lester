@@ -108,8 +108,8 @@ struct Lester::Instance::Backup::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = client.uri.dup
-    uri.path += "/instances/#{instance_name}/backups"
+    uri = client.instances.uri.dup
+    uri.path += "/#{instance_name}/backups"
     uri
   end
 end

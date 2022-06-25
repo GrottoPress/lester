@@ -78,8 +78,8 @@ struct Lester::Cluster::Member::Endpoint
   end
 
   def uri : URI
-    uri = client.uri.dup
-    uri.path += "/cluster/members"
+    uri = client.cluster.uri.dup
+    uri.path += "/members"
     uri
   end
 end
