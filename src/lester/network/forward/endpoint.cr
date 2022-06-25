@@ -103,7 +103,7 @@ struct Lester::Network::Forward::Endpoint
   end
 
   def uri(network_name) : URI
-    uri = client.networks.uri.dup
+    uri = URI.parse(client.networks.uri.to_s)
     uri.path += "/#{network_name}/forwards"
     uri
   end

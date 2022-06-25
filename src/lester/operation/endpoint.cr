@@ -45,7 +45,7 @@ struct Lester::Operation::Endpoint
   end
 
   def websocket(id : String, secret : String? = nil) : HTTP::WebSocket
-    uri = self.uri.dup
+    uri = URI.parse(self.uri.to_s)
     uri.path += "/#{id}/websocket"
     uri.path += "?public&secret=#{secret}" if secret
 
@@ -53,7 +53,7 @@ struct Lester::Operation::Endpoint
   end
 
   def uri : URI
-    uri = client.uri.dup
+    uri = URI.parse(client.uri.to_s)
     uri.path += "/operations"
     uri
   end

@@ -171,7 +171,7 @@ struct Lester::Volume::Backup::Endpoint
   end
 
   def uri(pool_name, volume_name, volume_type) : URI
-    uri = client.volumes.uri(pool_name).dup
+    uri = URI.parse client.volumes.uri(pool_name).to_s
     uri.path += "/#{volume_type}/#{volume_name}/backups"
     uri
   end

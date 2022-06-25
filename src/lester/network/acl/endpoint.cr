@@ -99,7 +99,7 @@ struct Lester::Network::Acl::Endpoint
   end
 
   def uri : URI
-    uri = client.uri.dup
+    uri = URI.parse(client.uri.to_s)
     uri.path += "/network-acls"
     uri
   end

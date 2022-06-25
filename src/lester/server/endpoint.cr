@@ -45,7 +45,7 @@ struct Lester::Server::Endpoint
   def events(**params) : HTTP::WebSocket
     params = URI::Params.encode(params)
 
-    uri = self.uri.dup
+    uri = URI.parse(self.uri.to_s)
     uri.path += "/events?#{params}"
 
     client.websocket(uri)
@@ -63,6 +63,6 @@ struct Lester::Server::Endpoint
   end
 
   def uri : URI
-    client.uri
+    URI.parse(client.uri.to_s)
   end
 end

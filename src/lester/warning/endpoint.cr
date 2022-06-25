@@ -49,7 +49,7 @@ struct Lester::Warning::Endpoint
   end
 
   def uri : URI
-    uri = client.uri.dup
+    uri = URI.parse(client.uri.to_s)
     uri.path += "/warnings"
     uri
   end

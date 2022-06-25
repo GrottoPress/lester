@@ -205,7 +205,7 @@ struct Lester::Volume::Endpoint
   end
 
   def uri(pool_name) : URI
-    uri = client.uri.dup
+    uri = URI.parse(client.uri.to_s)
     uri.path += "/storage-pools/#{pool_name}/volumes"
     uri
   end

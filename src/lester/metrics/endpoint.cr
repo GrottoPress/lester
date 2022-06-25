@@ -18,7 +18,7 @@ struct Lester::Metrics::Endpoint
   end
 
   def uri : URI
-    uri = client.uri.dup
+    uri = URI.parse(client.uri.to_s)
     uri.path += "/metrics"
     uri
   end

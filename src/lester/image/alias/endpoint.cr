@@ -89,7 +89,7 @@ struct Lester::Image::Alias::Endpoint
   end
 
   def uri : URI
-    uri = client.images.uri.dup
+    uri = URI.parse(client.images.uri.to_s)
     uri.path += "/aliases"
     uri
   end

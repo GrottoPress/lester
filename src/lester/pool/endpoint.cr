@@ -97,7 +97,7 @@ struct Lester::Pool::Endpoint
   end
 
   def uri : URI
-    uri = client.uri.dup
+    uri = URI.parse(client.uri.to_s)
     uri.path += "/storage-pools"
     uri
   end

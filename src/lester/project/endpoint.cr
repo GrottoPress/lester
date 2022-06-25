@@ -78,7 +78,7 @@ struct Lester::Project::Endpoint
   end
 
   def uri : URI
-    uri = client.uri.dup
+    uri = URI.parse(client.uri.to_s)
     uri.path += "/projects"
     uri
   end
