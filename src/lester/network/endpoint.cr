@@ -1,16 +1,16 @@
 struct Lester::Network::Endpoint
   include Lester::Endpoint
 
-  def acls : Acl::Endpoint
-    @acls ||= Acl::Endpoint.new(client)
+  getter acls : Acl::Endpoint do
+    Acl::Endpoint.new(client)
   end
 
-  def forwards : Forward::Endpoint
-    @forwards ||= Forward::Endpoint.new(client)
+  getter forwards : Forward::Endpoint do
+    Forward::Endpoint.new(client)
   end
 
-  def peers : Peer::Endpoint
-    @peers ||= Peer::Endpoint.new(client)
+  getter peers : Peer::Endpoint do
+    Peer::Endpoint.new(client)
   end
 
   def list(**params)

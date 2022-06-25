@@ -1,12 +1,12 @@
 struct Lester::Cluster::Endpoint
   include Lester::Endpoint
 
-  def certificate : Certificate::Endpoint
-    @certificate ||= Certificate::Endpoint.new(client)
+  getter certificate : Certificate::Endpoint do
+    Certificate::Endpoint.new(client)
   end
 
-  def members : Member::Endpoint
-    @members ||= Member::Endpoint.new(client)
+  getter members : Member::Endpoint do
+    Member::Endpoint.new(client)
   end
 
   def fetch

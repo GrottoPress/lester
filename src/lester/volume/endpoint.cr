@@ -1,12 +1,12 @@
 struct Lester::Volume::Endpoint
   include Lester::Endpoint
 
-  def backups : Backup::Endpoint
-    @backups ||= Backup::Endpoint.new(client)
+  getter backups : Backup::Endpoint do
+    Backup::Endpoint.new(client)
   end
 
-  def snapshots : Snapshot::Endpoint
-    @snapshots ||= Snapshot::Endpoint.new(client)
+  getter snapshots : Snapshot::Endpoint do
+    Snapshot::Endpoint.new(client)
   end
 
   def list(pool_name, **params)

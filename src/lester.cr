@@ -72,56 +72,56 @@ class Lester
     new UNIXSocket.new(uri.path)
   end
 
-  def certificates : Certificate::Endpoint
-    @certificates ||= Certificate::Endpoint.new(self)
+  getter certificates : Certificate::Endpoint do
+    Certificate::Endpoint.new(self)
   end
 
-  def cluster : Cluster::Endpoint
-    @cluster ||= Cluster::Endpoint.new(self)
+  getter cluster : Cluster::Endpoint do
+    Cluster::Endpoint.new(self)
   end
 
-  def images : Image::Endpoint
-    @images ||= Image::Endpoint.new(self)
+  getter images : Image::Endpoint do
+    Image::Endpoint.new(self)
   end
 
-  def instances : Instance::Endpoint
-    @instances ||= Instance::Endpoint.new(self)
+  getter instances : Instance::Endpoint do
+    Instance::Endpoint.new(self)
   end
 
-  def metrics : Metrics::Endpoint
-    @metrics ||= Metrics::Endpoint.new(self)
+  getter metrics : Metrics::Endpoint do
+    Metrics::Endpoint.new(self)
   end
 
-  def networks : Network::Endpoint
-    @networks ||= Network::Endpoint.new(self)
+  getter networks : Network::Endpoint do
+    Network::Endpoint.new(self)
   end
 
-  def operations : Operation::Endpoint
-    @operations ||= Operation::Endpoint.new(self)
+  getter operations : Operation::Endpoint do
+    Operation::Endpoint.new(self)
   end
 
-  def pools : Pool::Endpoint
-    @pools ||= Pool::Endpoint.new(self)
+  getter pools : Pool::Endpoint do
+    Pool::Endpoint.new(self)
   end
 
-  def profiles : Profile::Endpoint
-    @profiles ||= Profile::Endpoint.new(self)
+  getter profiles : Profile::Endpoint do
+    Profile::Endpoint.new(self)
   end
 
-  def projects : Project::Endpoint
-    @projects ||= Project::Endpoint.new(self)
+  getter projects : Project::Endpoint do
+    Project::Endpoint.new(self)
   end
 
-  def server : Server::Endpoint
-    @server ||= Server::Endpoint.new(self)
+  getter server : Server::Endpoint do
+    Server::Endpoint.new(self)
   end
 
-  def volumes : Volume::Endpoint
-    @volumes ||= Volume::Endpoint.new(self)
+  getter volumes : Volume::Endpoint do
+    Volume::Endpoint.new(self)
   end
 
-  def warnings : Warning::Endpoint
-    @warnings ||= Warning::Endpoint.new(self)
+  getter warnings : Warning::Endpoint do
+    Warning::Endpoint.new(self)
   end
 
   protected def recurse(**params)

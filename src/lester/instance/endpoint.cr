@@ -1,36 +1,36 @@
 struct Lester::Instance::Endpoint
   include Lester::Endpoint
 
-  def backups : Backup::Endpoint
-    @backups ||= Backup::Endpoint.new(client)
+  getter backups : Backup::Endpoint do
+    Backup::Endpoint.new(client)
   end
 
-  def console : Console::Endpoint
-    @console ||= Console::Endpoint.new(client)
+  getter console : Console::Endpoint do
+    Console::Endpoint.new(client)
   end
 
-  def files : File::Endpoint
-    @files ||= File::Endpoint.new(client)
+  getter files : File::Endpoint do
+    File::Endpoint.new(client)
   end
 
-  def logs : Log::Endpoint
-    @logs ||= Log::Endpoint.new(client)
+  getter logs : Log::Endpoint do
+    Log::Endpoint.new(client)
   end
 
-  def metadata : Metadata::Endpoint
-    @metadata ||= Metadata::Endpoint.new(client)
+  getter metadata : Metadata::Endpoint do
+    Metadata::Endpoint.new(client)
   end
 
-  def snapshots : Snapshot::Endpoint
-    @snapshots ||= Snapshot::Endpoint.new(client)
+  getter snapshots : Snapshot::Endpoint do
+    Snapshot::Endpoint.new(client)
   end
 
-  def state : State::Endpoint
-    @state ||= State::Endpoint.new(client)
+  getter state : State::Endpoint do
+    State::Endpoint.new(client)
   end
 
-  def templates : Template::Endpoint
-    @templates ||= Template::Endpoint.new(client)
+  getter templates : Template::Endpoint do
+    Template::Endpoint.new(client)
   end
 
   def list(**params)

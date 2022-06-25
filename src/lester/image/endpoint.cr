@@ -1,8 +1,8 @@
 struct Lester::Image::Endpoint
   include Lester::Endpoint
 
-  def aliases : Alias::Endpoint
-    @aliases ||= Alias::Endpoint.new(client)
+  getter aliases : Alias::Endpoint do
+    Alias::Endpoint.new(client)
   end
 
   def list(**params)
