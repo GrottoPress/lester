@@ -52,7 +52,7 @@ struct Lester::Operation::Endpoint
     client.websocket(uri)
   end
 
-  def uri : URI
+  getter uri : URI do
     uri = URI.parse(client.uri.to_s)
     uri.path += "/operations"
     uri

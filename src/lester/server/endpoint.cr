@@ -62,7 +62,7 @@ struct Lester::Server::Endpoint
     Resources::Item.from_json(response.body)
   end
 
-  def uri : URI
+  getter uri : URI do
     URI.parse(client.uri.to_s)
   end
 end

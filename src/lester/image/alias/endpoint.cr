@@ -88,7 +88,7 @@ struct Lester::Image::Alias::Endpoint
     Operation::Item.from_json(response.body)
   end
 
-  def uri : URI
+  getter uri : URI do
     uri = URI.parse(client.images.uri.to_s)
     uri.path += "/aliases"
     uri

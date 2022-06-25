@@ -10,7 +10,7 @@ struct Lester::Cluster::Certificate::Endpoint
     Operation::Item.from_json(response.body)
   end
 
-  def uri : URI
+  getter uri : URI do
     uri = URI.parse(client.cluster.uri.to_s)
     uri.path += "/certificate"
     uri
