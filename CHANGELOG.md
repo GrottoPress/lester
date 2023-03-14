@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased] - 
 
 ### Changed
+- Bump minimum required *Crystal* version to 1.2
 - Upgrade GitHub actions
+
+### Fixed
+- Fix "Not Found" error when connecting to local LXD socket
 
 ## [0.2.2] - 2022-06-28
 
