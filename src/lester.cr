@@ -149,16 +149,16 @@ class Lester
   end
 
   private def configure_tls(tls)
-    tls.cipher_suites = OpenSSL::SSL::Context::CIPHER_SUITES_MODERN
+    tls.tap do |_tls|
+      _tls.set_modern_ciphers
 
-    tls.add_options(
-      OpenSSL::SSL::Options::NO_SSL_V2 |
-      OpenSSL::SSL::Options::NO_SSL_V3 |
-      OpenSSL::SSL::Options::NO_TLS_V1 |
-      OpenSSL::SSL::Options::NO_TLS_V1_1
-    )
-
-    tls
+      _tls.add_options(
+        OpenSSL::SSL::Options::NO_SSL_V2 |
+        OpenSSL::SSL::Options::NO_SSL_V3 |
+        OpenSSL::SSL::Options::NO_TLS_V1 |
+        OpenSSL::SSL::Options::NO_TLS_V1_1
+      )
+    end
   end
 
   private def set_headers
