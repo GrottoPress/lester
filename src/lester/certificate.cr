@@ -1,5 +1,5 @@
 struct Lester::Certificate
-  include Hapi::Resource
+  include Lester::Resource
 
   enum Type
     Client

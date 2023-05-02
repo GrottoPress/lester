@@ -1,5 +1,5 @@
 struct Lester::Server::Cpu
-  include Hapi::Resource
+  include Lester::Resource
 
   getter architecture : String?
   getter sockets : Array(Socket)?

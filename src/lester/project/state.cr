@@ -1,5 +1,5 @@
 struct Lester::Project::State
-  include Hapi::Resource
+  include Lester::Resource
 
   getter resources : Resources?
 end

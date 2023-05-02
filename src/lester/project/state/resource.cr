@@ -1,5 +1,5 @@
 struct Lester::Project::State::Resource
-  include Hapi::Resource
+  include Lester::Resource
 
   @Limit : Int32? # ameba:disable Style/VariableNames
   @Usage : Int32? # ameba:disable Style/VariableNames

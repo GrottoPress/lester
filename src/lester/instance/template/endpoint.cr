@@ -8,7 +8,7 @@ struct Lester::Instance::Template::Endpoint
   def list(instance_name : String, **params) : List
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
-    response = client.get("#{base_path}?#{params}")
+    response = @client.get("#{base_path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -25,7 +25,7 @@ struct Lester::Instance::Template::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}?path=#{path}&project=#{project}",
       body: content
     )
@@ -43,7 +43,7 @@ struct Lester::Instance::Template::Endpoint
     project : String? = nil
   ) : Operation::Item
     base_path = uri(instance_name).path
-    response = client.delete("#{base_path}?path=#{path}&project=#{project}")
+    response = @client.delete("#{base_path}?path=#{path}&project=#{project}")
 
     Operation::Item.from_json(response.body)
   end
@@ -56,10 +56,10 @@ struct Lester::Instance::Template::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode params.merge({path: path})
 
-    client.get("#{base_path}?#{params}") do |response|
+    @client.get("#{base_path}?#{params}") do |response|
       return Item.from_json(response.body_io) unless response.status.success?
 
-      client.copy(response.body_io, destination)
+      @client.copy(response.body_io, destination)
 
       Item.from_json({
         type: "sync",
@@ -70,7 +70,7 @@ struct Lester::Instance::Template::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(client.instances.uri.to_s)
+    uri = URI.parse(@client.instances.uri.to_s)
     uri.path += "/#{instance_name}/metadata/templates"
     uri
   end

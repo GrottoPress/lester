@@ -1,5 +1,5 @@
 struct Lester::Instance::State::Cpu
-  include Hapi::Resource
+  include Lester::Resource
 
   getter usage : Int64?
 end

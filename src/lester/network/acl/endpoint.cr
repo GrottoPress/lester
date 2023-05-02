@@ -6,8 +6,8 @@ struct Lester::Network::Acl::Endpoint
   end
 
   def list(**params) : List
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{uri.path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{uri.path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -17,7 +17,7 @@ struct Lester::Network::Acl::Endpoint
   end
 
   def create(project : String? = nil, **params) : Operation::Item
-    response = client.post(
+    response = @client.post(
       "#{uri.path}?project=#{project}",
       body: params.to_json
     )
@@ -30,7 +30,7 @@ struct Lester::Network::Acl::Endpoint
   end
 
   def delete(name : String, project : String? = nil) : Operation::Item
-    response = client.delete("#{uri.path}/#{name}?project=#{project}")
+    response = @client.delete("#{uri.path}/#{name}?project=#{project}")
     Operation::Item.from_json(response.body)
   end
 
@@ -40,7 +40,7 @@ struct Lester::Network::Acl::Endpoint
 
   def fetch(name : String, **params) : Item
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}/#{name}?#{params}")
+    response = @client.get("#{uri.path}/#{name}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -54,7 +54,7 @@ struct Lester::Network::Acl::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    response = client.patch(
+    response = @client.patch(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -73,7 +73,7 @@ struct Lester::Network::Acl::Endpoint
   ) : Operation::Item
     params = {name: new_name}
 
-    response = client.post(
+    response = @client.post(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -90,7 +90,7 @@ struct Lester::Network::Acl::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    response = client.put(
+    response = @client.put(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -99,7 +99,7 @@ struct Lester::Network::Acl::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/network-acls"
     uri
   end

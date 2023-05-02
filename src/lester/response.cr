@@ -1,6 +1,6 @@
 module Lester::Response
   macro included
-    include Hapi::Resource
+    include Lester::Resource
 
     @error : String?
     @error_code : Int32?

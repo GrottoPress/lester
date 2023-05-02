@@ -1,5 +1,5 @@
 struct Lester::Image::Properties
-  include Hapi::Resource
+  include Lester::Resource
 
   getter architecture : String?
   getter description : String?

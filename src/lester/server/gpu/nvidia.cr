@@ -1,5 +1,5 @@
 struct Lester::Server::Gpu::Nvidia
-  include Hapi::Resource
+  include Lester::Resource
 
   getter architecture : String?
   getter brand : String?

@@ -1,5 +1,5 @@
 struct Lester::Network::State
-  include Hapi::Resource
+  include Lester::Resource
 
   getter addresses : Array(Address)?
   getter bond : Bond?

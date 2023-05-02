@@ -1,5 +1,5 @@
 struct Lester::Network::State::Vlan
-  include Hapi::Resource
+  include Lester::Resource
 
   getter lower_device : String?
   getter vid : Int32?

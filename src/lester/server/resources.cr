@@ -1,5 +1,5 @@
 struct Lester::Server::Resources
-  include Hapi::Resource
+  include Lester::Resource
 
   getter cpu : Cpu?
   getter gpu : Gpu?

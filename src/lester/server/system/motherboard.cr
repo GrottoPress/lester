@@ -1,5 +1,5 @@
 struct Lester::Server::System::Motherboard
-  include Hapi::Resource
+  include Lester::Resource
 
   getter product : String?
   getter serial : String?

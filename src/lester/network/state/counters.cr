@@ -1,5 +1,5 @@
 struct Lester::Network::State::Counters
-  include Hapi::Resource
+  include Lester::Resource
 
   getter bytes_received : Int64?
   getter bytes_sent : Int64?

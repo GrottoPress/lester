@@ -1,5 +1,5 @@
 struct Lester::Server::Cpu::Thread
-  include Hapi::Resource
+  include Lester::Resource
 
   getter id : Int32?
   getter? isolated : Bool?

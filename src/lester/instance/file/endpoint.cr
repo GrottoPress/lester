@@ -46,7 +46,7 @@ struct Lester::Instance::File::Endpoint
     headers["X-LXD-type"] = type.to_s.downcase if type
     headers["X-LXD-write"] = write_mode.to_s.downcase if write_mode
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}?path=#{path}&project=#{project}",
       body: content,
       headers: headers
@@ -66,7 +66,7 @@ struct Lester::Instance::File::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.delete("#{base_path}?path=#{path}&project=#{project}")
+    response = @client.delete("#{base_path}?path=#{path}&project=#{project}")
     Operation::Item.from_json(response.body)
   end
 
@@ -83,13 +83,13 @@ struct Lester::Instance::File::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode params.merge({path: path})
 
-    client.get("#{base_path}?#{params}") do |response|
+    @client.get("#{base_path}?#{params}") do |response|
       item(response, destination)
     end
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(client.instances.uri.to_s)
+    uri = URI.parse(@client.instances.uri.to_s)
     uri.path += "/#{instance_name}/files"
     uri
   end
@@ -109,7 +109,7 @@ struct Lester::Instance::File::Endpoint
       file = file.merge({content: body["metadata"]?})
       body["metadata"] = JSON.parse(file.to_json)
     else
-      client.copy(response.body_io, destination) if destination
+      @client.copy(response.body_io, destination) if destination
       body = {type: "sync", status: "Success", status_code: 200, metadata: file}
     end
 

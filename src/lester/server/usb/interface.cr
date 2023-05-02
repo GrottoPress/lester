@@ -1,5 +1,5 @@
 struct Lester::Server::Usb::Interface
-  include Hapi::Resource
+  include Lester::Resource
 
   getter class : String?
   getter class_id : Int32?

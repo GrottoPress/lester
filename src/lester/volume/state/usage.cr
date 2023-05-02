@@ -1,5 +1,5 @@
 struct Lester::Volume::State::Usage
-  include Hapi::Resource
+  include Lester::Resource
 
   getter used : Int64?
 end

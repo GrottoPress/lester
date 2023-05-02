@@ -1,8 +1,8 @@
 struct Lester::Image::Metadata
-  include Hapi::Resource
+  include Lester::Resource
 
   struct Template
-    include Hapi::Resource
+    include Lester::Resource
 
     getter? create_only : Bool?
     getter properties : Hash(String, String)?

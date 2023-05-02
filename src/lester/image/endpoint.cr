@@ -2,7 +2,7 @@ struct Lester::Image::Endpoint
   include Lester::Endpoint
 
   getter aliases : Alias::Endpoint do
-    Alias::Endpoint.new(client)
+    Alias::Endpoint.new(@client)
   end
 
   def list(**params)
@@ -10,8 +10,8 @@ struct Lester::Image::Endpoint
   end
 
   def list(**params) : List
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{uri.path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{uri.path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -36,7 +36,7 @@ struct Lester::Image::Endpoint
     uri_path = "#{uri.path}?project=#{project}"
     uri_path += "&public" if secret
 
-    response = client.post(uri_path, body: body, headers: headers)
+    response = @client.post(uri_path, body: body, headers: headers)
     Operation::Item.from_json(response.body)
   end
 
@@ -45,7 +45,7 @@ struct Lester::Image::Endpoint
   end
 
   def delete(fingerprint : String, project : String? = nil) : Operation::Item
-    response = client.delete("#{uri.path}/#{fingerprint}?project=#{project}")
+    response = @client.delete("#{uri.path}/#{fingerprint}?project=#{project}")
     Operation::Item.from_json(response.body)
   end
 
@@ -55,7 +55,7 @@ struct Lester::Image::Endpoint
 
   def fetch(fingerprint : String, **params) : Item
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}/#{fingerprint}?#{params}")
+    response = @client.get("#{uri.path}/#{fingerprint}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -69,7 +69,7 @@ struct Lester::Image::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    response = client.patch(
+    response = @client.patch(
       "#{uri.path}/#{fingerprint}?project=#{project}",
       body: params.to_json
     )
@@ -82,7 +82,7 @@ struct Lester::Image::Endpoint
   end
 
   def replace(fingerprint : String, project = nil, **params) : Operation::Item
-    response = client.put(
+    response = @client.put(
       "#{uri.path}/#{fingerprint}?project=#{project}",
       body: params.to_json
     )
@@ -97,12 +97,12 @@ struct Lester::Image::Endpoint
   def export(fingerprint : String, destination, **params) : Operation::Item
     params = URI::Params.encode(params)
 
-    client.get("#{uri.path}/#{fingerprint}/export?#{params}") do |response|
+    @client.get("#{uri.path}/#{fingerprint}/export?#{params}") do |response|
       unless response.status.success?
         return Operation::Item.from_json(response.body_io)
       end
 
-      client.copy(response.body_io, destination)
+      @client.copy(response.body_io, destination)
 
       Operation::Item.from_json({
         type: "sync",
@@ -121,7 +121,7 @@ struct Lester::Image::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    response = client.post(
+    response = @client.post(
       "#{uri.path}/#{fingerprint}/export?project=#{project}",
       body: params.to_json
     )
@@ -134,7 +134,7 @@ struct Lester::Image::Endpoint
   end
 
   def refresh(fingerprint : String, project : String? = nil) : Operation::Item
-    response = client.post(
+    response = @client.post(
       "#{uri.path}/#{fingerprint}/refresh?project=#{project}",
     )
 
@@ -149,7 +149,7 @@ struct Lester::Image::Endpoint
     fingerprint : String,
     project : String? = nil
   ) : Operation::Item
-    response = client.post(
+    response = @client.post(
       "#{uri.path}/#{fingerprint}/secret?project=#{project}",
     )
 
@@ -157,7 +157,7 @@ struct Lester::Image::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/images"
     uri
   end

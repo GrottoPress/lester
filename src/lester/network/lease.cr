@@ -1,5 +1,5 @@
 struct Lester::Network::Lease
-  include Hapi::Resource
+  include Lester::Resource
 
   getter address : String?
   getter hostname : String?

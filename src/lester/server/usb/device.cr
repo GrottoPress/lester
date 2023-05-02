@@ -1,5 +1,5 @@
 struct Lester::Server::Usb::Device
-  include Hapi::Resource
+  include Lester::Resource
 
   getter bus_address : Int32?
   getter device_address : Int32?

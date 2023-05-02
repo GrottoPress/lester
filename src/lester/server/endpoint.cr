@@ -7,7 +7,7 @@ struct Lester::Server::Endpoint
 
   def fetch(**params) : Item
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}?#{params}")
+    response = @client.get("#{uri.path}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -17,7 +17,7 @@ struct Lester::Server::Endpoint
   end
 
   def update(target : String? = nil, **params) : Operation::Item
-    response = client.patch(
+    response = @client.patch(
       "#{uri.path}?target=#{target}",
       body: params.to_json
     )
@@ -30,7 +30,7 @@ struct Lester::Server::Endpoint
   end
 
   def replace(target : String? = nil, **params) : Operation::Item
-    response = client.put(
+    response = @client.put(
       "#{uri.path}?target=#{target}",
       body: params.to_json
     )
@@ -48,7 +48,7 @@ struct Lester::Server::Endpoint
     uri = URI.parse(self.uri.to_s)
     uri.path += "/events?#{params}"
 
-    client.websocket(uri)
+    @client.websocket(uri)
   end
 
   def resources(**params)
@@ -57,12 +57,12 @@ struct Lester::Server::Endpoint
 
   def resources(**params) : Resources::Item
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}/resources?#{params}")
+    response = @client.get("#{uri.path}/resources?#{params}")
 
     Resources::Item.from_json(response.body)
   end
 
   getter uri : URI do
-    URI.parse(client.uri.to_s)
+    URI.parse(@client.uri.to_s)
   end
 end

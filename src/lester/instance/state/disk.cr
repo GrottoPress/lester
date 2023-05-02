@@ -1,5 +1,5 @@
 struct Lester::Instance::State::Disk
-  include Hapi::Resource
+  include Lester::Resource
 
   getter usage : Int64?
 end

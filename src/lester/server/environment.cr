@@ -1,5 +1,5 @@
 struct Lester::Server::Environment
-  include Hapi::Resource
+  include Lester::Resource
 
   getter addresses : Array(String)?
   getter architectures : Array(String)?

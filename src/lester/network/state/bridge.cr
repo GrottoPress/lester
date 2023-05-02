@@ -1,5 +1,5 @@
 struct Lester::Network::State::Bridge
-  include Hapi::Resource
+  include Lester::Resource
 
   getter forward_delay : Int32?
   getter id : String?

@@ -1,5 +1,5 @@
 struct Lester::Server::Network::Port
-  include Hapi::Resource
+  include Lester::Resource
 
   enum Duplex
     Half
@@ -7,7 +7,7 @@ struct Lester::Server::Network::Port
   end
 
   struct Infiniband
-    include Hapi::Resource
+    include Lester::Resource
 
     getter issm_device : String?
     getter issm_name : String?

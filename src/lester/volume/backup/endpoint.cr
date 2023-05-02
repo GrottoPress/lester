@@ -12,8 +12,8 @@ struct Lester::Volume::Backup::Endpoint
     **params
   ) : List
     base_path = uri(pool_name, volume_name, volume_type).path
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{base_path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{base_path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -39,7 +39,7 @@ struct Lester::Volume::Backup::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name, volume_name, volume_type).path
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}?project=#{project}&target=#{target}",
       body: params.to_json
     )
@@ -68,7 +68,7 @@ struct Lester::Volume::Backup::Endpoint
   ) : Operation::Item
     base_path = uri(pool_name, volume_name, volume_type).path
 
-    response = client.delete(
+    response = @client.delete(
       "#{base_path}/#{name}?project=#{project}&target=#{target}"
     )
 
@@ -88,7 +88,7 @@ struct Lester::Volume::Backup::Endpoint
   ) : Item
     base_path = uri(pool_name, volume_name, volume_type).path
     params = URI::Params.encode(params)
-    response = client.get("#{base_path}/#{name}?#{params}")
+    response = @client.get("#{base_path}/#{name}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -125,7 +125,7 @@ struct Lester::Volume::Backup::Endpoint
     base_path = uri(pool_name, volume_name, volume_type).path
     params = {name: new_name}
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
     )
@@ -155,12 +155,12 @@ struct Lester::Volume::Backup::Endpoint
     base_path = uri(pool_name, volume_name, volume_type).path
     params = URI::Params.encode(params)
 
-    client.get("#{base_path}/#{name}/export?#{params}") do |response|
+    @client.get("#{base_path}/#{name}/export?#{params}") do |response|
       unless response.status.success?
         return Operation::Item.from_json(response.body_io)
       end
 
-      client.copy(response.body_io, destination)
+      @client.copy(response.body_io, destination)
 
       Operation::Item.from_json({
         type: "sync",
@@ -171,7 +171,7 @@ struct Lester::Volume::Backup::Endpoint
   end
 
   def uri(pool_name, volume_name, volume_type) : URI
-    uri = URI.parse client.volumes.uri(pool_name).to_s
+    uri = URI.parse @client.volumes.uri(pool_name).to_s
     uri.path += "/#{volume_type}/#{volume_name}/backups"
     uri
   end

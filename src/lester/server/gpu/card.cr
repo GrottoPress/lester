@@ -1,5 +1,5 @@
 struct Lester::Server::Gpu::Card
-  include Hapi::Resource
+  include Lester::Resource
 
   getter driver : String?
   getter driver_version : String?

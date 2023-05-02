@@ -1,5 +1,5 @@
 struct Lester::Server::Gpu::MDev
-  include Hapi::Resource
+  include Lester::Resource
 
   getter api : String?
   getter available : Int32?

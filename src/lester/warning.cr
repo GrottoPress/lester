@@ -1,5 +1,5 @@
 struct Lester::Warning
-  include Hapi::Resource
+  include Lester::Resource
 
   getter count : Int32?
   getter entity_url : String?

@@ -1,5 +1,5 @@
 struct Lester::Server::System::Chassis
-  include Hapi::Resource
+  include Lester::Resource
 
   getter serial : String?
   getter type : String?

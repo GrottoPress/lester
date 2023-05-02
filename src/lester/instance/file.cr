@@ -1,5 +1,5 @@
 struct Lester::Instance::File
-  include Hapi::Resource
+  include Lester::Resource
 
   getter content : Array(String)?
   getter group_id : Int32?

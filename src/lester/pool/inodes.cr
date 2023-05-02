@@ -1,5 +1,5 @@
 struct Lester::Pool::Inodes
-  include Hapi::Resource
+  include Lester::Resource
 
   getter total : Int64?
   getter used : Int64?

@@ -2,15 +2,15 @@ struct Lester::Network::Endpoint
   include Lester::Endpoint
 
   getter acls : Acl::Endpoint do
-    Acl::Endpoint.new(client)
+    Acl::Endpoint.new(@client)
   end
 
   getter forwards : Forward::Endpoint do
-    Forward::Endpoint.new(client)
+    Forward::Endpoint.new(@client)
   end
 
   getter peers : Peer::Endpoint do
-    Peer::Endpoint.new(client)
+    Peer::Endpoint.new(@client)
   end
 
   def list(**params)
@@ -18,8 +18,8 @@ struct Lester::Network::Endpoint
   end
 
   def list(**params) : List
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{uri.path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{uri.path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -33,7 +33,7 @@ struct Lester::Network::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    response = client.post(
+    response = @client.post(
       "#{uri.path}?project=#{project}&target=#{target}",
       body: params.to_json
     )
@@ -46,7 +46,7 @@ struct Lester::Network::Endpoint
   end
 
   def delete(name : String, project : String? = nil) : Operation::Item
-    response = client.delete("#{uri.path}/#{name}?project=#{project}")
+    response = @client.delete("#{uri.path}/#{name}?project=#{project}")
     Operation::Item.from_json(response.body)
   end
 
@@ -56,7 +56,7 @@ struct Lester::Network::Endpoint
 
   def fetch(name : String, **params) : Item
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}/#{name}?#{params}")
+    response = @client.get("#{uri.path}/#{name}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -71,7 +71,7 @@ struct Lester::Network::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    response = client.patch(
+    response = @client.patch(
       "#{uri.path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
     )
@@ -90,7 +90,7 @@ struct Lester::Network::Endpoint
   ) : Operation::Item
     params = {name: new_name}
 
-    response = client.post(
+    response = @client.post(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -108,7 +108,7 @@ struct Lester::Network::Endpoint
     target : String? = nil,
     **params
   ) : Operation::Item
-    response = client.put(
+    response = @client.put(
       "#{uri.path}/#{name}?project=#{project}&target=#{target}",
       body: params.to_json
     )
@@ -122,7 +122,7 @@ struct Lester::Network::Endpoint
 
   def leases(name : String, **params) : Lease::List
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}/#{name}/leases?#{params}")
+    response = @client.get("#{uri.path}/#{name}/leases?#{params}")
 
     Lease::List.from_json(response.body)
   end
@@ -133,13 +133,13 @@ struct Lester::Network::Endpoint
 
   def state(name : String, **params) : State::Item
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}/#{name}/state?#{params}")
+    response = @client.get("#{uri.path}/#{name}/state?#{params}")
 
     State::Item.from_json(response.body)
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/networks"
     uri
   end

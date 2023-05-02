@@ -1,5 +1,5 @@
 struct Lester::Cluster::Member
-  include Hapi::Resource
+  include Lester::Resource
 
   getter architecture : String?
   getter config : Hash(String, String)?

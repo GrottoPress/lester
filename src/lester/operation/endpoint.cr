@@ -6,7 +6,7 @@ struct Lester::Operation::Endpoint
   end
 
   def list : List
-    response = client.get(uri.path)
+    response = @client.get(uri.path)
     List.from_json(response.body)
   end
 
@@ -15,7 +15,7 @@ struct Lester::Operation::Endpoint
   end
 
   def delete(id : String) : Item
-    response = client.delete("#{uri.path}/#{id}")
+    response = @client.delete("#{uri.path}/#{id}")
     Item.from_json(response.body)
   end
 
@@ -24,7 +24,7 @@ struct Lester::Operation::Endpoint
   end
 
   def fetch(id : String) : Item
-    response = client.get("#{uri.path}/#{id}")
+    response = @client.get("#{uri.path}/#{id}")
     Item.from_json(response.body)
   end
 
@@ -35,7 +35,7 @@ struct Lester::Operation::Endpoint
   def wait(id : String, secret : String? = nil, timeout : Int32 = -1) : Item
     uri_path = "#{uri.path}/#{id}/wait?timeout=#{timeout}"
     uri_path += "&public&secret=#{secret}" if secret
-    response = client.get(uri_path)
+    response = @client.get(uri_path)
 
     Item.from_json(response.body)
   end
@@ -49,11 +49,11 @@ struct Lester::Operation::Endpoint
     uri.path += "/#{id}/websocket"
     uri.path += "?public&secret=#{secret}" if secret
 
-    client.websocket(uri)
+    @client.websocket(uri)
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/operations"
     uri
   end

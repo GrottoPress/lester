@@ -12,7 +12,7 @@ struct Lester::Instance::Console::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json,
     )
@@ -28,12 +28,12 @@ struct Lester::Instance::Console::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    client.get("#{base_path}?#{params}") do |response|
+    @client.get("#{base_path}?#{params}") do |response|
       unless response.status.success?
         return Operation::Item.from_json(response.body_io)
       end
 
-      client.copy(response.body_io, destination)
+      @client.copy(response.body_io, destination)
 
       Operation::Item.from_json({
         type: "sync",
@@ -50,12 +50,12 @@ struct Lester::Instance::Console::Endpoint
   def clear(instance_name : String, project : String? = nil) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.delete("#{base_path}?project=#{project}")
+    response = @client.delete("#{base_path}?project=#{project}")
     Operation::Item.from_json(response.body)
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(client.instances.uri.to_s)
+    uri = URI.parse(@client.instances.uri.to_s)
     uri.path += "/#{instance_name}/console"
     uri
   end

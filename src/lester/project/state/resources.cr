@@ -1,5 +1,5 @@
 struct Lester::Project::State::Resources
-  include Hapi::Resource
+  include Lester::Resource
   include JSON::Serializable::Unmapped
 
   getter containers : Resource?

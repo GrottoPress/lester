@@ -1,5 +1,5 @@
 struct Lester::Volume::State
-  include Hapi::Resource
+  include Lester::Resource
 
   getter usage : Usage?
 end

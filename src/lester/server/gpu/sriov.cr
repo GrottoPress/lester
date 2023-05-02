@@ -1,5 +1,5 @@
 struct Lester::Server::Gpu::Sriov
-  include Hapi::Resource
+  include Lester::Resource
 
   getter current_vfs : Int32?
   getter maximum_vfs : Int32?

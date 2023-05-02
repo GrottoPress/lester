@@ -1,5 +1,5 @@
 struct Lester::Server
-  include Hapi::Resource
+  include Lester::Resource
 
   getter api_extensions : Array(String)?
   getter api_status : ApiStatus?

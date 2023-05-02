@@ -1,5 +1,5 @@
 struct Lester::Server::System
-  include Hapi::Resource
+  include Lester::Resource
 
   @type : String?
 

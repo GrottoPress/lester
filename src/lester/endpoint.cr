@@ -1,9 +1,6 @@
 module Lester::Endpoint
   macro included
-    include Hapi::Endpoint
-
-    private def client
-      @client.as(Lester)
+    def initialize(@client : Lester)
     end
   end
 end

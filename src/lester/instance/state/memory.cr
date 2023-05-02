@@ -1,5 +1,5 @@
 struct Lester::Instance::State::Memory
-  include Hapi::Resource
+  include Lester::Resource
 
   getter swap_usage : Int64?
   getter swap_usage_peak : Int64?

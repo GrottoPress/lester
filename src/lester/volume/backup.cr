@@ -1,5 +1,5 @@
 struct Lester::Volume::Backup
-  include Hapi::Resource
+  include Lester::Resource
 
   getter created_at : Time?
   getter expires_at : Time?

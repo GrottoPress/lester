@@ -1,5 +1,5 @@
 struct Lester::Server::Storage
-  include Hapi::Resource
+  include Lester::Resource
 
   getter disks : Array(Disk)?
   getter total : Int32?

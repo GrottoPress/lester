@@ -7,7 +7,7 @@ struct Lester::Metrics::Endpoint
 
   def fetch(**params) : String
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}?#{params}")
+    response = @client.get("#{uri.path}?#{params}")
 
     unless response.status.success?
       raise Error.new("Could not retrieve metrics. \
@@ -18,7 +18,7 @@ struct Lester::Metrics::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/metrics"
     uri
   end

@@ -1,5 +1,5 @@
 struct Lester::Project
-  include Hapi::Resource
+  include Lester::Resource
 
   getter config : Hash(String, String)?
   getter description : String?

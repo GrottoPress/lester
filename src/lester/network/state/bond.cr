@@ -1,5 +1,5 @@
 struct Lester::Network::State::Bond
-  include Hapi::Resource
+  include Lester::Resource
 
   getter down_delay : Int32?
   getter lower_devices : Array(String)?

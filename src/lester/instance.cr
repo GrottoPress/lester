@@ -1,5 +1,5 @@
 struct Lester::Instance
-  include Hapi::Resource
+  include Lester::Resource
   include Image::TypeField
 
   getter architecture : String?

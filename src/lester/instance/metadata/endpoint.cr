@@ -8,7 +8,7 @@ struct Lester::Instance::Metadata::Endpoint
   def fetch(instance_name : String, **params) : Item
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
-    response = client.get("#{base_path}?#{params}")
+    response = @client.get("#{base_path}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -24,7 +24,7 @@ struct Lester::Instance::Metadata::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.patch(
+    response = @client.patch(
       "#{base_path}?project=#{project}",
       body: params.to_json
     )
@@ -43,7 +43,7 @@ struct Lester::Instance::Metadata::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.put(
+    response = @client.put(
       "#{base_path}?project=#{project}",
       body: params.to_json
     )
@@ -52,7 +52,7 @@ struct Lester::Instance::Metadata::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(client.instances.uri.to_s)
+    uri = URI.parse(@client.instances.uri.to_s)
     uri.path += "/#{instance_name}/metadata"
     uri
   end

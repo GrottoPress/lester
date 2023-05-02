@@ -1,5 +1,5 @@
 struct Lester::Cluster::Member::Config
-  include Hapi::Resource
+  include Lester::Resource
 
   getter description : String?
   getter entity : String?

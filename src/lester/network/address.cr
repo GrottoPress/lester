@@ -1,5 +1,5 @@
 struct Lester::Network::Address
-  include Hapi::Resource
+  include Lester::Resource
 
   enum Scope
     Local

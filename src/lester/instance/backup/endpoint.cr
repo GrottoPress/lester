@@ -7,8 +7,8 @@ struct Lester::Instance::Backup::Endpoint
 
   def list(instance_name : String, **params) : List
     base_path = uri(instance_name).path
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{base_path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{base_path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -24,7 +24,7 @@ struct Lester::Instance::Backup::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json
     )
@@ -42,7 +42,7 @@ struct Lester::Instance::Backup::Endpoint
     project : String? = nil
   ) : Operation::Item
     base_path = uri(instance_name).path
-    response = client.delete("#{base_path}/#{name}?project=#{project}")
+    response = @client.delete("#{base_path}/#{name}?project=#{project}")
 
     Operation::Item.from_json(response.body)
   end
@@ -54,7 +54,7 @@ struct Lester::Instance::Backup::Endpoint
   def fetch(instance_name : String, name : String, **params) : Item
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
-    response = client.get("#{base_path}/#{name}?#{params}")
+    response = @client.get("#{base_path}/#{name}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -71,7 +71,7 @@ struct Lester::Instance::Backup::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}/#{name}?project=#{project}",
       body: {name: new_name}.to_json
     )
@@ -92,12 +92,12 @@ struct Lester::Instance::Backup::Endpoint
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
 
-    client.get("#{base_path}/#{name}/export?#{params}") do |response|
+    @client.get("#{base_path}/#{name}/export?#{params}") do |response|
       unless response.status.success?
         return Operation::Item.from_json(response.body_io)
       end
 
-      client.copy(response.body_io, destination)
+      @client.copy(response.body_io, destination)
 
       Operation::Item.from_json({
         type: "sync",
@@ -108,7 +108,7 @@ struct Lester::Instance::Backup::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(client.instances.uri.to_s)
+    uri = URI.parse(@client.instances.uri.to_s)
     uri.path += "/#{instance_name}/backups"
     uri
   end

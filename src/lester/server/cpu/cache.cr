@@ -1,5 +1,5 @@
 struct Lester::Server::Cpu::Cache
-  include Hapi::Resource
+  include Lester::Resource
 
   enum Type
     Data

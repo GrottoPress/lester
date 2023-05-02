@@ -1,5 +1,5 @@
 struct Lester::Instance::State
-  include Hapi::Resource
+  include Lester::Resource
 
   getter cpu : Cpu?
   getter disk : Hash(String, Disk)?

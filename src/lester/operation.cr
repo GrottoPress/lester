@@ -1,5 +1,5 @@
 struct Lester::Operation
-  include Hapi::Resource
+  include Lester::Resource
 
   getter class : Class?
   getter created_at : Time?

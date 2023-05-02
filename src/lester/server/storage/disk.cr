@@ -1,5 +1,5 @@
 struct Lester::Server::Storage::Disk
-  include Hapi::Resource
+  include Lester::Resource
 
   getter block_size : Int32?
   getter device : String?

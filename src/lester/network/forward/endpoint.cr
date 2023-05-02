@@ -7,8 +7,8 @@ struct Lester::Network::Forward::Endpoint
 
   def list(network_name : String, **params) : List
     base_path = uri(network_name).path
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{base_path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{base_path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -24,7 +24,7 @@ struct Lester::Network::Forward::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json
     )
@@ -43,7 +43,7 @@ struct Lester::Network::Forward::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    response = client.delete(
+    response = @client.delete(
       "#{base_path}/#{listen_address}?project=#{project}"
     )
 
@@ -57,7 +57,7 @@ struct Lester::Network::Forward::Endpoint
   def fetch(network_name : String, listen_address : String, **params) : Item
     base_path = uri(network_name).path
     params = URI::Params.encode(params)
-    response = client.get("#{base_path}/#{listen_address}?#{params}")
+    response = @client.get("#{base_path}/#{listen_address}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -74,7 +74,7 @@ struct Lester::Network::Forward::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    response = client.patch(
+    response = @client.patch(
       "#{base_path}/#{listen_address}?project=#{project}",
       body: params.to_json
     )
@@ -94,7 +94,7 @@ struct Lester::Network::Forward::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    response = client.put(
+    response = @client.put(
       "#{base_path}/#{listen_address}?project=#{project}",
       body: params.to_json
     )
@@ -103,7 +103,7 @@ struct Lester::Network::Forward::Endpoint
   end
 
   def uri(network_name) : URI
-    uri = URI.parse(client.networks.uri.to_s)
+    uri = URI.parse(@client.networks.uri.to_s)
     uri.path += "/#{network_name}/forwards"
     uri
   end

@@ -1,7 +1,7 @@
 require "./image/type_field"
 
 struct Lester::Image
-  include Hapi::Resource
+  include Lester::Resource
   include TypeField
 
   getter aliases : Array(Alias)?

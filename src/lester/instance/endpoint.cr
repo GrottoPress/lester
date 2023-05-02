@@ -2,35 +2,35 @@ struct Lester::Instance::Endpoint
   include Lester::Endpoint
 
   getter backups : Backup::Endpoint do
-    Backup::Endpoint.new(client)
+    Backup::Endpoint.new(@client)
   end
 
   getter console : Console::Endpoint do
-    Console::Endpoint.new(client)
+    Console::Endpoint.new(@client)
   end
 
   getter files : File::Endpoint do
-    File::Endpoint.new(client)
+    File::Endpoint.new(@client)
   end
 
   getter logs : Log::Endpoint do
-    Log::Endpoint.new(client)
+    Log::Endpoint.new(@client)
   end
 
   getter metadata : Metadata::Endpoint do
-    Metadata::Endpoint.new(client)
+    Metadata::Endpoint.new(@client)
   end
 
   getter snapshots : Snapshot::Endpoint do
-    Snapshot::Endpoint.new(client)
+    Snapshot::Endpoint.new(@client)
   end
 
   getter state : State::Endpoint do
-    State::Endpoint.new(client)
+    State::Endpoint.new(@client)
   end
 
   getter templates : Template::Endpoint do
-    Template::Endpoint.new(client)
+    Template::Endpoint.new(@client)
   end
 
   def list(**params)
@@ -38,8 +38,8 @@ struct Lester::Instance::Endpoint
   end
 
   def list(**params) : List
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{uri.path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{uri.path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -56,7 +56,7 @@ struct Lester::Instance::Endpoint
   ) : Operation::Item
     body = backup ? ::File.open(backup, "rb") : params.to_json
 
-    response = client.post(
+    response = @client.post(
       "#{uri.path}?project=#{project}&target=#{target}",
       body: body,
     )
@@ -69,7 +69,7 @@ struct Lester::Instance::Endpoint
   end
 
   def delete(name : String, project : String? = nil) : Operation::Item
-    response = client.delete("#{uri.path}/#{name}?project=#{project}")
+    response = @client.delete("#{uri.path}/#{name}?project=#{project}")
     Operation::Item.from_json(response.body)
   end
 
@@ -79,7 +79,7 @@ struct Lester::Instance::Endpoint
 
   def fetch(name : String, **params) : Item
     params = URI::Params.encode(params)
-    response = client.get("#{uri.path}/#{name}?#{params}")
+    response = @client.get("#{uri.path}/#{name}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -93,7 +93,7 @@ struct Lester::Instance::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    response = client.patch(
+    response = @client.patch(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -111,7 +111,7 @@ struct Lester::Instance::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    response = client.post(
+    response = @client.post(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.merge({name: new_name}).to_json
     )
@@ -124,7 +124,7 @@ struct Lester::Instance::Endpoint
   end
 
   def replace(project : String? = nil, **params) : Operation::Item
-    response = client.put(
+    response = @client.put(
       "#{uri.path}?project=#{project}",
       body: params.to_json
     )
@@ -141,7 +141,7 @@ struct Lester::Instance::Endpoint
     project : String? = nil,
     **params
   ) : Operation::Item
-    response = client.put(
+    response = @client.put(
       "#{uri.path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -154,7 +154,7 @@ struct Lester::Instance::Endpoint
   end
 
   def exec(name : String, project : String? = nil, **params) : Operation::Item
-    response = client.post(
+    response = @client.post(
       "#{uri.path}/#{name}/exec?project=#{project}",
       body: params.to_json
     )
@@ -163,7 +163,7 @@ struct Lester::Instance::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/instances"
     uri
   end

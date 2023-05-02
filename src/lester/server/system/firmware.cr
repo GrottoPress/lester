@@ -1,5 +1,5 @@
 struct Lester::Server::System::Firmware
-  include Hapi::Resource
+  include Lester::Resource
 
   getter date : String?
   getter vendor : String?

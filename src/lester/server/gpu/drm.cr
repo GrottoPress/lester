@@ -1,5 +1,5 @@
 struct Lester::Server::Gpu::Drm
-  include Hapi::Resource
+  include Lester::Resource
 
   getter card_device : String?
   getter card_name : String?

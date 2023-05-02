@@ -1,5 +1,5 @@
 struct Lester::Server::Storage::Driver
-  include Hapi::Resource
+  include Lester::Resource
 
   getter name : String?
   getter? remote : Bool?

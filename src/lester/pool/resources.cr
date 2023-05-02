@@ -1,5 +1,5 @@
 struct Lester::Pool::Resources
-  include Hapi::Resource
+  include Lester::Resource
 
   getter inodes : Inodes?
   getter space : Space?

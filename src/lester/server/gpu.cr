@@ -1,5 +1,5 @@
 struct Lester::Server::Gpu
-  include Hapi::Resource
+  include Lester::Resource
 
   getter cards : Array(Card)?
   getter total : Int32?

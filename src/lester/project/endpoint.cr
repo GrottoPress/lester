@@ -6,8 +6,8 @@ struct Lester::Project::Endpoint
   end
 
   def list : List
-    params = URI::Params.encode(client.recurse)
-    response = client.get("#{uri.path}?#{params}")
+    params = URI::Params.encode(@client.recurse)
+    response = @client.get("#{uri.path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -17,7 +17,7 @@ struct Lester::Project::Endpoint
   end
 
   def create(**params) : Operation::Item
-    response = client.post(uri.path, body: params.to_json)
+    response = @client.post(uri.path, body: params.to_json)
     Operation::Item.from_json(response.body)
   end
 
@@ -26,7 +26,7 @@ struct Lester::Project::Endpoint
   end
 
   def delete(name : String) : Operation::Item
-    response = client.delete("#{uri.path}/#{name}")
+    response = @client.delete("#{uri.path}/#{name}")
     Operation::Item.from_json(response.body)
   end
 
@@ -35,7 +35,7 @@ struct Lester::Project::Endpoint
   end
 
   def fetch(name : String) : Item
-    response = client.get("#{uri.path}/#{name}")
+    response = @client.get("#{uri.path}/#{name}")
     Item.from_json(response.body)
   end
 
@@ -44,7 +44,7 @@ struct Lester::Project::Endpoint
   end
 
   def update(name : String, **params) : Operation::Item
-    response = client.patch("#{uri.path}/#{name}", body: params.to_json)
+    response = @client.patch("#{uri.path}/#{name}", body: params.to_json)
     Operation::Item.from_json(response.body)
   end
 
@@ -54,7 +54,7 @@ struct Lester::Project::Endpoint
 
   def rename(name : String, new_name : String) : Operation::Item
     params = {name: new_name}
-    response = client.post("#{uri.path}/#{name}", body: params.to_json)
+    response = @client.post("#{uri.path}/#{name}", body: params.to_json)
 
     Operation::Item.from_json(response.body)
   end
@@ -64,7 +64,7 @@ struct Lester::Project::Endpoint
   end
 
   def replace(name : String, **params) : Operation::Item
-    response = client.put("#{uri.path}/#{name}", body: params.to_json)
+    response = @client.put("#{uri.path}/#{name}", body: params.to_json)
     Operation::Item.from_json(response.body)
   end
 
@@ -73,12 +73,12 @@ struct Lester::Project::Endpoint
   end
 
   def state(name : String) : State::Item
-    response = client.get("#{uri.path}/#{name}/state")
+    response = @client.get("#{uri.path}/#{name}/state")
     State::Item.from_json(response.body)
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/projects"
     uri
   end

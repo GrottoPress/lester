@@ -6,8 +6,8 @@ struct Lester::Warning::Endpoint
   end
 
   def list(**params) : List
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{uri.path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{uri.path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -17,7 +17,7 @@ struct Lester::Warning::Endpoint
   end
 
   def delete(uuid : String) : Operation::Item
-    response = client.delete("#{uri.path}/#{uuid}")
+    response = @client.delete("#{uri.path}/#{uuid}")
     Operation::Item.from_json(response.body)
   end
 
@@ -26,7 +26,7 @@ struct Lester::Warning::Endpoint
   end
 
   def fetch(uuid : String) : Item
-    response = client.get("#{uri.path}/#{uuid}")
+    response = @client.get("#{uri.path}/#{uuid}")
     Item.from_json(response.body)
   end
 
@@ -35,7 +35,7 @@ struct Lester::Warning::Endpoint
   end
 
   def update(uuid : String, **params) : Operation::Item
-    response = client.patch("#{uri.path}/#{uuid}", body: params.to_json)
+    response = @client.patch("#{uri.path}/#{uuid}", body: params.to_json)
     Operation::Item.from_json(response.body)
   end
 
@@ -44,12 +44,12 @@ struct Lester::Warning::Endpoint
   end
 
   def replace(uuid : String, **params) : Operation::Item
-    response = client.put("#{uri.path}/#{uuid}", body: params.to_json)
+    response = @client.put("#{uri.path}/#{uuid}", body: params.to_json)
     Operation::Item.from_json(response.body)
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/warnings"
     uri
   end

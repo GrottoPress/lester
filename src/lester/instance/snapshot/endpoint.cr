@@ -7,8 +7,8 @@ struct Lester::Instance::Snapshot::Endpoint
 
   def list(instance_name : String, **params) : List
     base_path = uri(instance_name).path
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{base_path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{base_path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -24,7 +24,7 @@ struct Lester::Instance::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json
     )
@@ -42,7 +42,7 @@ struct Lester::Instance::Snapshot::Endpoint
     project : String? = nil
   ) : Operation::Item
     base_path = uri(instance_name).path
-    response = client.delete("#{base_path}/#{name}?project=#{project}")
+    response = @client.delete("#{base_path}/#{name}?project=#{project}")
 
     Operation::Item.from_json(response.body)
   end
@@ -54,7 +54,7 @@ struct Lester::Instance::Snapshot::Endpoint
   def fetch(instance_name : String, name : String, **params) : Item
     base_path = uri(instance_name).path
     params = URI::Params.encode(params)
-    response = client.get("#{base_path}/#{name}?#{params}")
+    response = @client.get("#{base_path}/#{name}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -71,7 +71,7 @@ struct Lester::Instance::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.patch(
+    response = @client.patch(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -93,7 +93,7 @@ struct Lester::Instance::Snapshot::Endpoint
     base_path = uri(instance_name).path
     params = params.merge({name: new_name})
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -113,7 +113,7 @@ struct Lester::Instance::Snapshot::Endpoint
   ) : Operation::Item
     base_path = uri(instance_name).path
 
-    response = client.put(
+    response = @client.put(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -122,7 +122,7 @@ struct Lester::Instance::Snapshot::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(client.instances.uri.to_s)
+    uri = URI.parse(@client.instances.uri.to_s)
     uri.path += "/#{instance_name}/snapshots"
     uri
   end

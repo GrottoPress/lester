@@ -1,5 +1,5 @@
 struct Lester::Operation::Resources
-  include Hapi::Resource
+  include Lester::Resource
 
   getter containers : Array(String)?
   getter instances : Array(String)?

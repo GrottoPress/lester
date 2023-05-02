@@ -1,5 +1,5 @@
 struct Lester::Server::Cpu::Core
-  include Hapi::Resource
+  include Lester::Resource
 
   getter core : Int32?
   getter die : Int32?

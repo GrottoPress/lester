@@ -1,5 +1,5 @@
 struct Lester::Operation::Metadata
-  include Hapi::Resource
+  include Lester::Resource
 
   @return : Int32?
 

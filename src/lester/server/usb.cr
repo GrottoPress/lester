@@ -1,5 +1,5 @@
 struct Lester::Server::Usb
-  include Hapi::Resource
+  include Lester::Resource
 
   getter devices : Array(Device)?
   getter total : Int32?

@@ -1,5 +1,5 @@
 struct Lester::Network::Acl::Rule
-  include Hapi::Resource
+  include Lester::Resource
 
   @protocol : String?
 

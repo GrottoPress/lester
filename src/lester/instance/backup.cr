@@ -1,5 +1,5 @@
 struct Lester::Instance::Backup
-  include Hapi::Resource
+  include Lester::Resource
 
   getter? container_only : Bool?
   getter created_at : Time?

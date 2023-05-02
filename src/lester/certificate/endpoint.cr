@@ -6,8 +6,8 @@ struct Lester::Certificate::Endpoint
   end
 
   def list : List
-    params = URI::Params.encode(client.recurse)
-    response = client.get("#{uri.path}?#{params}")
+    params = URI::Params.encode(@client.recurse)
+    response = @client.get("#{uri.path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -19,7 +19,7 @@ struct Lester::Certificate::Endpoint
   def add(**params) : Operation::Item
     uri_path = uri.path
     uri_path += "?public" if params[:password]?
-    response = client.post(uri_path, body: params.to_json)
+    response = @client.post(uri_path, body: params.to_json)
 
     Operation::Item.from_json(response.body)
   end
@@ -29,7 +29,7 @@ struct Lester::Certificate::Endpoint
   end
 
   def delete(fingerprint : String) : Operation::Item
-    response = client.delete("#{uri.path}/#{fingerprint}")
+    response = @client.delete("#{uri.path}/#{fingerprint}")
     Operation::Item.from_json(response.body)
   end
 
@@ -38,7 +38,7 @@ struct Lester::Certificate::Endpoint
   end
 
   def fetch(fingerprint : String) : Item
-    response = client.get("#{uri.path}/#{fingerprint}")
+    response = @client.get("#{uri.path}/#{fingerprint}")
     Item.from_json(response.body)
   end
 
@@ -47,7 +47,7 @@ struct Lester::Certificate::Endpoint
   end
 
   def update(fingerprint : String, **params) : Operation::Item
-    response = client.patch("#{uri.path}/#{fingerprint}", body: params.to_json)
+    response = @client.patch("#{uri.path}/#{fingerprint}", body: params.to_json)
     Operation::Item.from_json(response.body)
   end
 
@@ -56,12 +56,12 @@ struct Lester::Certificate::Endpoint
   end
 
   def replace(fingerprint : String, **params) : Operation::Item
-    response = client.put("#{uri.path}/#{fingerprint}", body: params.to_json)
+    response = @client.put("#{uri.path}/#{fingerprint}", body: params.to_json)
     Operation::Item.from_json(response.body)
   end
 
   getter uri : URI do
-    uri = URI.parse(client.uri.to_s)
+    uri = URI.parse(@client.uri.to_s)
     uri.path += "/certificates"
     uri
   end

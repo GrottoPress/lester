@@ -1,5 +1,5 @@
 struct Lester::Server::Storage::Partition
-  include Hapi::Resource
+  include Lester::Resource
 
   getter device : String?
   getter id : String?

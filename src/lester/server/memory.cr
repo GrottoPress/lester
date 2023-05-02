@@ -1,5 +1,5 @@
 struct Lester::Server::Memory
-  include Hapi::Resource
+  include Lester::Resource
 
   getter hugepages_size : Int64?
   getter hugepages_total : Int64?

@@ -1,5 +1,5 @@
 struct Lester::Network::Forward::Port
-  include Hapi::Resource
+  include Lester::Resource
 
   getter description : String?
   getter listen_port : String?

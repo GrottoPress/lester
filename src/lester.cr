@@ -1,13 +1,12 @@
-require "hapi"
+require "json"
 
 require "./lester/version"
+require "./lester/endpoint"
+require "./lester/resource"
 require "./lester/**"
 
 class Lester
-  include Hapi::Client
-
   getter :uri
-  private getter :http_client
 
   getter socket : UNIXSocket?
 
@@ -71,6 +70,8 @@ class Lester
     uri = URI.parse(socket)
     new UNIXSocket.new(uri.path)
   end
+
+  forward_missing_to @http_client
 
   getter certificates : Certificate::Endpoint do
     Certificate::Endpoint.new(self)
@@ -162,7 +163,7 @@ class Lester
   end
 
   private def set_headers
-    http_client.before_request do |request|
+    @http_client.before_request do |request|
       set_content_type(request.headers)
       set_user_agent(request.headers)
     end

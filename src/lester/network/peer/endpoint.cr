@@ -7,8 +7,8 @@ struct Lester::Network::Peer::Endpoint
 
   def list(network_name : String, **params) : List
     base_path = uri(network_name).path
-    params = URI::Params.encode(client.recurse **params)
-    response = client.get("#{base_path}?#{params}")
+    params = URI::Params.encode(@client.recurse **params)
+    response = @client.get("#{base_path}?#{params}")
 
     List.from_json(response.body)
   end
@@ -24,7 +24,7 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    response = client.post(
+    response = @client.post(
       "#{base_path}?project=#{project}",
       body: params.to_json
     )
@@ -43,7 +43,7 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    response = client.delete("#{base_path}/#{name}?project=#{project}")
+    response = @client.delete("#{base_path}/#{name}?project=#{project}")
     Operation::Item.from_json(response.body)
   end
 
@@ -54,7 +54,7 @@ struct Lester::Network::Peer::Endpoint
   def fetch(network_name : String, name : String, **params) : Item
     base_path = uri(network_name).path
     params = URI::Params.encode(params)
-    response = client.get("#{base_path}/#{name}?#{params}")
+    response = @client.get("#{base_path}/#{name}?#{params}")
 
     Item.from_json(response.body)
   end
@@ -71,7 +71,7 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    response = client.patch(
+    response = @client.patch(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -91,7 +91,7 @@ struct Lester::Network::Peer::Endpoint
   ) : Operation::Item
     base_path = uri(network_name).path
 
-    response = client.put(
+    response = @client.put(
       "#{base_path}/#{name}?project=#{project}",
       body: params.to_json
     )
@@ -100,7 +100,7 @@ struct Lester::Network::Peer::Endpoint
   end
 
   def uri(network_name) : URI
-    uri = URI.parse(client.networks.uri.to_s)
+    uri = URI.parse(@client.networks.uri.to_s)
     uri.path += "/#{network_name}/peers"
     uri
   end

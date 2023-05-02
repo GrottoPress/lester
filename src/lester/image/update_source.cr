@@ -1,5 +1,5 @@
 struct Lester::Image::UpdateSource
-  include Hapi::Resource
+  include Lester::Resource
 
   enum Protocol
     Simplestreams
