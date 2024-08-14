@@ -1,3 +1,5 @@
+require "http"
+require "http/web_socket"
 require "json"
 
 require "./lester/version"
