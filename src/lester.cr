@@ -185,7 +185,7 @@ class Lester
     socket.try do |socket|
       key = Random::Secure.base64(16)
 
-      headers["Host"] = "#{host}:#{port}"
+      headers["Host"] = "#{uri.host}:#{uri.port}"
       headers["Connection"] = "Upgrade"
       headers["Upgrade"] = "websocket"
       headers["Sec-WebSocket-Version"] = HTTP::WebSocket::Protocol::VERSION
