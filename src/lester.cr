@@ -9,7 +9,6 @@ require "./lester/**"
 
 class Lester
   getter :uri
-
   getter socket : UNIXSocket?
 
   def initialize(base_uri : URI, tls : OpenSSL::SSL::Context::Client)
