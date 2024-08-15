@@ -1,4 +1,4 @@
-require "http"
+require "http/client"
 require "http/web_socket"
 require "json"
 
