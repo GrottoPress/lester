@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Add missing `require "http"`
 - Add missing `require "http/web_socket"`
+- Fix invalid websocket challenge verification
 
 ## [1.0.0] - 2023-05-29
 

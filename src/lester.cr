@@ -183,7 +183,7 @@ class Lester
   # Adapted from `HTTP::Websocket::Protocol.new`
   private def websocket_for_unix_socket(uri, headers)
     socket.try do |socket|
-      key = Random::Secure.base64(16)
+      key = Base64.strict_encode(StaticArray(UInt8, 16).new { rand(256).to_u8 })
 
       headers["Host"] = "#{uri.host}:#{uri.port}"
       headers["Connection"] = "Upgrade"
