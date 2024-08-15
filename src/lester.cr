@@ -139,7 +139,7 @@ class Lester
     set_content_type(headers)
     set_user_agent(headers)
 
-    HTTP::WebSocket.new(uri.host.to_s, uri.path, headers: headers, tls: true)
+    HTTP::WebSocket.new(uri, headers: headers)
   end
 
   protected def copy(source, destination) : Nil
