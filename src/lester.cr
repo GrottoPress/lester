@@ -7,7 +7,7 @@ require "./lester/endpoint"
 require "./lester/resource"
 require "./lester/**"
 
-class Lester
+struct Lester
   getter :uri
   getter socket : UNIXSocket?
 
@@ -74,55 +74,55 @@ class Lester
 
   forward_missing_to @http_client
 
-  getter certificates : Certificate::Endpoint do
+  def certificates : Certificate::Endpoint
     Certificate::Endpoint.new(self)
   end
 
-  getter cluster : Cluster::Endpoint do
+  def cluster : Cluster::Endpoint
     Cluster::Endpoint.new(self)
   end
 
-  getter images : Image::Endpoint do
+  def images : Image::Endpoint
     Image::Endpoint.new(self)
   end
 
-  getter instances : Instance::Endpoint do
+  def instances : Instance::Endpoint
     Instance::Endpoint.new(self)
   end
 
-  getter metrics : Metrics::Endpoint do
+  def metrics : Metrics::Endpoint
     Metrics::Endpoint.new(self)
   end
 
-  getter networks : Network::Endpoint do
+  def networks : Network::Endpoint
     Network::Endpoint.new(self)
   end
 
-  getter operations : Operation::Endpoint do
+  def operations : Operation::Endpoint
     Operation::Endpoint.new(self)
   end
 
-  getter pools : Pool::Endpoint do
+  def pools : Pool::Endpoint
     Pool::Endpoint.new(self)
   end
 
-  getter profiles : Profile::Endpoint do
+  def profiles : Profile::Endpoint
     Profile::Endpoint.new(self)
   end
 
-  getter projects : Project::Endpoint do
+  def projects : Project::Endpoint
     Project::Endpoint.new(self)
   end
 
-  getter server : Server::Endpoint do
+  def server : Server::Endpoint
     Server::Endpoint.new(self)
   end
 
-  getter volumes : Volume::Endpoint do
+  def volumes : Volume::Endpoint
     Volume::Endpoint.new(self)
   end
 
-  getter warnings : Warning::Endpoint do
+  def warnings : Warning::Endpoint
     Warning::Endpoint.new(self)
   end
 
