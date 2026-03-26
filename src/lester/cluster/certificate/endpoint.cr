@@ -11,8 +11,6 @@ struct Lester::Cluster::Certificate::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.cluster.uri.to_s)
-    uri.path += "/certificate"
-    uri
+    clone_uri(@client.cluster.uri).tap { |uri| uri.path += "/certificate" }
   end
 end

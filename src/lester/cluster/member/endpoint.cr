@@ -78,8 +78,6 @@ struct Lester::Cluster::Member::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.cluster.uri.to_s)
-    uri.path += "/members"
-    uri
+    clone_uri(@client.cluster.uri).tap { |uri| uri.path += "/members" }
   end
 end

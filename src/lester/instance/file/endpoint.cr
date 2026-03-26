@@ -89,9 +89,9 @@ struct Lester::Instance::File::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(@client.instances.uri.to_s)
-    uri.path += "/#{instance_name}/files"
-    uri
+    clone_uri(@client.instances.uri).tap do |uri|
+      uri.path += "/#{instance_name}/files"
+    end
   end
 
   private def item(response, destination)

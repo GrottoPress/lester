@@ -18,8 +18,6 @@ struct Lester::Metrics::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.uri.to_s)
-    uri.path += "/metrics"
-    uri
+    clone_uri(@client.uri).tap { |uri| uri.path += "/metrics" }
   end
 end

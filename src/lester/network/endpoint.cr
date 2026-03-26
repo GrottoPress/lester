@@ -139,8 +139,6 @@ struct Lester::Network::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.uri.to_s)
-    uri.path += "/networks"
-    uri
+    clone_uri(@client.uri).tap { |uri| uri.path += "/networks" }
   end
 end

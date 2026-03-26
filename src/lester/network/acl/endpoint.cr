@@ -99,8 +99,6 @@ struct Lester::Network::Acl::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.uri.to_s)
-    uri.path += "/network-acls"
-    uri
+    clone_uri(@client.uri).tap { |uri| uri.path += "/network-acls" }
   end
 end

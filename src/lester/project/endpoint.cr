@@ -78,8 +78,6 @@ struct Lester::Project::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.uri.to_s)
-    uri.path += "/projects"
-    uri
+    clone_uri(@client.uri).tap { |uri| uri.path += "/projects" }
   end
 end

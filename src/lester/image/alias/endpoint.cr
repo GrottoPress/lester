@@ -89,8 +89,6 @@ struct Lester::Image::Alias::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.images.uri.to_s)
-    uri.path += "/aliases"
-    uri
+    clone_uri(@client.images.uri).tap { |uri| uri.path += "/aliases" }
   end
 end

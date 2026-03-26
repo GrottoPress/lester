@@ -97,8 +97,6 @@ struct Lester::Pool::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.uri.to_s)
-    uri.path += "/storage-pools"
-    uri
+    clone_uri(@client.uri).tap { |uri| uri.path += "/storage-pools" }
   end
 end

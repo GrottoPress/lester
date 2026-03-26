@@ -100,8 +100,8 @@ struct Lester::Network::Peer::Endpoint
   end
 
   def uri(network_name) : URI
-    uri = URI.parse(@client.networks.uri.to_s)
-    uri.path += "/#{network_name}/peers"
-    uri
+    clone_uri(@client.networks.uri).tap do |uri|
+      uri.path += "/#{network_name}/peers"
+    end
   end
 end

@@ -52,8 +52,8 @@ struct Lester::Instance::Metadata::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(@client.instances.uri.to_s)
-    uri.path += "/#{instance_name}/metadata"
-    uri
+    clone_uri(@client.instances.uri).tap do |uri|
+      uri.path += "/#{instance_name}/metadata"
+    end
   end
 end

@@ -87,8 +87,6 @@ struct Lester::Profile::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.uri.to_s)
-    uri.path += "/profiles"
-    uri
+    clone_uri(@client.uri).tap { |uri| uri.path += "/profiles" }
   end
 end

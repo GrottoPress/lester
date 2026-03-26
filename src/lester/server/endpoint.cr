@@ -63,6 +63,6 @@ struct Lester::Server::Endpoint
   end
 
   getter uri : URI do
-    URI.parse(@client.uri.to_s)
+    clone_uri(@client.uri)
   end
 end

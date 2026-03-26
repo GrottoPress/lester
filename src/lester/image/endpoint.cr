@@ -157,8 +157,6 @@ struct Lester::Image::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.uri.to_s)
-    uri.path += "/images"
-    uri
+    clone_uri(@client.uri).tap { |uri| uri.path += "/images" }
   end
 end

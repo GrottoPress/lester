@@ -49,8 +49,6 @@ struct Lester::Warning::Endpoint
   end
 
   getter uri : URI do
-    uri = URI.parse(@client.uri.to_s)
-    uri.path += "/warnings"
-    uri
+    clone_uri(@client.uri).tap { |uri| uri.path += "/warnings" }
   end
 end

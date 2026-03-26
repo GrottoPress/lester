@@ -70,8 +70,8 @@ struct Lester::Instance::Template::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(@client.instances.uri.to_s)
-    uri.path += "/#{instance_name}/metadata/templates"
-    uri
+    clone_uri(@client.instances.uri).tap do |uri|
+      uri.path += "/#{instance_name}/metadata/templates"
+    end
   end
 end

@@ -171,8 +171,8 @@ struct Lester::Volume::Backup::Endpoint
   end
 
   def uri(pool_name, volume_name, volume_type) : URI
-    uri = URI.parse @client.volumes.uri(pool_name).to_s
-    uri.path += "/#{volume_type}/#{volume_name}/backups"
-    uri
+    clone_uri(@client.volumes.uri(pool_name)).tap do |uri|
+      uri.path += "/#{volume_type}/#{volume_name}/backups"
+    end
   end
 end

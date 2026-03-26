@@ -103,8 +103,8 @@ struct Lester::Network::Forward::Endpoint
   end
 
   def uri(network_name) : URI
-    uri = URI.parse(@client.networks.uri.to_s)
-    uri.path += "/#{network_name}/forwards"
-    uri
+    clone_uri(@client.networks.uri).tap do |uri|
+      uri.path += "/#{network_name}/forwards"
+    end
   end
 end

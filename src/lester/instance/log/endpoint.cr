@@ -55,8 +55,8 @@ struct Lester::Instance::Log::Endpoint
   end
 
   def uri(instance_name) : URI
-    uri = URI.parse(@client.instances.uri.to_s)
-    uri.path += "/#{instance_name}/logs"
-    uri
+    clone_uri(@client.instances.uri).tap do |uri|
+      uri.path += "/#{instance_name}/logs"
+    end
   end
 end
