@@ -153,7 +153,7 @@ struct Lester
 
   private def configure_tls(tls)
     tls.tap do |_tls|
-      _tls.set_modern_ciphers
+      _tls.security_level = 3
 
       _tls.add_options(
         OpenSSL::SSL::Options::NO_SSL_V2 |
