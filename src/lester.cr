@@ -145,6 +145,7 @@ struct Lester
     case destination
     when IO
       IO.copy(source, destination)
+      destination.rewind
     else
       File.write(destination, source, mode: "wb")
     end
