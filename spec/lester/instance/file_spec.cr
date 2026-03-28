@@ -58,7 +58,7 @@ describe Lester::Instance::File::Endpoint do
           metadata.user_id.should eq(0)
         end
 
-        File.read_lines(destination).first?.should eq(body_io.to_s)
+        File.read(destination).should eq(body_io.to_s)
       ensure
         File.delete(destination)
       end

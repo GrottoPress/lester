@@ -205,7 +205,7 @@ describe Lester::Instance::Backup::Endpoint do
 
       LXD.instances.backups.export("inst4", "bak0", destination) do |response|
         response.success?.should be_true
-        File.read_lines(destination).first?.should eq(body_io.to_s)
+        File.read(destination).should eq(body_io.to_s)
       ensure
         File.delete(destination)
       end
