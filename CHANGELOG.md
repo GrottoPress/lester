@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Rewind destination `IO` after file download
+- Replace deprecated `OpenSSL::SSL::Context::Client#set_modern_ciphers` call with `#security_level=`
 
 ## [2.0.2] - 2026-03-26
 
